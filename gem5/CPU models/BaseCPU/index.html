@@ -871,14 +871,14 @@
 <code>电源门控</code>：提供电源门控相关的操作。</p>
 <p>通过这些功能，BaseCPU 类为 gem5 模拟器提供了一个基础的 CPU 模型，可以进一步扩展和实现具体的 CPU 行为。</p>
 <h2 id="basecc">base.cc</h2>
-<p>1.版权声明和包含的头文件<br />
-代码开始部分是版权声明，接着是包含的头文件。这些头文件包括了各种库和模块，如cpu/base.hh、iostream、sstream、string等，这些头文件为后续的代码提供了必要的功能和定义。<br />
-2.命名空间和全局变量<br />
-代码进入了gem5命名空间，并定义了一些全局变量和静态成员变量，如BaseCPU::globalStats和BaseCPU::cpuList，这些变量用于管理和跟踪CPU的状态和统计信息。<br />
-3.CPUProgressEvent类<br />
-CPUProgressEvent类用于定期报告CPU的进度。它继承自Event类，并在构造函数中设置了一个定期事件，用于在每个时间间隔后调用process方法。process方法计算并打印出CPU的IPC（每时钟周期的指令数）。
-4.BaseCPU类<br />
-<code>BaseCPU类是CPU的基类</code>，包含了许多重要的方法和成员变量，用于管理CPU的状态、线程、中断、统计信息等。<br />
+<p>1.版权声明和包含的头文件  </p>
+<p>代码开始部分是版权声明，接着是包含的头文件。这些头文件包括了各种库和模块，如cpu/base.hh、iostream、sstream、string等，这些头文件为后续的代码提供了必要的功能和定义。<br />
+2.命名空间和全局变量  </p>
+<p>代码进入了gem5命名空间，并定义了一些全局变量和静态成员变量，如BaseCPU::globalStats和BaseCPU::cpuList，这些变量用于管理和跟踪CPU的状态和统计信息。<br />
+3.CPUProgressEvent类  </p>
+<p>CPUProgressEvent类用于定期报告CPU的进度。它继承自Event类，并在构造函数中设置了一个定期事件，用于在每个时间间隔后调用process方法。process方法计算并打印出CPU的IPC（每时钟周期的指令数）。
+4.BaseCPU类  </p>
+<p><code>BaseCPU类是CPU的基类</code>，包含了许多重要的方法和成员变量，用于管理CPU的状态、线程、中断、统计信息等。<br />
 <code>构造函数</code>：初始化CPU的各种属性，如CPU ID、线程数、缓存行大小等。还设置了函数跟踪和统计信息。<br />
 <code>enableFunctionTrace</code>：启用函数跟踪。<br />
 <code>postInterrupt</code>：处理中断，并在必要时唤醒线程。<br />
@@ -910,11 +910,11 @@ CPUProgressEvent类用于定期报告CPU的进度。它继承自Event类，并�
 <code>traceFunctionsInternal</code>：跟踪函数调用。<br />
 <code>scheduleSimpointsInstStop</code>：调度SimPoints指令停止事件。<br />
 <code>scheduleInstStopAnyThread</code>：调度任意线程的指令停止事件。<br />
-5.BaseCPUStats类<br />
-BaseCPUStats类用于收集和报告CPU的统计信息，如周期数、IPC、CPI等。
+5.BaseCPUStats类  </p>
+<p>BaseCPUStats类用于收集和报告CPU的统计信息，如周期数、IPC、CPI等。
 FetchCPUStats、ExecuteCPUStats、CommitCPUStats类<br />
-这些类分别用于收集和报告取指、执行和提交阶段的统计信息。<br />
-这段代码实现了一个CPU的基类BaseCPU，提供了CPU的基本功能和管理机制，包括：
+这些类分别用于收集和报告取指、执行和提交阶段的统计信息。  </p>
+<p>这段代码实现了一个CPU的基类BaseCPU，提供了CPU的基本功能和管理机制，包括：
 1.CPU状态管理：初始化、启动、挂起、激活和停止CPU。<br />
 2.线程管理：注册、查找、激活和挂起线程上下文。<br />
 3.中断处理：处理中断并唤醒线程。<br />
