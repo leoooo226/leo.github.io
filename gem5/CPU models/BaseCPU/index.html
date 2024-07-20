@@ -71,6 +71,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#basehh" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -560,6 +565,19 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    BaseCPU
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -570,6 +588,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basecc" class="md-nav__link">
+    <span class="md-ellipsis">
+      base.cc
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -753,6 +799,25 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basecc" class="md-nav__link">
+    <span class="md-ellipsis">
+      base.cc
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -767,9 +832,82 @@
                   
 
 
-  <h1>BaseCPU</h1>
-
-
+<h1 id="basehh">base.hh</h1>
+<p>该代码定义了一个名为 BaseCPU 的基类，用于模拟 CPU 的核心功能。主要功能包括：<br />
+事件管理：通过继承 ClockedObject 类，管理事件队列和时钟。
+中断处理：提供中断控制器的管理和操作。
+线程上下文管理：管理线程上下文的激活、挂起和停止。
+初始化和启动：提供初始化和启动相关的操作。
+电源门控管理：管理电源门控事件的调度和取消调度。
+状态切换和恢复：提供状态切换和恢复相关的操作。
+序列化和反序列化：提供对象和线程的序列化和反序列化。
+指令和操作计数：提供指令和操作计数的获取。
+事件调度：调度指令停止事件。
+性能监控单元（PMU）探针：提供 PMU 探针相关的操作。
+CPU 状态更新：更新周期计数器。
+函数跟踪：提供函数跟踪相关的操作。
+全局 CPU 列表：管理全局 CPU 列表。
+统计信息：提供统计信息相关的结构体。
+地址监控：提供地址监控相关的操作。
+电源门控：提供电源门控相关的操作。
+通过这些功能，BaseCPU 类为 gem5 模拟器提供了一个基础的 CPU 模型，可以进一步扩展和实现具体的 CPU 行为。</p>
+<h2 id="basecc">base.cc</h2>
+<ol>
+<li>版权声明和包含的头文件
+代码开始部分是版权声明，接着是包含的头文件。这些头文件包括了各种库和模块，如cpu/base.hh、iostream、sstream、string等，这些头文件为后续的代码提供了必要的功能和定义。</li>
+<li>命名空间和全局变量
+代码进入了gem5命名空间，并定义了一些全局变量和静态成员变量，如BaseCPU::globalStats和BaseCPU::cpuList，这些变量用于管理和跟踪CPU的状态和统计信息。</li>
+<li>CPUProgressEvent类
+CPUProgressEvent类用于定期报告CPU的进度。它继承自Event类，并在构造函数中设置了一个定期事件，用于在每个时间间隔后调用process方法。process方法计算并打印出CPU的IPC（每时钟周期的指令数）。</li>
+<li>BaseCPU类
+BaseCPU类是CPU的基类，包含了许多重要的方法和成员变量，用于管理CPU的状态、线程、中断、统计信息等。
+构造函数：初始化CPU的各种属性，如CPU ID、线程数、缓存行大小等。还设置了函数跟踪和统计信息。
+enableFunctionTrace：启用函数跟踪。
+postInterrupt：处理中断，并在必要时唤醒线程。
+armMonitor：设置监视器，用于监视特定的内存地址。
+mwait：处理mwait指令，用于等待某个内存地址的变化。
+mwaitAtomic：原子地处理mwait指令。
+init：初始化CPU，设置指令计数终止事件等。
+startup：启动CPU，设置进度事件和电源状态。
+regProbePoints：注册探针点，用于性能监控。
+probeInstCommit：处理指令提交事件，更新统计信息。
+regStats：注册统计信息。
+getPort：根据名称获取端口。
+registerThreadContexts：注册线程上下文。
+deschedulePowerGatingEvent：取消电源门控事件。
+schedulePowerGatingEvent：调度电源门控事件。
+findContext：查找线程上下文。
+activateContext：激活线程上下文。
+suspendContext：挂起线程上下文。
+haltContext：停止线程上下文。
+enterPwrGating：进入电源门控状态。
+switchOut：切换出CPU。
+takeOverFrom：从另一个CPU接管状态。
+setReset：设置重置状态。
+flushTLBs：刷新TLB。
+serialize：序列化CPU状态。
+unserialize：反序列化CPU状态。
+scheduleInstStop：调度指令停止事件。
+getCurrentInstCount：获取当前指令计数。
+traceFunctionsInternal：跟踪函数调用。
+scheduleSimpointsInstStop：调度SimPoints指令停止事件。
+scheduleInstStopAnyThread：调度任意线程的指令停止事件。</li>
+<li>BaseCPUStats类
+BaseCPUStats类用于收集和报告CPU的统计信息，如周期数、IPC、CPI等。</li>
+<li>FetchCPUStats、ExecuteCPUStats、CommitCPUStats类
+这些类分别用于收集和报告取指、执行和提交阶段的统计信息。
+总结代码（强调其主要功能）
+这段代码实现了一个CPU的基类BaseCPU，提供了CPU的基本功能和管理机制，包括：
+1.CPU状态管理：初始化、启动、挂起、激活和停止CPU。
+2.线程管理：注册、查找、激活和挂起线程上下文。
+3.中断处理：处理中断并唤醒线程。
+4.内存监视：设置和处理内存监视器。
+5.电源管理：管理电源状态和电源门控事件。
+6.统计信息收集：收集和报告CPU的性能统计信息，如IPC、CPI等。
+7.序列化和反序列化：保存和恢复CPU状态。
+8.事件调度：调度各种事件，如进度事件、指令停止事件等。
+通过这些功能，BaseCPU类为更复杂的CPU模型提供了基础，使得模拟器能够模拟和分析CPU的行为和性能。</li>
+</ol>
 
 
 
