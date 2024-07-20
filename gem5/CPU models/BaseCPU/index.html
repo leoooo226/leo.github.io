@@ -257,7 +257,7 @@
   
     
   
-  Algorithms
+  Algorithm
 
       </a>
     </li>
@@ -762,7 +762,7 @@
         
   
   <span class="md-ellipsis">
-    Algorithms
+    Algorithm
   </span>
   
 
@@ -850,26 +850,9 @@
                   
 
 
-<h1 id="_1"></h1>
+<h1 id="_1">源代码解读</h1>
 <h2 id="basehh">base.hh</h2>
-<p>该代码定义了一个名为 BaseCPU 的基类，用于模拟 CPU 的核心功能。主要功能包括：  </p>
-<p><code>事件管理</code>：通过继承 ClockedObject 类，管理事件队列和时钟。<br />
-<code>中断处理</code>：提供中断控制器的管理和操作。<br />
-<code>线程上下文管理</code>：管理线程上下文的激活、挂起和停止。<br />
-<code>初始化和启动</code>：提供初始化和启动相关的操作。<br />
-<code>电源门控管理</code>：管理电源门控事件的调度和取消调度。<br />
-<code>状态切换和恢复</code>：提供状态切换和恢复相关的操作。<br />
-<code>序列化和反序列化</code>：提供对象和线程的序列化和反序列化。<br />
-<code>指令和操作计数</code>：提供指令和操作计数的获取。<br />
-<code>事件调度</code>：调度指令停止事件。<br />
-<code>性能监控单元（PMU）探针</code>：提供 PMU 探针相关的操作。<br />
-<code>CPU 状态更新</code>：更新周期计数器。<br />
-<code>函数跟踪</code>：提供函数跟踪相关的操作。<br />
-<code>全局 CPU 列表</code>：管理全局 CPU 列表。<br />
-<code>统计信息</code>：提供统计信息相关的结构体。<br />
-<code>地址监控</code>：提供地址监控相关的操作。<br />
-<code>电源门控</code>：提供电源门控相关的操作。</p>
-<p>通过这些功能，BaseCPU 类为 gem5 模拟器提供了一个基础的 CPU 模型，可以进一步扩展和实现具体的 CPU 行为。</p>
+<p>该代码是base.cc的声明。具体实现在base.cc中。</p>
 <h2 id="basecc">base.cc</h2>
 <p>这段代码实现了一个CPU的基类BaseCPU，提供了CPU的基本功能和管理机制，包括：CPU状态管理：初始化、启动、挂起、激活和停止CPU；注册、查找、激活和挂起线程上下文；处理中断并唤醒线程；设置和处理内存监视器；管理电源状态和电源门控事件；收集和报告CPU的性能统计信息，如IPC、CPI等；保存和恢复CPU状态;调度各种事件，如进度事件、指令停止事件等。<br />
 通过这些功能，BaseCPU类为更复杂的CPU模型提供了基础，使得模拟器能够模拟和分析CPU的行为和性能。  </p>
