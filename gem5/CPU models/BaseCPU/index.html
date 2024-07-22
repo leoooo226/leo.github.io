@@ -894,11 +894,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../TimingSimpleCPU/" class="md-nav__link">
+      <a href="../AtomicSimpleCPU/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    TimingSimpleCPU
+    AtomicSimpleCPU
   </span>
   
 
@@ -915,11 +915,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../AtomicSimpleCPU/" class="md-nav__link">
+      <a href="../TimingSimpleCPU/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    AtomicSimpleCPU
+    TimingSimpleCPU
   </span>
   
 
@@ -1086,6 +1086,7 @@
 
 
 <h1 id="_1">源代码解读</h1>
+<p>处于 cpu 继承树的顶层，BaseCPU 是所有后续 cpu 的父类，它抽象出了一个非常简单的 cpu 模型，把后续所有 cpu 需要用到的公共功能封装到了这个 BaseCPU 中。  </p>
 <h2 id="basehh">base.hh</h2>
 <p>该代码是base.cc的声明。具体实现在base.cc中。</p>
 <h2 id="basecc">base.cc</h2>

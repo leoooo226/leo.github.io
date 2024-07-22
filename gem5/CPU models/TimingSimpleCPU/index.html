@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../BaseSimpleCPU/">
+        <link rel="prev" href="../AtomicSimpleCPU/">
       
       
-        <link rel="next" href="../AtomicSimpleCPU/">
+        <link rel="next" href="../MinorCPU/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -70,6 +70,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -828,35 +833,6 @@
                 
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    TimingSimpleCPU
-  </span>
-  
-
-      </a>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
   
   
     <li class="md-nav__item">
@@ -869,6 +845,37 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    TimingSimpleCPU
+  </span>
+  
+
+      </a>
+      
     </li>
   
 
@@ -988,6 +995,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -1002,9 +1011,11 @@
                   
 
 
-  <h1>TimingSimpleCPU</h1>
-
-
+<h1 id="_1"></h1>
+<p>TimingSimpleCPU是使用计时内存访问的SimpleCPU版本。它在访问高速缓存时停止，并在继续之前等待内存系统的响应。与AtomicSimpleCPU一样，TimingSimpleCPU也派生自BaseSimpleCPU，并实现了相同的一组函数。它定义了用于连接到内存的端口，并将CPU连接到缓存。它还定义了处理从内存到发出访问的响应所需的函数。
+TimingSimpleCPU 的指令执行流程由下图给出：<br />
+<img alt="Timing图片" src="../TimingSimpleCPU.jpg" /><br />
+与AtomicSimpleCPU不同，TimingSimpleCPU在模拟中会考虑内存访问的实际延迟。当CPU发出内存请求时，它会等待内存系统返回响应，而不是立即完成。尽管考虑了内存时序，但TimingSimpleCPU仍然不使用CPU流水线技术，因此其模拟过程仍然相对简单。</p>
 
 
 
