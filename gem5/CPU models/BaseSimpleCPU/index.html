@@ -71,6 +71,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -816,6 +821,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -988,6 +995,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -1002,9 +1011,12 @@
                   
 
 
-  <h1>BaseSimpleCPU</h1>
-
-
+<h1 id="_1"></h1>
+<p>实现了几个功能：</p>
+<p>保存体系结构状态，在SimpleCPU模型中通用的状态。
+定义了检查中断、设置获取请求、处理预执行设置、处理后执行操作以及将PC推进到下一条指令的函数。这些函数在SimpleCPU模型中也很常见。
+实现ExecContext接口。</p>
+<p>BaseSimpleCPU不能单独运行，必须使用从BaseSimpleCPU继承的类之一，AtomicSimpleCPU或TimingSimpleCPU。</p>
 
 
 
