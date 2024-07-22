@@ -1111,6 +1111,34 @@
 <code>定义和类型声明</code>：定义了多个类型和结构体，用于描述不同模块之间的接口和数据结构。<br />
 <code>模块实例化</code>：实例化了多个子模块，包括调度器、序列器、通道、向量加载存储单元、滑动单元、掩码单元。<br />
 <code>断言</code>：定义了多个断言，用于检查参数的合法性，确保模块在正确的配置下运行。  </p>
+<pre><code class="language-verilog">module ara import ara_pkg::*; #(
+    // RVV Parameters
+    parameter  int           unsigned NrLanes      = 0,                          // Number of parallel vector lanes.
+    parameter  int           unsigned VLEN         = 0,                          // VLEN [bit]
+    // Support for floating-point data types
+    parameter  fpu_support_e          FPUSupport   = FPUSupportHalfSingleDouble,
+    // External support for vfrec7, vfrsqrt7
+    parameter  fpext_support_e        FPExtSupport = FPExtSupportEnable,
+    // Support for fixed-point data types
+    parameter  fixpt_support_e        FixPtSupport = FixedPointEnable,
+    // AXI Interface
+    parameter  int           unsigned AxiDataWidth = 0,
+    parameter  int           unsigned AxiAddrWidth = 0,
+    parameter  type                   axi_ar_t     = logic,
+    parameter  type                   axi_r_t      = logic,
+    parameter  type                   axi_aw_t     = logic,
+    parameter  type                   axi_w_t      = logic,
+    parameter  type                   axi_b_t      = logic,
+    parameter  type                   axi_req_t    = logic,
+    parameter  type                   axi_resp_t   = logic,
+    // Dependant parameters. DO NOT CHANGE!
+    // Ara has NrLanes + 3 processing elements: each one of the lanes, the vector load unit, the
+    // vector store unit, the slide unit, and the mask unit.
+    localparam int           unsigned NrPEs        = NrLanes + 4,
+    localparam type                   vlen_t       = logic[$clog2(VLEN+1)-1:0],
+    localparam int           unsigned VLENB        = VLEN / 8
+  ) 
+</code></pre>
 <h2 id="ara_systemsv">ara_system.sv</h2>
 <p>Ara's System, containing CV6 and Ara.</p>
 <h2 id="ara_socsv">ara_soc.sv</h2>
