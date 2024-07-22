@@ -71,6 +71,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#minorcpu" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -885,6 +890,19 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    MinorCPU
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -895,6 +913,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -992,9 +1038,9 @@
                   
 
 
-  <h1>MinorCPU</h1>
-
-
+<h1 id="minorcpu">MinorCPU</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Minor 是一种有序处理器模型，具有固定的流水线，但可配置的数据结构和执行行为。它旨在用于对具有严格顺序执行行为的处理器进行建模，并允许通过 MinorTrace/minorview.py 格式/工具可视化指令在流水线中的位置。其目的是提供一个框架，用于在微架构上将模型与具有类似功能的特定选定处理器相关联。</p>
 
 
 
