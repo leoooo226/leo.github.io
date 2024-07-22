@@ -1137,12 +1137,115 @@
     localparam int           unsigned NrPEs        = NrLanes + 4,
     localparam type                   vlen_t       = logic[$clog2(VLEN+1)-1:0],
     localparam int           unsigned VLENB        = VLEN / 8
-  ) 
+  ) (
+    // Clock and Reset
+    input  logic              clk_i,
+    input  logic              rst_ni,
+    // Scan chain
+    input  logic              scan_enable_i,
+    input  logic              scan_data_i,
+    output logic              scan_data_o,
+
+    // Interface with Ariane
+    input  cva6_to_acc_t      acc_req_i,
+    output acc_to_cva6_t      acc_resp_o,
+    // AXI interface
+    output axi_req_t          axi_req_o,
+    input  axi_resp_t         axi_resp_i
+  );
 </code></pre>
 <h2 id="ara_systemsv">ara_system.sv</h2>
 <p>Ara's System, containing CV6 and Ara.</p>
+<pre><code class="language-verilog">module ara import ara_pkg::*; #(
+    // RVV Parameters
+    parameter  int           unsigned NrLanes      = 0,                          // Number of parallel vector lanes.
+    parameter  int           unsigned VLEN         = 0,                          // VLEN [bit]
+    // Support for floating-point data types
+    parameter  fpu_support_e          FPUSupport   = FPUSupportHalfSingleDouble,
+    // External support for vfrec7, vfrsqrt7
+    parameter  fpext_support_e        FPExtSupport = FPExtSupportEnable,
+    // Support for fixed-point data types
+    parameter  fixpt_support_e        FixPtSupport = FixedPointEnable,
+    // AXI Interface
+    parameter  int           unsigned AxiDataWidth = 0,
+    parameter  int           unsigned AxiAddrWidth = 0,
+    parameter  type                   axi_ar_t     = logic,
+    parameter  type                   axi_r_t      = logic,
+    parameter  type                   axi_aw_t     = logic,
+    parameter  type                   axi_w_t      = logic,
+    parameter  type                   axi_b_t      = logic,
+    parameter  type                   axi_req_t    = logic,
+    parameter  type                   axi_resp_t   = logic,
+    // Dependant parameters. DO NOT CHANGE!
+    // Ara has NrLanes + 3 processing elements: each one of the lanes, the vector load unit, the
+    // vector store unit, the slide unit, and the mask unit.
+    localparam int           unsigned NrPEs        = NrLanes + 4,
+    localparam type                   vlen_t       = logic[$clog2(VLEN+1)-1:0],
+    localparam int           unsigned VLENB        = VLEN / 8
+  ) (
+    // Clock and Reset
+    input  logic              clk_i,
+    input  logic              rst_ni,
+    // Scan chain
+    input  logic              scan_enable_i,
+    input  logic              scan_data_i,
+    output logic              scan_data_o,
+
+    // Interface with Ariane
+    input  cva6_to_acc_t      acc_req_i,
+    output acc_to_cva6_t      acc_resp_o,
+    // AXI interface
+    output axi_req_t          axi_req_o,
+    input  axi_resp_t         axi_resp_i
+  );
+</code></pre>
 <h2 id="ara_socsv">ara_soc.sv</h2>
 <p>Ara's SoC, containing CVA6, Ara, and a L2 cache.</p>
+<pre><code class="language-verilog">module ara_soc import axi_pkg::*; import ara_pkg::*; #(
+    // RVV Parameters
+    parameter  int           unsigned NrLanes      = 0,                          // Number of parallel vector lanes.
+    parameter  int           unsigned VLEN         = 0,                          // VLEN [bit]
+    // Support for floating-point data types
+    parameter  fpu_support_e          FPUSupport   = FPUSupportHalfSingleDouble,
+    // External support for vfrec7, vfrsqrt7
+    parameter  fpext_support_e        FPExtSupport = FPExtSupportEnable,
+    // Support for fixed-point data types
+    parameter  fixpt_support_e        FixPtSupport = FixedPointEnable,
+    // AXI Interface
+    parameter  int           unsigned AxiDataWidth = 32*NrLanes,
+    parameter  int           unsigned AxiAddrWidth = 64,
+    parameter  int           unsigned AxiUserWidth = 1,
+    parameter  int           unsigned AxiIdWidth   = 5,
+    // AXI Resp Delay [ps] for gate-level simulation
+    parameter  int           unsigned AxiRespDelay = 200,
+    // Main memory
+    parameter  int           unsigned L2NumWords   = 2**20,
+    // Dependant parameters. DO NOT CHANGE!
+    localparam type                   axi_data_t   = logic [AxiDataWidth-1:0],
+    localparam type                   axi_strb_t   = logic [AxiDataWidth/8-1:0],
+    localparam type                   axi_addr_t   = logic [AxiAddrWidth-1:0],
+    localparam type                   axi_user_t   = logic [AxiUserWidth-1:0],
+    localparam type                   axi_id_t     = logic [AxiIdWidth-1:0]
+  ) (
+    input  logic        clk_i,
+    input  logic        rst_ni,
+    output logic [63:0] exit_o,
+    output logic [63:0] hw_cnt_en_o,
+    // Scan chain
+    input  logic        scan_enable_i,
+    input  logic        scan_data_i,
+    output logic        scan_data_o,
+    // UART APB interface
+    output logic        uart_penable_o,
+    output logic        uart_pwrite_o,
+    output logic [31:0] uart_paddr_o,
+    output logic        uart_psel_o,
+    output logic [31:0] uart_pwdata_o,
+    input  logic [31:0] uart_prdata_i,
+    input  logic        uart_pready_i,
+    input  logic        uart_pslverr_i
+  );
+</code></pre>
 
 
 
