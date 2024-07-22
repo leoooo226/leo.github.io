@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#atomicsimplecpu" class="md-skip">
           Skip to content
         </a>
       
@@ -999,7 +999,7 @@
                   
 
 
-<h1 id="_1"></h1>
+<h1 id="atomicsimplecpu">AtomicSimpleCPU</h1>
 <p>AtomicSimpleCPU 一般是用来进行验证功能或者加速全系统仿真用的， AtomicSimpleCPU是使用原子内存访问的SimpleCPU版本。它使用原子访问的延迟估计来估计总体缓存访问时间。AtomicSimpleCPU派生自BaseSimpleCPU，并实现了读取和写入内存的函数，以及tick函数，它定义了每个CPU周期发生的事情。它定义了用于连接到内存的端口，并将CPU连接到缓存。<br />
 <img alt="原子图片" src="../AtomicSimpleCPU.jpg" /><br />
 AtomicSimpleCPU没有CPU流水线，因此模拟过程相对简单。其内存访问模型是原子性的，即内存请求立即完成，不考虑实际的内存访问延迟。由于其简单性和快速性，AtomicSimpleCPU主要用于快速功能模拟，特别是在需要快速启动Linux等操作系统时。此外，它还可以用作检查点，在模拟过程中切换到更详细的CPU模型。</p>
