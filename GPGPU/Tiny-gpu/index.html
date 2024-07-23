@@ -1601,7 +1601,7 @@
 
 
 <h1 id="tiny-gpu">Tiny-gpu</h1>
-<h2 id="introduction">Introduction</h2>
+<h2 id="introduction"><strong>Introduction</strong></h2>
 <p>Tiny-gpu是一个轻量级的 GPU 模型，专为帮助用户从头开始理解 GPU 的工作原理而设计。这是最简单的开源gpgpu项目，适合gpu入门学习。</p>
 <p>项目主要侧重于探索以下方面</p>
 <ul>
@@ -1610,7 +1610,7 @@
 <li>内存 (Memory)：GPU 如何应对内存带宽有限的限制？</li>
 </ul>
 <hr />
-<h2 id="execution-flow">Execution flow</h2>
+<h2 id="execution-flow"><strong>Execution flow</strong></h2>
 <p>Tiny-gpu简化了执行流程，一次仅处理一个内核 (kernel)。<br />
 启动内核的步骤如下</p>
 <ul>
@@ -1620,7 +1620,7 @@
 <li>启动内核：将启动信号设置为高电平，启动内核执行。</li>
 </ul>
 <hr />
-<h2 id="architecture">Architecture</h2>
+<h2 id="architecture"><strong>Architecture</strong></h2>
 <p>Tiny-gpu 本身包含以下单元：</p>
 <ul>
 <li>设备控制寄存器：用于存储线程数量等控制信息。</li>
@@ -1644,7 +1644,7 @@
 <p>全局内存中的相同数据经常被多个计算核心请求。反复访问全局内存代价很高，因为数据已经获取过一次，所以将数据存储在设备上的 SRAM 中以便稍后更快地检索会更有效。<br />
 这就是缓存的作用。从外部内存检索到的数据会存储在缓存中，以后的请求可以直接从缓存中读取，从而释放内存带宽用于处理新数据。</p>
 <hr />
-<h2 id="core">Core</h2>
+<h2 id="core"><strong>Core</strong></h2>
 <p>每个核心都包含一定数量的计算资源，通常围绕着它可以支持的线程数量进行设计。为了最大化并行化，需要最佳管理这些资源以提高资源利用率。<br />
 在简化后的 tiny-gpu 中，每个核心一次处理一个线程块 (block)。为每个线程块中的线程，核心都配备了专用的 ALU、LSU、PC 和寄存器文件。管理这些资源执行线程指令是 GPU 中最具挑战性的问题之一。</p>
 <h3 id="_6">调度</h3>
@@ -1672,7 +1672,7 @@ tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，�
 由于线程并行处理，tiny-gpu 假设所有线程在每个指令后都“收敛”到相同的程序计数器 - 这为了简化起见，是一个近似假设。<br />
 在真正的GPU中，单个线程可以跳转到不同的 PC，导致分支分歧 (branch divergence)，即最初一起处理的一组线程必须分裂成单独的执行部分。</p>
 <hr />
-<h2 id="isa">ISA</h2>
+<h2 id="isa"><strong>ISA</strong></h2>
 <p>tiny-gpu 实现了一套简单的 11 条指令的指令集架构 (ISA)，在支持用于概念验证的简单内核，例如矩阵加法和矩阵乘法。</p>
 <p><img alt="图片" src="../isa.jpg" /></p>
 <p>实现这些功能，tiny-gpu 支持以下指令<br />
