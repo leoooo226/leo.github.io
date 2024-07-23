@@ -1527,7 +1527,7 @@ tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，�
 <hr />
 <h2 id="isa">ISA</h2>
 <p>tiny-gpu 实现了一套简单的 11 条指令的指令集架构 (ISA)，在支持用于概念验证的简单内核，例如矩阵加法和矩阵乘法。</p>
-<p><img alt="图片" src="isa.png" /></p>
+<p><img alt="图片" src="../isa.jpg" /></p>
 <p>实现这些功能，tiny-gpu 支持以下指令<br />
 <code>BRnzp (分支指令)</code> - 如果 NZP 寄存器值满足指令中指定的 nzp 条件，则跳转到程序内存中的另一行。</p>
 <p><code>CMP (比较指令)</code> - 比较两个寄存器中的值，并将结果存储在 NZP 寄存器中，供后续的 BRnzp 指令使用。</p>
