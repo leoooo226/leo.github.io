@@ -943,6 +943,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#execution-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution flow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#architecture" class="md-nav__link">
     <span class="md-ellipsis">
       Architecture
@@ -999,6 +1008,93 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      调度
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      取指
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      解码
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      寄存器文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alu" class="md-nav__link">
+    <span class="md-ellipsis">
+      ALU
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lsu" class="md-nav__link">
+    <span class="md-ellipsis">
+      LSU
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      pc
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isa" class="md-nav__link">
+    <span class="md-ellipsis">
+      ISA
+    </span>
+  </a>
   
 </li>
       
@@ -1359,15 +1455,15 @@
 
 <h1 id="tiny-gpu">Tiny-gpu</h1>
 <h2 id="introduction">Introduction</h2>
-<p>Tiny-gpu是一个轻量级的 GPU 模型，专为帮助用户从头开始理解 GPU 的工作原理而设计。<br />
-需要注意的是，随着通用 GPU (GPGPU) 和机器学习加速器（例如谷歌的 TPU）的发展趋势，tiny-gpu 更专注于强调这些架构的通用原理，而不是图形专用硬件的细节。<br />
-基于这一目标，我们可以通过去除构建生产级显卡所需的大部分复杂性来简化 GPU，并专注于所有这些现代硬件加速器都至关重要的核心元素。<br />
-项目主要侧重于探索以下方面</p>
+<p>Tiny-gpu是一个轻量级的 GPU 模型，专为帮助用户从头开始理解 GPU 的工作原理而设计。这是最简单的开源gpgpu项目，适合gpu入门学习。</p>
+<p>项目主要侧重于探索以下方面</p>
 <ul>
 <li>架构 (Architecture)：GPU 的架构是什么样的？哪些元素最重要?</li>
 <li>并行化 (Parallelization)：如何在硬件中实现 SIMD 编程模型？  </li>
 <li>内存 (Memory)：GPU 如何应对内存带宽有限的限制？</li>
 </ul>
+<hr />
+<h2 id="execution-flow">Execution flow</h2>
 <p>Tiny-gpu简化了执行流程，一次仅处理一个内核 (kernel)。<br />
 启动内核的步骤如下</p>
 <ul>
@@ -1376,6 +1472,7 @@
 <li>指定线程数量：在设备控制寄存器中指定要启动的线程数量。</li>
 <li>启动内核：将启动信号设置为高电平，启动内核执行。</li>
 </ul>
+<hr />
 <h2 id="architecture">Architecture</h2>
 <p>Tiny-gpu 本身包含以下单元：</p>
 <ul>
@@ -1393,7 +1490,51 @@
 <p>每个核心都包含一定数量的计算资源，通常围绕着它可以支持的线程数量进行设计。为了最大化并行化，需要最佳管理这些资源以提高资源利用率。
 在简化后的 tiny-gpu 中，每个核心一次处理一个线程块 (block)。为每个线程块中的线程，核心都配备了专用的 ALU、LSU、PC 和寄存器文件。管理这些资源执行线程指令是 GPU 中最具挑战性的问题之一。</p>
 <h3 id="_4">内存控制器</h3>
+<p>全局内存具有固定的读写带宽，但是所有计算核心访问内存的数据请求可能会远远超出外部内存的实际处理能力。<br />
+内存控制器负责跟踪来自计算核心的所有传出内存请求，根据实际外部内存带宽限制请求，并将外部内存的响应传递回相应的资源。<br />
+每个内存控制器根据全局内存的带宽配置了固定数量的通道。  </p>
 <h3 id="_5">缓存</h3>
+<p>全局内存中的相同数据经常被多个计算核心请求。反复访问全局内存代价很高，因为数据已经获取过一次，所以将数据存储在设备上的 SRAM 中以便稍后更快地检索会更有效。<br />
+这就是缓存的作用。从外部内存检索到的数据会存储在缓存中，以后的请求可以直接从缓存中读取，从而释放内存带宽用于处理新数据。</p>
+<hr />
+<h2 id="core">Core</h2>
+<p>每个核心都包含一定数量的计算资源，通常围绕着它可以支持的线程数量进行设计。为了最大化并行化，需要最佳管理这些资源以提高资源利用率。<br />
+在简化后的 tiny-gpu 中，每个核心一次处理一个线程块 (block)。为每个线程块中的线程，核心都配备了专用的 ALU、LSU、PC 和寄存器文件。管理这些资源执行线程指令是 GPU 中最具挑战性的问题之一。</p>
+<h3 id="_6">调度</h3>
+<p>每个核心都有一个调度器，负责管理线程的执行。
+tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，直到完成，然后再拾取一个新的线程块。它以同步的方式依次执行所有线程的指令。
+在更高级的调度器中，会使用流水线 (pipelining) 等技术来流式执行后续指令，在先前指令完全完成之前最大化资源利用率。此外，还可以使用波形调度 (warp scheduling) 并行执行线程块内的多个线程批次。
+调度器需要解决的主要限制是与从全局内存加载和存储数据相关的延迟。虽然大多数指令可以同步执行，但这些加载/存储操作是异步的，这意味着指令执行的其余部分必须围绕这些较长的等待时间进行构建。</p>
+<h3 id="_7">取指</h3>
+<p>异步地从程序内存中提取当前程序计数器指向的指令（通常在执行完一个线程块后应该从缓存中提取）。</p>
+<h3 id="_8">解码</h3>
+<p>将提取的指令解码成控制线程执行的控制信号。</p>
+<h3 id="_9">寄存器文件</h3>
+<p>每个线程都有自己专用的寄存器文件。寄存器文件保存每个线程执行计算的数据，从而实现相同指令多数据 (SIMD) 模式。<br />
+值得注意的是，每个寄存器文件都包含一些只读寄存器，其中存储有关正在局部执行的当前线程块和线程的数据，使内核能够基于局部线程 ID 使用不同的数据执行。</p>
+<h3 id="alu">ALU</h3>
+<p>每个线程的专用算术逻辑单元用于执行计算。处理加法 (ADD)、减法 (SUB)、乘法 (MUL)、除法 (DIV) 等算术指令。
+还处理比较指令 (CMP)，该指令实际上输出两个寄存器差值是负数、零还是正数的结果，并将结果存储在 PC 单元中的 NZP 寄存器中。</p>
+<h3 id="lsu">LSU</h3>
+<p>每个线程的专用加载存储单元用于访问全局数据内存。
+处理加载 (LDR) 和存储 (STR) 指令，并处理内存请求被内存控制器处理和中继的异步等待时间。</p>
+<h3 id="pc">pc</h3>
+<p>每个单元的专用程序计数器用于确定每个线程接下来要执行的指令。<br />
+默认情况下，PC 在每个指令后递增 1。<br />
+使用分支指令 (BRnzp)，NZP 寄存器会检查 NZP 寄存器（由先前的 CMP 指令设置）是否匹配某些情况 - 如果匹配，它将跳转到程序内存的特定行。这就是循环和条件语句的实现方式。<br />
+由于线程并行处理，tiny-gpu 假设所有线程在每个指令后都“收敛”到相同的程序计数器 - 这为了简化起见，是一个近似假设。<br />
+在真正的GPU中，单个线程可以跳转到不同的 PC，导致分支分歧 (branch divergence)，即最初一起处理的一组线程必须分裂成单独的执行部分。</p>
+<h2 id="isa">ISA</h2>
+<p>tiny-gpu 实现了一套简单的 11 条指令的指令集架构 (ISA)，在支持用于概念验证的简单内核，例如矩阵加法和矩阵乘法。
+实现这些功能，tiny-gpu 支持以下指令
+<code>BRnzp (分支指令)</code> - 如果 NZP 寄存器值满足指令中指定的 nzp 条件，则跳转到程序内存中的另一行。</p>
+<p><code>CMP (比较指令)</code> - 比较两个寄存器中的值，并将结果存储在 NZP 寄存器中，供后续的 BRnzp 指令使用。</p>
+<p><code>ADD、SUB、MUL、DIV (基本算术运算)</code> - 支持张量运算的基本算术操作。</p>
+<p><code>LDR (加载指令)</code>- 从全局内存中加载数据。</p>
+<p><code>STR (存储指令)</code> - 将数据存储到全局内存中。</p>
+<p><code>CONST (常量加载指令)</code> - 将常量值加载到寄存器中。</p>
+<p><code>RET (返回指令)</code> - 表示当前线程已执行完毕。</p>
+<p>每个寄存器由4位指定，意味着共有16个寄存器。前13个寄存器 R0-R12 是可读写的通用寄存器。最后 3 个寄存器是特殊的只读寄存器，用于提供对 SIMD 关键的 %blockIdx、%blockDim 和 %threadIdx 值。</p>
 
 
 
