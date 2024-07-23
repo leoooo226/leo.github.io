@@ -1031,27 +1031,27 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#fetch" class="md-nav__link">
     <span class="md-ellipsis">
-      取指
+      Fetch
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#decode" class="md-nav__link">
     <span class="md-ellipsis">
-      解码
+      Decode
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#rf" class="md-nav__link">
     <span class="md-ellipsis">
-      寄存器文件
+      RF
     </span>
   </a>
   
@@ -1078,7 +1078,7 @@
           <li class="md-nav__item">
   <a href="#pc" class="md-nav__link">
     <span class="md-ellipsis">
-      pc
+      PC
     </span>
   </a>
   
@@ -1505,11 +1505,11 @@
 tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，直到完成，然后再拾取一个新的线程块。它以同步的方式依次执行所有线程的指令。
 在更高级的调度器中，会使用流水线 (pipelining) 等技术来流式执行后续指令，在先前指令完全完成之前最大化资源利用率。此外，还可以使用波形调度 (warp scheduling) 并行执行线程块内的多个线程批次。
 调度器需要解决的主要限制是与从全局内存加载和存储数据相关的延迟。虽然大多数指令可以同步执行，但这些加载/存储操作是异步的，这意味着指令执行的其余部分必须围绕这些较长的等待时间进行构建。</p>
-<h3 id="_7">取指</h3>
+<h3 id="fetch">Fetch</h3>
 <p>异步地从程序内存中提取当前程序计数器指向的指令（通常在执行完一个线程块后应该从缓存中提取）。</p>
-<h3 id="_8">解码</h3>
+<h3 id="decode">Decode</h3>
 <p>将提取的指令解码成控制线程执行的控制信号。</p>
-<h3 id="_9">寄存器文件</h3>
+<h3 id="rf">RF</h3>
 <p>每个线程都有自己专用的寄存器文件。寄存器文件保存每个线程执行计算的数据，从而实现相同指令多数据 (SIMD) 模式。<br />
 值得注意的是，每个寄存器文件都包含一些只读寄存器，其中存储有关正在局部执行的当前线程块和线程的数据，使内核能够基于局部线程 ID 使用不同的数据执行。</p>
 <h3 id="alu">ALU</h3>
@@ -1518,15 +1518,16 @@ tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，�
 <h3 id="lsu">LSU</h3>
 <p>每个线程的专用加载存储单元用于访问全局数据内存。
 处理加载 (LDR) 和存储 (STR) 指令，并处理内存请求被内存控制器处理和中继的异步等待时间。</p>
-<h3 id="pc">pc</h3>
+<h3 id="pc">PC</h3>
 <p>每个单元的专用程序计数器用于确定每个线程接下来要执行的指令。<br />
 默认情况下，PC 在每个指令后递增 1。<br />
 使用分支指令 (BRnzp)，NZP 寄存器会检查 NZP 寄存器（由先前的 CMP 指令设置）是否匹配某些情况 - 如果匹配，它将跳转到程序内存的特定行。这就是循环和条件语句的实现方式。<br />
 由于线程并行处理，tiny-gpu 假设所有线程在每个指令后都“收敛”到相同的程序计数器 - 这为了简化起见，是一个近似假设。<br />
 在真正的GPU中，单个线程可以跳转到不同的 PC，导致分支分歧 (branch divergence)，即最初一起处理的一组线程必须分裂成单独的执行部分。</p>
+<hr />
 <h2 id="isa">ISA</h2>
 <p>tiny-gpu 实现了一套简单的 11 条指令的指令集架构 (ISA)，在支持用于概念验证的简单内核，例如矩阵加法和矩阵乘法。
-实现这些功能，tiny-gpu 支持以下指令
+实现这些功能，tiny-gpu 支持以下指令<br />
 <code>BRnzp (分支指令)</code> - 如果 NZP 寄存器值满足指令中指定的 nzp 条件，则跳转到程序内存中的另一行。</p>
 <p><code>CMP (比较指令)</code> - 比较两个寄存器中的值，并将结果存储在 NZP 寄存器中，供后续的 BRnzp 指令使用。</p>
 <p><code>ADD、SUB、MUL、DIV (基本算术运算)</code> - 支持张量运算的基本算术操作。</p>
