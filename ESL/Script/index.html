@@ -1823,476 +1823,482 @@
 
 
 <h1 id="_1">自动化脚本</h1>
-<p>```python</p>
-<h1 id="-top-">----------------------------------TOP---------------------------------------------</h1>
-<p>import re
-import os
-import sys
-print('-----TOP Generator -------')</p>
-<h1 id="_2">打开设计文件</h1>
-<p>try:
-    top = sys.argv[1]
-    file_group = sys.argv[2]
-except Exception:
-    raise ("Error: gen_top.py need some design.v ")</p>
-<h1 id="_3">格式对齐</h1>
-<p>align1 = "{:&lt;20}\t{:&lt;10}\t{:&lt;20}\t{:&lt;25}"
-align2 = "{:&lt;20}\t{:&lt;10}\t{:&lt;20}\t{:&lt;25}{:&lt;5}"
-align3 = "{:&lt;20}{:&lt;30}\t{:&lt;5}"
-align4 = "{:&lt;20}{:&lt;4}"
-align5 = "{:&lt;20}\t{:&lt;10}\t{:&lt;20}\t{:&lt;25}{:&lt;1}"</p>
-<h1 id="_4">定义路径</h1>
-<p>inst = 'inst.tmp'
-directory = os.getcwd()
-inst_path = directory + '/' + inst
-top_path = directory + '/' + top</p>
-<h1 id="tmp">移除tmp文件</h1>
-<p>if os.path.exists(inst_path):
-    os.remove(inst_path)
-if os.path.exists(top_path):
-    os.remove(top_path)</p>
-<p>with open(inst_path, 'a') as instance_group:
-    port_list = []  #端口列表
-    sig_dir = {}    #信号嵌套字典
-    link_dic = {}   #自定义信号字典
-    # 例化模块
-    for filepath, dirnames, filenames in os.walk(str(file_group)):
-        for filename in filenames:
-            file_path = os.path.join(filepath, filename)
-            with open(file_path, 'r',errors='ignore') as file_obj:
-                print('Starting Reading file: ' + file_path)
-                content = file_obj.read()
-                #正则匹配删除单行和多行注释，防止干扰(信号连接除外)
-                regex_note = re.compile(r'/*[^/]<em class="+">*/\n?|//(?!.</em>).<em>') <br />
-                match_string = re.findall(regex_note, content)
-                for k in range(len(match_string)):
-                    content = content.replace(match_string[k], '')
-                # 自定义模块信号连接
-                signal_link=re.compile(r'(.</em>{\s<em>)(\w+)(\s</em>:\s<em>)(\w+)(\s</em>}.*)') <br />
-                signal_dic=re.findall(signal_link, content)
-                for m in  range(len(signal_dic)):
-                    signal_from=signal_dic[m][1]
-                    signal_to=signal_dic[m][3] 
-                    link_dic.update({signal_from:signal_to})
-                link_keys = link_dic.keys()<br />
-                link_values = list(link_dic.values() )</p>
-<pre><code>            # 正则匹配模块名
-            regex_module = re.compile(r'(module)(\s+)(\w+)(\s*)')
-            module_obj = re.findall(regex_module, content)
-            if len(module_obj) == 0:
-                print('Error: Cannot find any module')
-            if len(module_obj) &gt; 1:
-                print('Error: ', len(module_obj), ' module have been found')
-            if len(module_obj) == 1:
-                module_name = module_obj[0][2]
-                print('Info: Found module: ', module_name)
-            # 正则匹配端口名
-            regex_ports = re.compile(r'(input|output|inout)(\s+)(reg|wire)?(\s+)?(\[.*:.*\]\s+|\[.*\]\s+)?(\w+)')
-            #                                0输入输出     1空格 2信号类型  3空格     4[位宽]               5信号名
-            groups_ports = re.findall(regex_ports, content)
-            print('Info: Found ports: ', len(groups_ports))
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-----TOP Generator -------&#39;</span><span class="p">)</span>
+<span class="c1"># 打开设计文件</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">file_group</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="p">(</span><span class="s2">&quot;Error: gen_top.py need some design.v &quot;</span><span class="p">)</span>
+<span class="c1"># 格式对齐</span>
+<span class="n">align1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:&lt;20}</span><span class="se">\t</span><span class="si">{:&lt;10}</span><span class="se">\t</span><span class="si">{:&lt;20}</span><span class="se">\t</span><span class="si">{:&lt;25}</span><span class="s2">&quot;</span>
+<span class="n">align2</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:&lt;20}</span><span class="se">\t</span><span class="si">{:&lt;10}</span><span class="se">\t</span><span class="si">{:&lt;20}</span><span class="se">\t</span><span class="si">{:&lt;25}{:&lt;5}</span><span class="s2">&quot;</span>
+<span class="n">align3</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:&lt;20}{:&lt;30}</span><span class="se">\t</span><span class="si">{:&lt;5}</span><span class="s2">&quot;</span>
+<span class="n">align4</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:&lt;20}{:&lt;4}</span><span class="s2">&quot;</span>
+<span class="n">align5</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:&lt;20}</span><span class="se">\t</span><span class="si">{:&lt;10}</span><span class="se">\t</span><span class="si">{:&lt;20}</span><span class="se">\t</span><span class="si">{:&lt;25}{:&lt;1}</span><span class="s2">&quot;</span>
+<span class="c1"># 定义路径</span>
+<span class="n">inst</span> <span class="o">=</span> <span class="s1">&#39;inst.tmp&#39;</span>
+<span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="n">inst_path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">inst</span>
+<span class="n">top_path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">top</span>
+<span class="c1"># 移除tmp文件</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">inst_path</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">inst_path</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">top_path</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">top_path</span><span class="p">)</span>
 
-            # 例化模块
-            if module_obj is not None:
-                instance_group.write('\n//instance module of ' + module_name)
-                # 有参数的模块                    
-                regex_para = re.compile(r'(parameter)(\s+)(\w+)(\s*)(=)(\s*)(\w+)')
-                groups_para = re.findall(regex_para, content)
-                instance_group.write('\n' + module_name+' #(' ) if len(groups_para) &gt; 0 else ' '
-                if len(groups_para) &gt; 0:                                 
-                    for j in range(len(groups_para)):
-                        para_name = groups_para[j][2]
-                        para_num = groups_para[j][6]
-                        if j == len(groups_para)-1:
-                            instance_group.write(' .'+ para_name+'(' + para_name+'))')
-                        else: 
-                            instance_group.write(' .'+ para_name+'(' + para_name+'),')
-                else:
-                    instance_group.write(' ')
-                if len(groups_para) &gt; 0 :
-                    instance_group.write('\n'  + 'u_' + module_name + ' (\n') 
-                else :
-                    instance_group.write('\n' + module_name + ' u_' + module_name + ' (\n')
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inst_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">instance_group</span><span class="p">:</span>
+    <span class="n">port_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#端口列表</span>
+    <span class="n">sig_dir</span> <span class="o">=</span> <span class="p">{}</span>    <span class="c1">#信号嵌套字典</span>
+    <span class="n">link_dic</span> <span class="o">=</span> <span class="p">{}</span>   <span class="c1">#自定义信号字典</span>
+    <span class="c1"># 例化模块</span>
+    <span class="k">for</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_group</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Starting Reading file: &#39;</span> <span class="o">+</span> <span class="n">file_path</span><span class="p">)</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="c1">#正则匹配删除单行和多行注释，防止干扰(信号连接除外)</span>
+                <span class="n">regex_note</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/\*[^/]*\*/\n?|//(?!.*{.+}).*&#39;</span><span class="p">)</span>   
+                <span class="n">match_string</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_note</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">match_string</span><span class="p">)):</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">match_string</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="c1"># 自定义模块信号连接</span>
+                <span class="n">signal_link</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(.*{\s*)(\w+)(\s*:\s*)(\w+)(\s*}.*)&#39;</span><span class="p">)</span>   
+                <span class="n">signal_dic</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">signal_link</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span>  <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal_dic</span><span class="p">)):</span>
+                    <span class="n">signal_from</span><span class="o">=</span><span class="n">signal_dic</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">signal_to</span><span class="o">=</span><span class="n">signal_dic</span><span class="p">[</span><span class="n">m</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> 
+                    <span class="n">link_dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">signal_from</span><span class="p">:</span><span class="n">signal_to</span><span class="p">})</span>
+                <span class="n">link_keys</span> <span class="o">=</span> <span class="n">link_dic</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>  
+                <span class="n">link_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">link_dic</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">)</span>
 
-                num = len(groups_ports)
-                for i in range(num):
-                    port_name = groups_ports[i][5]
-                    port_width = groups_ports[i][4]
-                    port_type = groups_ports[i][0]
-                    port_regwire = groups_ports[i][2]
-                    if port_name not in port_list:
-                        sig_dir[port_name] = {}
-                        sig_dir[port_name]['input_inst'] = []
-                        sig_dir[port_name]['output_inst'] = []
-                        sig_dir[port_name]['inout_inst'] = []
-                        sig_dir[port_name]['input_num'] = 0
-                        sig_dir[port_name]['output_num'] = 0
-                        sig_dir[port_name]['inout_num'] = 0
-                        sig_dir[port_name]['link_num'] = 0
-                        sig_dir[port_name]['port_name'] = port_name
-                        sig_dir[port_name]['port_width'] = port_width
-                        sig_dir[port_name]['port_type'] = port_type
-                        sig_dir[port_name]['regwire'] = port_regwire
-                        sig_dir[port_name]['link_from'] = port_name if port_name in link_keys else ''
-                        sig_dir[port_name]['link_to'] = link_dic[port_name] if port_name in link_keys else ''
-                        port_list.append(port_name)
+                <span class="c1"># 正则匹配模块名</span>
+                <span class="n">regex_module</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(module)(\s+)(\w+)(\s*)&#39;</span><span class="p">)</span>
+                <span class="n">module_obj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_module</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: Cannot find any module&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">),</span> <span class="s1">&#39; module have been found&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">module_name</span> <span class="o">=</span> <span class="n">module_obj</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Info: Found module: &#39;</span><span class="p">,</span> <span class="n">module_name</span><span class="p">)</span>
+                <span class="c1"># 正则匹配端口名</span>
+                <span class="n">regex_ports</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(input|output|inout)(\s+)(reg|wire)?(\s+)?(\[.*:.*\]\s+|\[.*\]\s+)?(\w+)&#39;</span><span class="p">)</span>
+                <span class="c1">#                                0输入输出     1空格 2信号类型  3空格     4[位宽]               5信号名</span>
+                <span class="n">groups_ports</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_ports</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Info: Found ports: &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_ports</span><span class="p">))</span>
 
-                    if port_type == 'input':
-                        sig_dir[port_name]['input_num'] += 1 
-                        sig_dir[port_name]['input_inst'].append(module_name)                             
-                    elif port_type == 'output':
-                        sig_dir[port_name]['output_num'] += 1
-                        sig_dir[port_name]['output_inst'].append(module_name)                         
-                    else:
-                        sig_dir[port_name]['inout_num'] += 1
-                        sig_dir[port_name]['inout_inst'].append(module_name)
+                <span class="c1"># 例化模块</span>
+                <span class="k">if</span> <span class="n">module_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">//instance module of &#39;</span> <span class="o">+</span> <span class="n">module_name</span><span class="p">)</span>
+                    <span class="c1"># 有参数的模块                    </span>
+                    <span class="n">regex_para</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(parameter)(\s+)(\w+)(\s*)(=)(\s*)(\w+)&#39;</span><span class="p">)</span>
+                    <span class="n">groups_para</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_para</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                    <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">module_name</span><span class="o">+</span><span class="s1">&#39; #(&#39;</span> <span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_para</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_para</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>                                 
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">groups_para</span><span class="p">)):</span>
+                            <span class="n">para_name</span> <span class="o">=</span> <span class="n">groups_para</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                            <span class="n">para_num</span> <span class="o">=</span> <span class="n">groups_para</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_para</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                                <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; .&#39;</span><span class="o">+</span> <span class="n">para_name</span><span class="o">+</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="n">para_name</span><span class="o">+</span><span class="s1">&#39;))&#39;</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span> 
+                                <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; .&#39;</span><span class="o">+</span> <span class="n">para_name</span><span class="o">+</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="n">para_name</span><span class="o">+</span><span class="s1">&#39;),&#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_para</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span>
+                        <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>  <span class="o">+</span> <span class="s1">&#39;u_&#39;</span> <span class="o">+</span> <span class="n">module_name</span> <span class="o">+</span> <span class="s1">&#39; (</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
+                    <span class="k">else</span> <span class="p">:</span>
+                        <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">module_name</span> <span class="o">+</span> <span class="s1">&#39; u_&#39;</span> <span class="o">+</span> <span class="n">module_name</span> <span class="o">+</span> <span class="s1">&#39; (</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>  
 
-                    if port_name in link_keys:
-                        sig_dir[port_name]['link_num'] += 1
+                    <span class="n">num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_ports</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+                        <span class="n">port_name</span> <span class="o">=</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span>
+                        <span class="n">port_width</span> <span class="o">=</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+                        <span class="n">port_type</span> <span class="o">=</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">port_regwire</span> <span class="o">=</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">port_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">port_list</span><span class="p">:</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;input_inst&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;output_inst&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;inout_inst&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;inout_num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;link_num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;port_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_name</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;port_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_width</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;port_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_type</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;regwire&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_regwire</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;link_from&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_name</span> <span class="k">if</span> <span class="n">port_name</span> <span class="ow">in</span> <span class="n">link_keys</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;link_to&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">link_dic</span><span class="p">[</span><span class="n">port_name</span><span class="p">]</span> <span class="k">if</span> <span class="n">port_name</span> <span class="ow">in</span> <span class="n">link_keys</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+                            <span class="n">port_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">port_name</span><span class="p">)</span>
 
-                    if i == num - 1:
-                        if port_name in link_keys:                           
-                            instance_group.write(align2.format(('\t.' + port_name),(' '),(' '),('\t(' + link_dic[port_name] + ')')
-                                                ,('\t//' + port_type +' '+port_regwire +' '+ port_width + '\n);\n')))
-                        else:
-                            instance_group.write(align2.format(('\t.' + port_name),(' '),(' '),('\t(' + port_name + ')')
-                                                ,('\t//' + port_type +' '+port_regwire +' '+ port_width + '\n);\n')))                                
-                    else:
-                        if port_name in link_keys:                           
-                            instance_group.write(align2.format(('\t.' + port_name),(' '),(' '),('\t(' + link_dic[port_name] + '),')
-                                            ,('\t//' + port_type +  ' '+port_regwire +' '+ port_width + '\n'))) 
-                        else:
-                            instance_group.write(align2.format(('\t.' + port_name),(' '),(' '),('\t(' + port_name + '),')
-                                            ,('\t//' + port_type +  ' '+port_regwire +' '+ port_width + '\n')))
+                        <span class="k">if</span> <span class="n">port_type</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span><span class="p">:</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> 
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;input_inst&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>                             
+                        <span class="k">elif</span> <span class="n">port_type</span> <span class="o">==</span> <span class="s1">&#39;output&#39;</span><span class="p">:</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;output_inst&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>                         
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;inout_num&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;inout_inst&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
 
-# 顶层输入输出信号声明
-</code></pre>
-<p>with open(top_path, 'a') as top_group:
-    top_group.write('/<em>------------------------------------------------------------------\n')
-    top_group.write('//The design file is generated by gen_top.py\n')
-    top_group.write('//The design file including:\n')
-    for filepath, dirnames, filenames in os.walk(str(file_group)):
-        for filename in filenames:
-            file_path = os.path.join(filepath, filename)
-            top_group.write('//'+file_path+'\n')
-    top_group.write('-------------------------------------------------------------------</em>/\n')
-    # <code>include
-    for filepath, dirnames, filenames in os.walk(str(file_group)):
-        for filename in filenames:
-            file_path = os.path.join(filepath, filename)
-            with open(file_path, 'r',errors='ignore') as file_obj:
-                content = file_obj.read()
-                regex_include = re.compile(r'</code>include.+"') <br />
-                include_string = re.findall(regex_include, content)
-                for m in range(len(include_string)):
-                    top_group.write(include_string[m]+'\n') </p>
-<pre><code>top_group.write('module top (\n')
-num_port = 0
-link_port = 0 
-cmt_input = {}
-cmt_output = {}
-cmt_inout = {}
-cmt_link1 = {}
-cmt_link2 = {}
-cmt_link = {}
-cmt_sig = {}
-port_sig = {}
-wire_sig = {}
-link_sig = {}
-Info1 ={}
-Info2 ={}
-Info ={}
-for i in sig_dir:
-    #注释
-    cmt_input[i] = str('to: ' +str(sig_dir[i]['input_inst']) + '; ') if sig_dir[i]['input_num'] &gt; 0 else ''
-    cmt_output[i] = str('from: ' + str(sig_dir[i]['output_inst']) + '; ') if sig_dir[i]['output_num'] &gt; 0 else ''
-    cmt_inout[i] = str('connect: ' + str(sig_dir[i]['inout_inst']) + '; ') if sig_dir[i]['inout_num'] &gt; 0 else ''
-    cmt_sig[i] ='\t//' + cmt_input[i] + cmt_output[i] + cmt_inout[i]
+                        <span class="k">if</span> <span class="n">port_name</span> <span class="ow">in</span> <span class="n">link_keys</span><span class="p">:</span>
+                            <span class="n">sig_dir</span><span class="p">[</span><span class="n">port_name</span><span class="p">][</span><span class="s1">&#39;link_num&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> 
 
-    cmt_link1[i] = str('to: ' + str(sig_dir[i]['input_inst'])+':' +str(sig_dir[i]['link_from']) +'; ') if sig_dir[i]['input_num'] &gt; 0 else ''
-    cmt_link2[i] = str('from: ' + str(sig_dir[i]['output_inst'])+':' +str(sig_dir[i]['link_from'])) if sig_dir[i]['output_num'] &gt; 0 else ''
-    cmt_link[i] =  '\t//' + cmt_link2[i] + cmt_link1[i]
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">port_name</span> <span class="ow">in</span> <span class="n">link_keys</span><span class="p">:</span>                           
+                                <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align2</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">.&#39;</span> <span class="o">+</span> <span class="n">port_name</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">(&#39;</span> <span class="o">+</span> <span class="n">link_dic</span><span class="p">[</span><span class="n">port_name</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+                                                    <span class="p">,(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">//&#39;</span> <span class="o">+</span> <span class="n">port_type</span> <span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">port_regwire</span> <span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span> <span class="n">port_width</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">);</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align2</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">.&#39;</span> <span class="o">+</span> <span class="n">port_name</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">(&#39;</span> <span class="o">+</span> <span class="n">port_name</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+                                                    <span class="p">,(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">//&#39;</span> <span class="o">+</span> <span class="n">port_type</span> <span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">port_regwire</span> <span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span> <span class="n">port_width</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">);</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span>                                
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">port_name</span> <span class="ow">in</span> <span class="n">link_keys</span><span class="p">:</span>                           
+                                <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align2</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">.&#39;</span> <span class="o">+</span> <span class="n">port_name</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">(&#39;</span> <span class="o">+</span> <span class="n">link_dic</span><span class="p">[</span><span class="n">port_name</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;),&#39;</span><span class="p">)</span>
+                                                <span class="p">,(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">//&#39;</span> <span class="o">+</span> <span class="n">port_type</span> <span class="o">+</span>  <span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">port_regwire</span> <span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span> <span class="n">port_width</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span> 
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">instance_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align2</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">.&#39;</span> <span class="o">+</span> <span class="n">port_name</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">(&#39;</span> <span class="o">+</span> <span class="n">port_name</span> <span class="o">+</span> <span class="s1">&#39;),&#39;</span><span class="p">)</span>
+                                                <span class="p">,(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">//&#39;</span> <span class="o">+</span> <span class="n">port_type</span> <span class="o">+</span>  <span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">port_regwire</span> <span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span> <span class="n">port_width</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span> 
 
-    port_sig[i] = str(align1.format(('\t' + sig_dir[i]['port_type'] ),( '\t'+ sig_dir[i]['regwire']  ),( sig_dir[i]['port_width']  ),( sig_dir[i]['port_name'])))
-    wire_sig[i] = str(align1.format(('\t' +'wire' + '\t' ),(' '),( sig_dir[i]['port_width'] ), (sig_dir[i]['port_name']))) 
-    link_sig[i] = str(align1.format(('\t' +'wire' + '\t' ),(' '),( sig_dir[i]['port_width'] ), (sig_dir[i]['link_to'])))
+    <span class="c1"># 顶层输入输出信号声明</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">top_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">top_group</span><span class="p">:</span>
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;/*------------------------------------------------------------------</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;//The design file is generated by gen_top.py</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;//The design file including:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_group</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;//&#39;</span><span class="o">+</span><span class="n">file_path</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------------*/</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="c1"># `include</span>
+    <span class="k">for</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_group</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">regex_include</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;`include.+&quot;&#39;</span><span class="p">)</span>   
+                <span class="n">include_string</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_include</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">include_string</span><span class="p">)):</span>
+                    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">include_string</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
 
-    Info1[i] =str(sig_dir[i]['input_inst'])if sig_dir[i]['input_num'] &gt; 0 else ''
-    Info2[i] =str(sig_dir[i]['output_inst'])if sig_dir[i]['output_num'] &gt; 0 else ''
-    Info[i] =Info1[i]+Info2[i]
-    #如果其中一个为0也就是说只输入或者只输出就是顶层端口，否则是内部信号
-    if (sig_dir[i]['input_num'] == 0 or sig_dir[i]['output_num'] == 0 or sig_dir[i]['inout_num'] &gt; 0 ) and (sig_dir[i]['link_num'] == 0):
-        num_port = num_port + 1
-    # if sig_dir[i]['output_num'] &gt; 1:
-    #     print('Error: ' + i + ' have been multiple derived by ' + str(sig_dir[i]['output_inst']))
-    # if sig_dir[i]['input_num'] &gt; 1:
-    #     print('Info: ' + i + ' have been broadcast to ' + str(sig_dir[i]['input_inst'])+'\n')
-#顶层端口声明
-cnt_port = 0
-for i in sig_dir:           
-    if (sig_dir[i]['input_num'] == 0 or sig_dir[i]['output_num'] == 0 or sig_dir[i]['inout_num'] &gt; 0) and (sig_dir[i]['link_num'] == 0):
-        if cnt_port == num_port - 1:
-            top_group.write(port_sig[i] + cmt_sig[i]+ '\n);\n\n')
-        else:
-            top_group.write(port_sig[i] + ',' + cmt_sig[i]  + '\n')
-        cnt_port = cnt_port + 1
-#参数声明
-top_group.write("//parameter declaration\n")
-for filepath, dirnames, filenames in os.walk(str(file_group)):
-    for filename in filenames:
-        file_path = os.path.join(filepath, filename)
-        with open(file_path, 'r',errors='ignore') as file_obj:
-            content = file_obj.read()                  
-            regex_para = re.compile(r'(parameter)(\s+)(\w+)(\s*)(=)(\s*)(\w+)')
-            groups_para = re.findall(regex_para, content)                               
-            for j in range(len(groups_para)):
-                para_name = groups_para[j][2]
-                para_num = groups_para[j][6]
-                top_group.write(align5.format(('\tlocalparam '),(' '),( '\t'+para_name),('\t=' + para_num),(' ;\n')))
-#信号声明 
-top_group.write(" \n") 
-top_group.write("//signal declaration\n")  
-for i in sig_dir:
-    if sig_dir[i]['input_num'] &gt; 0 and sig_dir[i]['output_num'] &gt; 0 and sig_dir[i]['inout_num'] == 0:
-        top_group.write(wire_sig[i] + ';' +cmt_sig[i] + '\n')
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;module top (</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">num_port</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">link_port</span> <span class="o">=</span> <span class="mi">0</span> 
+    <span class="n">cmt_input</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmt_output</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmt_inout</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmt_link1</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmt_link2</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmt_link</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cmt_sig</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">port_sig</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">wire_sig</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">link_sig</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">Info1</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="n">Info2</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="n">Info</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sig_dir</span><span class="p">:</span>
+        <span class="c1">#注释</span>
+        <span class="n">cmt_input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;to: &#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_inst&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">cmt_output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;from: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_inst&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">cmt_inout</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;connect: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;inout_inst&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;inout_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">cmt_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">//&#39;</span> <span class="o">+</span> <span class="n">cmt_input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmt_output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmt_inout</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-# 自定义信号声明           
-    if sig_dir[i]['link_num'] &gt; 0:                   
-        top_group.write(link_sig[i] + ';' + '\n')
-        print('Info: ' + Info[i]+':'+i + ' have been renamed as '  +str(sig_dir[i]['link_to']))
-</code></pre>
-<h1 id="_5">去除重复声明</h1>
-<p>def remove_duplicate_lines(file_path):
-    lines_dict = {}
-    with open(file_path, 'r+') as file:
-        for line in file:
-            lines_dict[line] = None
-        file.truncate(0)
-    with open(file_path, 'w') as output_file:
-        for line in lines_dict.keys():
-            output_file.write(line)
-remove_duplicate_lines(top_path)                </p>
-<h1 id="insttop">将inst中的模块例化写入top</h1>
-<p>with open(inst_path, 'r') as instance_group:
-    res = instance_group.read()
-    with open(top_path, 'a') as top_group:
-        top_group.write(res + '\nendmodule\n')#分文件因为endmodule</p>
-<h1 id="inst">清除inst文件</h1>
-<p>if os.path.exists(directory + '/' + inst):
-    os.remove(directory + '/' + inst)
-    print('Info: ' + top + ' have been generated')
-    print('-----TOP Generator End---------')</p>
-<h1 id="-testbench-">---------------------------------Testbench--------------------------------------------</h1>
-<p>print('\n-----TB Generator-----')
-file_tb   = 'tb_top.v'
-path = top_path
-with open(path,'r') as file:
-  print('Read instance: '+path)
-  content_tb = file.read()
-  regex=re.compile(r'//.<em>')
-  match_string=re.findall(regex, content_tb)
-  for k in range(len(match_string)):
-    content_tb=content_tb.replace(match_string[k],'')
-  #正则匹配模块名
-  regex_module = re.compile(r'(module)(\s+)(\w+)(\s+)')
-  module_obj = re.findall(regex_module, content_tb)
-  if len(module_obj)==0:
-    print('Error! Cannot find any module')
-  if len(module_obj)&gt;1:
-    print('Error! ',len(module_obj), ' module have been found')
-  if len(module_obj)==1:
-    print('Find module: ',module_obj[0][2]) 
-  #正则匹配端口
-  regex_ports = re.compile(r'(input|output)(\s+)(reg|wire)?(\s+)?([.</em>:.<em>]\s+|[.</em>]\s+)?(\w+)');
-  groups_ports = re.findall(regex_ports, content_tb)
-  print('Find ports:',len(groups_ports))
-  ##写TB文件
-  with open(directory+'/'+file_tb,'w') as file_obj2:
-    with open(path, 'r',errors='ignore') as file_obj3:
-        content = file_obj3.read()
-        regex_include = re.compile(r'<code>include.+"')   
-        include_string = re.findall(regex_include, content)
-        for m in range(len(include_string)):
-            file_obj2.write(include_string[m]+'\n') 
-    file_obj2.write('''//This file is generated by scripts for simulation
-//The simulation is for smoking test
-//liuao</code>timescale 1ns/1ps
-module tb_top;
-    ''')
-    if module_obj is not None:
-      num = len(groups_ports)   </p>
-<h1 id="_6">信号声明</h1>
-<pre><code>  file_obj2.write('\n//Declaration DUT signals')
-  for i in range(num):
-    if groups_ports[i][0] == 'input':
-      file_obj2.write(align3.format(('\n\treg'),(groups_ports[i][4]),(groups_ports[i][5]+';')))
-    else:
-      file_obj2.write(align3.format(('\n\twire'),(groups_ports[i][4]),(groups_ports[i][5]+';')))
-</code></pre>
-<h1 id="_7">例化模块</h1>
-<pre><code>  file_obj2.write('\n\n//Instance DUT module')
-  file_obj2.write('\n'+module_obj[0][2]+' u_'+module_obj[0][2]+' (\n')
-  for i in range(num):
-    if i == num-1:
-      file_obj2.write(align3.format(('\t.'+groups_ports[i][5]),('('+groups_ports[i][5]+')'),('//'+groups_ports[i][0]+groups_ports[i][4]+'\n);\n')))
-    else:
-      file_obj2.write(align3.format(('\t.'+groups_ports[i][5]),('('+groups_ports[i][5]+'),'),('//'+groups_ports[i][0]+groups_ports[i][4]+'\n')))
-#载入模板
-# with open(directory+'/'+'simulation.temp','r') as file_temp:
-#   file_obj2.write(file_temp.read())
-# file_obj2.write('\nendmodule')
-</code></pre>
-<h1 id="_8">时钟和复位信号</h1>
-<pre><code>  file_obj2.write('''\n//Generate clock at 1GHz
-</code></pre>
-<p>initial begin
-    clk = 0;
-    forever #0.5 clk = ~clk;
-end</p>
-<p>//Generate rst_n at 50ns
-initial begin
-    rst_n = 0;
-    #50;
-    rst_n = 1;
-end''')</p>
-<h1 id="_9">初始化信号</h1>
-<pre><code>  file_obj2.write('\n//Signals initialization\ninitial begin\n')
-  for i in range(num):
-      if groups_ports[i][0] == 'input'and groups_ports[i][5] !='rst_n' and  groups_ports[i][5] !='clk':
-        file_obj2.write(align4.format(('\t'+groups_ports[i][5]),('=0;'+'\n')))
-  file_obj2.write('end\n')
-</code></pre>
-<h1 id="_10">简单激励信号</h1>
-<pre><code>  file_obj2.write('\n//Single Motivation\nalways @(posedge clk or negedge rst_n)begin\n\tif(!rst_n)\n')
-  for i in range(num):
-      if groups_ports[i][0] == 'input' and groups_ports[i][5] !='rst_n' and  groups_ports[i][5] !='clk':
-        file_obj2.write(align4.format(('\t\t'+groups_ports[i][5]),("&lt;= {$random}%2;"+'\n')))
-  file_obj2.write('\telse\n\t\t#10;\n')      
-  for i in range(num):
-      if groups_ports[i][0] == 'input'and groups_ports[i][5] !='rst_n' and  groups_ports[i][5] !='clk':
-        file_obj2.write(align4.format(('\t\t'+groups_ports[i][5]),('&lt;= '+groups_ports[i][5] +"+ 32'h1 ;"+'\n') ))
-  file_obj2.write('end\n')
-</code></pre>
-<h1 id="_11">波形文件输出</h1>
-<pre><code>  file_obj2.write('''\n//Generate Verdi fsdb waveform for debug
-</code></pre>
-<p>initial begin
-  $display("###########SIM HAVE START##############");
-  $fsdbDumpfile("tb_top.fsdb");
-  $fsdbDumpvars(0,tb_top,"+mda");
-  #1000000000000;
-  $display("###########SIM HAVE DONE##############");
-  $finish;
-end</p>
-<p>endmodule''')
-  print('tb_top.v have been generated!\n----TB Generator End-----')</p>
-<h1 id="-check-">---------------------------------Check--------------------------------------------</h1>
-<p>print('\n------Check-------') 
-with open(top_path, 'a') as top_group:
-    for i in sig_dir:     <br />
-        if sig_dir[i]['output_num'] &gt; 1:
-            print('Error: ' + i + ' have been multiple derived by ' + str(sig_dir[i]['output_inst']))
-        if sig_dir[i]['input_num'] &gt; 1:
-            print('Info: ' + i + ' have been broadcast to ' + str(sig_dir[i]['input_inst']))  </p>
-<p>def get_include(verilog):
-    obj_include ={}
-    re_include = re.compile(r'<code>include\s+"(.+)"') 
-    re_define =  re.compile(r'</code>define\s+(\w+)\s+(.+)')
-    with open(verilog,'r') as top:
-        lines = top.readlines()
-        for line in lines:
-            if re.search(re_include, line):
-                include=re.search(re_include, line).group(1)
-                with open(include,'r') as top_define:
-                    includes= top_define.readlines()
-                    for line in includes:
-                        if re.search(re_define, line):
-                            include_key=re.search(re_define, line).group(1)
-                            obj_include[include_key]=re.search(re_define, line).group(2)
-                            print('Info:',include_key,'was defined as',obj_include[include_key])
-    return obj_include</p>
-<h1 id="_12">返回输入输出类型，端口和信号宽度，端口和信号数量，信号类型，一行内容</h1>
-<p>def get_sigs(verilog,obj_include):
-    re_port = re.compile(r'^(input|output|inout)(reg|wire)?([((\d+|.+)?(:0)?)])?(\w+)(,?)') #端口
-    re_wire = re.compile(r'.\w+((\w+)),?(\/\/(input|output))?(\w+)?([((\d+|.+)?(:0)?)])?')#.abc(abd)， //input|output   [31:0]
-    # print(obj_include)
-    with open(verilog,'r') as top:
-        lines = top.readlines()
-        obj_dir  = {}
-        obj_wid  = {}
-        obj_cnt  = {}
-        obj_exp  = {}
-        obj_lin  = {}
-        for line in lines:
-            line = re.sub(r'\s', '', line)#去掉空白
-            line = re.sub(r'^\/\/.<em>$', '', line)#去掉从头开始的注释
-            line = re.sub(r'^(\w+.</em>)?.\w+(\d+).<em>', '', line)#去掉直接赋值的信号
-            line = re.sub(r'^.+#.</em>..*', '', line)
-            if re.search(re_port, line):
-                port_dir = re.search(re_port, line).group(1)# input|output|inout
-                port_rag = re.search(re_port, line).group(3)# [(\d+):0]              <br />
-                # 有位宽则d+1,否则1
-                if port_rag:
-                    if re.search(re_port, line).group(5).isdigit():#\d+位宽
-                        port_wid = re.search(re_port, line).group(4)
-                    elif re.search(re_port, line).group(5).replace('<code>', '') in obj_include.keys():
-                        port_wid = obj_include[re.search(re_port, line).group(5).replace('</code>', '')]
-                    else:
-                        port_wid = re.search(re_port, line).group(4)
-                else:
-                    port_wid = 1
-                port_sig = re.search(re_port, line).group(7)#\w+端口名字
-                if port_sig not in obj_dir:
-                    obj_dir[port_sig] = port_dir
-                    obj_wid[port_sig] = port_wid
-                    obj_cnt[port_sig] = 1
-                    obj_exp[port_sig] = port_dir
-                    obj_lin[port_sig] = line
-                else:
-                    obj_cnt[port_sig] = 1 + obj_cnt[port_sig]
-            elif re.search(re_wire, line):
-                wire_dir = re.search(re_wire, line).group(3)#input|output
-                wire_rag = re.search(re_wire, line).group(5)#[(\d+):0]
-                if wire_rag:
-                    if re.search(re_wire, line).group(7).isdigit():#\d+位宽
-                        wire_wid = re.search(re_wire, line).group(6) 
-                    elif re.search(re_wire, line).group(7).replace('<code>', '') in obj_include.keys():
-                            wire_wid = obj_include[re.search(re_wire, line).group(6).replace('</code>', '')]
-                    else:
-                        wire_wid = re.search(re_wire, line).group(6)
-                else:
-                    wire_wid = 1
-                wire_sig = re.search(re_wire, line).group(1)#\w+信号名
-                if wire_sig not in obj_dir:
-                    obj_dir[wire_sig] = wire_dir
-                    obj_wid[wire_sig] = wire_wid
-                    obj_cnt[wire_sig] = 1
-                    obj_exp[wire_sig] = 'wire'
-                    obj_lin[wire_sig] = line
-                else:
-                    obj_cnt[wire_sig] = 1 + obj_cnt[wire_sig]
-                    if wire_wid != obj_wid[wire_sig]:#相连信号宽度不匹配
-                        print('Error: width mismath -&gt; ', obj_lin[wire_sig], wire_sig)
-    return obj_dir, obj_wid, obj_cnt, obj_exp, obj_lin</p>
-<h1 id="_13">未连接检查</h1>
-<p>def get_float(obj_wid, obj_exp):
-    for obj in sorted(obj_wid):
-        if obj_cnt[obj] == 1:
-            if 'wire'  in obj_exp[obj]:
-                print('Error: not connected wire -&gt; ', obj_lin[obj], obj_cnt[obj])
-    return True</p>
-<h1 id="_14">多驱动检查</h1>
-<p>def get_broadcast(obj_wid, obj_exp):
-    for obj in sorted(obj_wid):
-        if obj_cnt[obj] &gt; 3:
-            print('Info: multiple load wire -&gt; ', obj_lin[obj], obj_cnt[obj])
-    return True</p>
-<p>if <strong>name</strong> == '<strong>main</strong>':
-    obj_include = get_include(top_path)
-    obj_dir, obj_wid, obj_cnt, obj_exp, obj_lin = get_sigs(top_path,obj_include)
-    get_float(obj_wid, obj_exp)
-    get_broadcast(obj_wid, obj_exp)   </p>
-<p>print('------END-------') ```</p>
+        <span class="n">cmt_link1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;to: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_inst&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;:&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;link_from&#39;</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;; &#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">cmt_link2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;from: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_inst&#39;</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;:&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;link_from&#39;</span><span class="p">]))</span> <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">cmt_link</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span>  <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">//&#39;</span> <span class="o">+</span> <span class="n">cmt_link2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmt_link1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">port_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">align1</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;port_type&#39;</span><span class="p">]</span> <span class="p">),(</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">+</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;regwire&#39;</span><span class="p">]</span>  <span class="p">),(</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;port_width&#39;</span><span class="p">]</span>  <span class="p">),(</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;port_name&#39;</span><span class="p">])))</span>
+        <span class="n">wire_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">align1</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span><span class="s1">&#39;wire&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;port_width&#39;</span><span class="p">]</span> <span class="p">),</span> <span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;port_name&#39;</span><span class="p">])))</span> 
+        <span class="n">link_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">align1</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span><span class="s1">&#39;wire&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;port_width&#39;</span><span class="p">]</span> <span class="p">),</span> <span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;link_to&#39;</span><span class="p">])))</span>
+
+        <span class="n">Info1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_inst&#39;</span><span class="p">])</span><span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">Info2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_inst&#39;</span><span class="p">])</span><span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">Info</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span><span class="n">Info1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">Info2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="c1">#如果其中一个为0也就是说只输入或者只输出就是顶层端口，否则是内部信号</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;inout_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;link_num&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">num_port</span> <span class="o">=</span> <span class="n">num_port</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># if sig_dir[i][&#39;output_num&#39;] &gt; 1:</span>
+        <span class="c1">#     print(&#39;Error: &#39; + i + &#39; have been multiple derived by &#39; + str(sig_dir[i][&#39;output_inst&#39;]))</span>
+        <span class="c1"># if sig_dir[i][&#39;input_num&#39;] &gt; 1:</span>
+        <span class="c1">#     print(&#39;Info: &#39; + i + &#39; have been broadcast to &#39; + str(sig_dir[i][&#39;input_inst&#39;])+&#39;\n&#39;)</span>
+    <span class="c1">#顶层端口声明</span>
+    <span class="n">cnt_port</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sig_dir</span><span class="p">:</span>           
+        <span class="k">if</span> <span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;inout_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;link_num&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cnt_port</span> <span class="o">==</span> <span class="n">num_port</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">port_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmt_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">);</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">port_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="n">cmt_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">cnt_port</span> <span class="o">=</span> <span class="n">cnt_port</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1">#参数声明</span>
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;//parameter declaration</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file_group</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">file_obj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>                  
+                <span class="n">regex_para</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(parameter)(\s+)(\w+)(\s*)(=)(\s*)(\w+)&#39;</span><span class="p">)</span>
+                <span class="n">groups_para</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_para</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>                               
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">groups_para</span><span class="p">)):</span>
+                    <span class="n">para_name</span> <span class="o">=</span> <span class="n">groups_para</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">para_num</span> <span class="o">=</span> <span class="n">groups_para</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span>
+                    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align5</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">localparam &#39;</span><span class="p">),(</span><span class="s1">&#39; &#39;</span><span class="p">),(</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">para_name</span><span class="p">),(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">=&#39;</span> <span class="o">+</span> <span class="n">para_num</span><span class="p">),(</span><span class="s1">&#39; ;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span>
+    <span class="c1">#信号声明 </span>
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> 
+    <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;//signal declaration</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>  
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sig_dir</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;inout_num&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">wire_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span> <span class="o">+</span><span class="n">cmt_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># 自定义信号声明           </span>
+        <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;link_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>                   
+            <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">link_sig</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Info: &#39;</span> <span class="o">+</span> <span class="n">Info</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="n">i</span> <span class="o">+</span> <span class="s1">&#39; have been renamed as &#39;</span>  <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;link_to&#39;</span><span class="p">]))</span>
+
+<span class="c1"># 去除重复声明</span>
+<span class="k">def</span> <span class="nf">remove_duplicate_lines</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">lines_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">lines_dict</span><span class="p">[</span><span class="n">line</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output_file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="n">remove_duplicate_lines</span><span class="p">(</span><span class="n">top_path</span><span class="p">)</span>                
+
+<span class="c1"># 将inst中的模块例化写入top</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inst_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">instance_group</span><span class="p">:</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">instance_group</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">top_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">top_group</span><span class="p">:</span>
+        <span class="n">top_group</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">res</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">endmodule</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span><span class="c1">#分文件因为endmodule</span>
+
+<span class="c1"># 清除inst文件</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">inst</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">inst</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Info: &#39;</span> <span class="o">+</span> <span class="n">top</span> <span class="o">+</span> <span class="s1">&#39; have been generated&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-----TOP Generator End---------&#39;</span><span class="p">)</span>
+
+<span class="c1"># ---------------------------------Testbench--------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">-----TB Generator-----&#39;</span><span class="p">)</span>
+<span class="n">file_tb</span>   <span class="o">=</span> <span class="s1">&#39;tb_top.v&#39;</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">top_path</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Read instance: &#39;</span><span class="o">+</span><span class="n">path</span><span class="p">)</span>
+  <span class="n">content_tb</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+  <span class="n">regex</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;//.*&#39;</span><span class="p">)</span>
+  <span class="n">match_string</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">content_tb</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">match_string</span><span class="p">)):</span>
+    <span class="n">content_tb</span><span class="o">=</span><span class="n">content_tb</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">match_string</span><span class="p">[</span><span class="n">k</span><span class="p">],</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="c1">#正则匹配模块名</span>
+  <span class="n">regex_module</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(module)(\s+)(\w+)(\s+)&#39;</span><span class="p">)</span>
+  <span class="n">module_obj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_module</span><span class="p">,</span> <span class="n">content_tb</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error! Cannot find any module&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error! &#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">),</span> <span class="s1">&#39; module have been found&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_obj</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Find module: &#39;</span><span class="p">,</span><span class="n">module_obj</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span> 
+  <span class="c1">#正则匹配端口</span>
+  <span class="n">regex_ports</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(input|output)(\s+)(reg|wire)?(\s+)?(\[.*:.*\]\s+|\[.*\]\s+)?(\w+)&#39;</span><span class="p">);</span>
+  <span class="n">groups_ports</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_ports</span><span class="p">,</span> <span class="n">content_tb</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Find ports:&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">groups_ports</span><span class="p">))</span>
+  <span class="c1">##写TB文件</span>
+  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="n">file_tb</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj2</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj3</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">file_obj3</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">regex_include</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;`include.+&quot;&#39;</span><span class="p">)</span>   
+        <span class="n">include_string</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">regex_include</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">include_string</span><span class="p">)):</span>
+            <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">include_string</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> 
+    <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;//This file is generated by scripts for simulation</span>
+<span class="s1">//The simulation is for smoking test</span>
+<span class="s1">//liuao</span>
+<span class="s1">`timescale 1ns/1ps</span>
+<span class="s1">module tb_top;</span>
+<span class="s1">    &#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">module_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups_ports</span><span class="p">)</span>   
+<span class="c1">#信号声明</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">//Declaration DUT signals&#39;</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span><span class="p">:</span>
+          <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align3</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\n\t</span><span class="s1">reg&#39;</span><span class="p">),(</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]),(</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;;&#39;</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align3</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\n\t</span><span class="s1">wire&#39;</span><span class="p">),(</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]),(</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;;&#39;</span><span class="p">)))</span>
+<span class="c1">#例化模块</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">//Instance DUT module&#39;</span><span class="p">)</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">module_obj</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; u_&#39;</span><span class="o">+</span><span class="n">module_obj</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; (</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">num</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+          <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align3</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">.&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]),(</span><span class="s1">&#39;(&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;)&#39;</span><span class="p">),(</span><span class="s1">&#39;//&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">);</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align3</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">.&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]),(</span><span class="s1">&#39;(&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;),&#39;</span><span class="p">),(</span><span class="s1">&#39;//&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span>
+    <span class="c1">#载入模板</span>
+    <span class="c1"># with open(directory+&#39;/&#39;+&#39;simulation.temp&#39;,&#39;r&#39;) as file_temp:</span>
+    <span class="c1">#   file_obj2.write(file_temp.read())</span>
+    <span class="c1"># file_obj2.write(&#39;\nendmodule&#39;)</span>
+<span class="c1">#时钟和复位信号</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span><span class="se">\n</span><span class="s1">//Generate clock at 1GHz</span>
+<span class="s1">initial begin</span>
+<span class="s1">    clk = 0;</span>
+<span class="s1">    forever #0.5 clk = ~clk;</span>
+<span class="s1">end</span>
+
+<span class="s1">//Generate rst_n at 50ns</span>
+<span class="s1">initial begin</span>
+<span class="s1">    rst_n = 0;</span>
+<span class="s1">    #50;</span>
+<span class="s1">    rst_n = 1;</span>
+<span class="s1">end&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c1">#初始化信号</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">//Signals initialization</span><span class="se">\n</span><span class="s1">initial begin</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+          <span class="k">if</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span><span class="ow">and</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">!=</span><span class="s1">&#39;rst_n&#39;</span> <span class="ow">and</span>  <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">!=</span><span class="s1">&#39;clk&#39;</span><span class="p">:</span>
+            <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align4</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]),(</span><span class="s1">&#39;=0;&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;end</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>    
+<span class="c1">#简单激励信号     </span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">//Single Motivation</span><span class="se">\n</span><span class="s1">always @(posedge clk or negedge rst_n)begin</span><span class="se">\n\t</span><span class="s1">if(!rst_n)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+          <span class="k">if</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span> <span class="ow">and</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">!=</span><span class="s1">&#39;rst_n&#39;</span> <span class="ow">and</span>  <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">!=</span><span class="s1">&#39;clk&#39;</span><span class="p">:</span>
+            <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align4</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]),(</span><span class="s2">&quot;&lt;= {$random}%2;&quot;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)))</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">else</span><span class="se">\n\t\t</span><span class="s1">#10;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>      
+      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+          <span class="k">if</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span><span class="ow">and</span> <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">!=</span><span class="s1">&#39;rst_n&#39;</span> <span class="ow">and</span>  <span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">!=</span><span class="s1">&#39;clk&#39;</span><span class="p">:</span>
+            <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">align4</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]),(</span><span class="s1">&#39;&lt;= &#39;</span><span class="o">+</span><span class="n">groups_ports</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span><span class="s2">&quot;+ 32&#39;h1 ;&quot;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="p">))</span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;end</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>              
+<span class="c1">#波形文件输出     </span>
+      <span class="n">file_obj2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span><span class="se">\n</span><span class="s1">//Generate Verdi fsdb waveform for debug</span>
+<span class="s1">initial begin</span>
+<span class="s1">  $display(&quot;###########SIM HAVE START##############&quot;);</span>
+<span class="s1">  $fsdbDumpfile(&quot;tb_top.fsdb&quot;);</span>
+<span class="s1">  $fsdbDumpvars(0,tb_top,&quot;+mda&quot;);</span>
+<span class="s1">  #1000000000000;</span>
+<span class="s1">  $display(&quot;###########SIM HAVE DONE##############&quot;);</span>
+<span class="s1">  $finish;</span>
+<span class="s1">end</span>
+
+<span class="s1">endmodule&#39;&#39;&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;tb_top.v have been generated!</span><span class="se">\n</span><span class="s1">----TB Generator End-----&#39;</span><span class="p">)</span>
+<span class="c1"># ---------------------------------Check--------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">------Check-------&#39;</span><span class="p">)</span> 
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">top_path</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">top_group</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sig_dir</span><span class="p">:</span>       
+        <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39; have been multiple derived by &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;output_inst&#39;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_num&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Info: &#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39; have been broadcast to &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sig_dir</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;input_inst&#39;</span><span class="p">]))</span>  
+
+<span class="k">def</span> <span class="nf">get_include</span><span class="p">(</span><span class="n">verilog</span><span class="p">):</span>
+    <span class="n">obj_include</span> <span class="o">=</span><span class="p">{}</span>
+    <span class="n">re_include</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;`include\s+&quot;(.+)&quot;&#39;</span><span class="p">)</span> 
+    <span class="n">re_define</span> <span class="o">=</span>  <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;`define\s+(\w+)\s+(.+)&#39;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">verilog</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">top</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_include</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">include</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_include</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">include</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">top_define</span><span class="p">:</span>
+                    <span class="n">includes</span><span class="o">=</span> <span class="n">top_define</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">includes</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_define</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                            <span class="n">include_key</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_define</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="n">obj_include</span><span class="p">[</span><span class="n">include_key</span><span class="p">]</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_define</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Info:&#39;</span><span class="p">,</span><span class="n">include_key</span><span class="p">,</span><span class="s1">&#39;was defined as&#39;</span><span class="p">,</span><span class="n">obj_include</span><span class="p">[</span><span class="n">include_key</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">obj_include</span>
+
+<span class="c1">#返回输入输出类型，端口和信号宽度，端口和信号数量，信号类型，一行内容</span>
+<span class="k">def</span> <span class="nf">get_sigs</span><span class="p">(</span><span class="n">verilog</span><span class="p">,</span><span class="n">obj_include</span><span class="p">):</span>
+    <span class="n">re_port</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(input|output|inout)(reg|wire)?(\[((\d+|.+)?(:0)?)\])?(\w+)(,?)&#39;</span><span class="p">)</span> <span class="c1">#端口</span>
+    <span class="n">re_wire</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\.\w+\((\w+)\),?(\/\/(input|output))?(\w+)?(\[((\d+|.+)?(:0)?)\])?&#39;</span><span class="p">)</span><span class="c1">#.abc(abd)， //input|output   [31:0]</span>
+    <span class="c1"># print(obj_include)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">verilog</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">top</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">obj_dir</span>  <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">obj_wid</span>  <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">obj_cnt</span>  <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">obj_exp</span>  <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">obj_lin</span>  <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="c1">#去掉空白</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\/\/.*$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="c1">#去掉从头开始的注释</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(\w+.*)?\.\w+\(\d+\).*&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="c1">#去掉直接赋值的信号</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^.+#.*\..*&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">port_dir</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="c1"># input|output|inout</span>
+                <span class="n">port_rag</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="c1"># \[(\d+):0\]                </span>
+                <span class="c1"># 有位宽则d+1,否则1</span>
+                <span class="k">if</span> <span class="n">port_rag</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span><span class="c1">#\d+位宽</span>
+                        <span class="n">port_wid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;`&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">obj_include</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">port_wid</span> <span class="o">=</span> <span class="n">obj_include</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;`&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">port_wid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">port_wid</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">port_sig</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_port</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="c1">#\w+端口名字</span>
+                <span class="k">if</span> <span class="n">port_sig</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">obj_dir</span><span class="p">:</span>
+                    <span class="n">obj_dir</span><span class="p">[</span><span class="n">port_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_dir</span>
+                    <span class="n">obj_wid</span><span class="p">[</span><span class="n">port_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_wid</span>
+                    <span class="n">obj_cnt</span><span class="p">[</span><span class="n">port_sig</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">obj_exp</span><span class="p">[</span><span class="n">port_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">port_dir</span>
+                    <span class="n">obj_lin</span><span class="p">[</span><span class="n">port_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">obj_cnt</span><span class="p">[</span><span class="n">port_sig</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">obj_cnt</span><span class="p">[</span><span class="n">port_sig</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+                <span class="n">wire_dir</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="c1">#input|output</span>
+                <span class="n">wire_rag</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="c1">#\[(\d+):0\]</span>
+                <span class="k">if</span> <span class="n">wire_rag</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span><span class="c1">#\d+位宽</span>
+                        <span class="n">wire_wid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> 
+                    <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;`&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">obj_include</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="n">wire_wid</span> <span class="o">=</span> <span class="n">obj_include</span><span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;`&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">wire_wid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">wire_wid</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">wire_sig</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">re_wire</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="c1">#\w+信号名</span>
+                <span class="k">if</span> <span class="n">wire_sig</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">obj_dir</span><span class="p">:</span>
+                    <span class="n">obj_dir</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">wire_dir</span>
+                    <span class="n">obj_wid</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">wire_wid</span>
+                    <span class="n">obj_cnt</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">obj_exp</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;wire&#39;</span>
+                    <span class="n">obj_lin</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">obj_cnt</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">obj_cnt</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">wire_wid</span> <span class="o">!=</span> <span class="n">obj_wid</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">]:</span><span class="c1">#相连信号宽度不匹配</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: width mismath -&gt; &#39;</span><span class="p">,</span> <span class="n">obj_lin</span><span class="p">[</span><span class="n">wire_sig</span><span class="p">],</span> <span class="n">wire_sig</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj_dir</span><span class="p">,</span> <span class="n">obj_wid</span><span class="p">,</span> <span class="n">obj_cnt</span><span class="p">,</span> <span class="n">obj_exp</span><span class="p">,</span> <span class="n">obj_lin</span>
+
+<span class="c1">#  未连接检查</span>
+<span class="k">def</span> <span class="nf">get_float</span><span class="p">(</span><span class="n">obj_wid</span><span class="p">,</span> <span class="n">obj_exp</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">obj_wid</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj_cnt</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;wire&#39;</span>  <span class="ow">in</span> <span class="n">obj_exp</span><span class="p">[</span><span class="n">obj</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: not connected wire -&gt; &#39;</span><span class="p">,</span> <span class="n">obj_lin</span><span class="p">[</span><span class="n">obj</span><span class="p">],</span> <span class="n">obj_cnt</span><span class="p">[</span><span class="n">obj</span><span class="p">])</span>
+    <span class="k">return</span> <span class="kc">True</span>
+<span class="c1">#  多驱动检查</span>
+<span class="k">def</span> <span class="nf">get_broadcast</span><span class="p">(</span><span class="n">obj_wid</span><span class="p">,</span> <span class="n">obj_exp</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">obj_wid</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj_cnt</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Info: multiple load wire -&gt; &#39;</span><span class="p">,</span> <span class="n">obj_lin</span><span class="p">[</span><span class="n">obj</span><span class="p">],</span> <span class="n">obj_cnt</span><span class="p">[</span><span class="n">obj</span><span class="p">])</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">obj_include</span> <span class="o">=</span> <span class="n">get_include</span><span class="p">(</span><span class="n">top_path</span><span class="p">)</span>
+    <span class="n">obj_dir</span><span class="p">,</span> <span class="n">obj_wid</span><span class="p">,</span> <span class="n">obj_cnt</span><span class="p">,</span> <span class="n">obj_exp</span><span class="p">,</span> <span class="n">obj_lin</span> <span class="o">=</span> <span class="n">get_sigs</span><span class="p">(</span><span class="n">top_path</span><span class="p">,</span><span class="n">obj_include</span><span class="p">)</span>
+    <span class="n">get_float</span><span class="p">(</span><span class="n">obj_wid</span><span class="p">,</span> <span class="n">obj_exp</span><span class="p">)</span>
+    <span class="n">get_broadcast</span><span class="p">(</span><span class="n">obj_wid</span><span class="p">,</span> <span class="n">obj_exp</span><span class="p">)</span>   
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------END-------&#39;</span><span class="p">)</span> 
+</code></pre></div>
 
 
 
