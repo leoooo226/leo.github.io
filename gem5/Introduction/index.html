@@ -87,6 +87,8 @@
       
     
     
+      <link rel="stylesheet" href="../../extra.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -1491,9 +1493,9 @@
                   
 
 
-<h1 id="gem5"><strong>gem5</strong></h1>
+<h1 id="gem5">gem5</h1>
 <hr />
-<h2 id="introduction"><strong>Introduction</strong></h2>
+<h2 id="introduction">Introduction</h2>
 <p>gem5是一个开源计算机架构模拟器，包括系统级架构以及处理器微架构。gem5的前身为密歇根大学的m5项目与威斯康星大学的GEMS项目。2011年m5与GEMS合并为gem5，目前被广泛用于学术界和工业界。通过谷歌学术可以看到，gem5目前被引用超过5000次，大量论文采用gem5作为研究工具。同时也被许多工业界公司使用，包括ARM、AMD、Google、Micron、Metempsy、HP、Samsung等。许多公司也积极为gem5添加了新功能或改进了现有功能。近年来，gem5社区仍在积极更新与开发，以支持未来15年的计算机架构研究。</p>
 <p>gem5是一个模块化离散事件驱动的计算机系统模拟器平台。这意味着，架构研究人员在研究新架构时，只需添加或修改特定于目标的功能模块，而不需要了解模拟器的方方面面。同时，也使得gem5容易与其他模拟器联合仿真，构建联合模拟器平台或搭建自己的模拟系统，目前已有许多工作基于gem5开发了模拟平台。</p>
 <p>gem5主要由C++和python编写的。其中C++占绝大多数，主要负责底层架构的具体实现等，python则负责对象的初始化、配置和模拟控制等。另外包含了两个领域特定语言DSL，其中ISADSL负责统一二进制指令的解码和语义规范，SLICC用于实现缓存一致性协议。</p>
@@ -1525,13 +1527,13 @@
 </li>
 </ol>
 <hr />
-<h2 id="download-and-install"><strong>Download and Install</strong></h2>
+<h2 id="download-and-install">Download and Install</h2>
 <p>gem5的下载与安装请参考<a href="https://www.gem5.org/documentation/general_docs/building">https://www.gem5.org/documentation/general_docs/building</a>。</p>
 <hr />
-<h2 id="quick-start"><strong>Quick Start</strong></h2>
+<h2 id="quick-start">Quick Start</h2>
 <p>gem5的快速入门请参考<a href="https://www.gem5.org/documentation/learning_gem5/part1/">https://www.gem5.org/documentation/learning_gem5/part1/</a>。</p>
 <hr />
-<h2 id="community"><strong>Community</strong></h2>
+<h2 id="community">Community</h2>
 <p>gem5的社区包括邮件列表、IRC频道、论坛、wiki等。</p>
 <ul>
 <li>邮件列表：<a href="https://gem5.groups.io/g/main">https://gem5.groups.io/g/main</a></li>
@@ -1540,10 +1542,10 @@
 <li>wiki：<a href="https://gem5.atlassian.net/wiki">https://gem5.atlassian.net/wiki</a></li>
 </ul>
 <hr />
-<h2 id="license"><strong>License</strong></h2>
+<h2 id="license">License</h2>
 <p>gem5使用Apache 2.0许可证。</p>
 <hr />
-<h2 id="documents"><strong>Documents</strong></h2>
+<h2 id="documents">Documents</h2>
 <div class="admonition note">
 <p class="admonition-title">learning_gem5</p>
 <p><a href="https://www.gem5.org/documentation/learning_gem5">https://www.gem5.org/documentation/learning_gem5</a></p>
