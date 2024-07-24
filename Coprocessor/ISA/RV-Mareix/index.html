@@ -15,7 +15,7 @@
         <link rel="next" href="../../Ara2/Introduction/">
       
       
-      <link rel="icon" href="../../../apple.png">
+      <link rel="icon" href="../../../aa.png">
       <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.29">
     
     
@@ -87,8 +87,6 @@
       
     
     
-      <link rel="stylesheet" href="../../../css/extra.css">
-    
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -133,7 +131,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../../.." title="leo&#39;s site" class="md-header__button md-logo" aria-label="leo's site" data-md-component="logo">
       
-  <img src="../../../apple.png" alt="logo">
+  <img src="../../../aa.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -384,7 +382,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="../../.." title="leo&#39;s site" class="md-nav__button md-logo" aria-label="leo's site" data-md-component="logo">
       
-  <img src="../../../apple.png" alt="logo">
+  <img src="../../../aa.png" alt="logo">
 
     </a>
     leo's site
@@ -516,7 +514,7 @@
             
   
   <span class="md-ellipsis">
-    Spec
+    ISA
   </span>
   
 
@@ -526,7 +524,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_2">
             <span class="md-nav__icon md-icon"></span>
-            Spec
+            ISA
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1766,7 +1764,7 @@
 
 
 <h1 id="risc-v-matrix">RISC-V Matrix</h1>
-<h2 id="introduction"><strong>Introduction</strong></h2>
+<h2 id="introduction">Introduction</h2>
 <p>目前RISC-V国际基金会正在积极推动矩阵指令集扩展正式版的进展。现在有两种矩阵指令集扩展的思路，一种是在RVV的基础上，复用向量寄存器的状态来扩展矩阵运算的能力，另一种则是设计全新的矩阵状态，通过与向量进行解耦形成一套完整独立的矩阵指令集扩展。目前来说，本方案倾向于制定一套完整独立的矩阵指令集扩展，因为向量和矩阵的应用场景并不重合，向量扩展可以更好地解决不规则矩阵运算，而矩阵扩展可以在规则的矩阵运算中得到更好的性能。独立的矩阵指令集扩展对不同的人工智能场景也会有不同的应用。利用向量扩展可以更好地进行加解密的操作，而通过矩阵扩展可以进行人工智能复杂场景的运算。并且独立的矩阵扩展具备更大的灵活性，并不依赖于向量扩展，可以更好地面对不同的人工智能场景。<br />
 在此，研究玄铁团队的自定义矩阵扩展。</p>
 <ul class="task-list">
@@ -1775,11 +1773,11 @@
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 矩阵扩展可以进行人工智能复杂场景的运算</li>
 </ul>
 <hr />
-<h2 id="matrix-register"><strong>Matrix Register</strong></h2>
+<h2 id="matrix-register">Matrix Register</h2>
 <hr />
-<h2 id="matrix-size"><strong>Matrix Size</strong></h2>
+<h2 id="matrix-size">Matrix Size</h2>
 <hr />
-<h2 id="matrix-isa"><strong>Matrix ISA</strong></h2>
+<h2 id="matrix-isa">Matrix ISA</h2>
 <div class="admonition note">
 <p class="admonition-title"> XuantieSpec</p>
 <p><a href="https://github.com/XUANTIE-RV/riscv-matrix-extension-spec">https://github.com/XUANTIE-RV/riscv-matrix-extension-spec</a></p>
