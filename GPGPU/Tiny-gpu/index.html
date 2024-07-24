@@ -206,6 +206,11 @@
       </label>
       <nav class="md-search__options" aria-label="Search">
         
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
@@ -1219,6 +1224,108 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Exe">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      启动内核
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      线程执行
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simulation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      待优化
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="待优化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      多级缓存和共享内存
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      内存合并
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      流水线
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      波形调度
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      分支分歧
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      同步和屏障
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2048,7 +2155,62 @@ tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，�
 <p><code>CONST (常量加载指令)</code> - 将常量值加载到寄存器中。</p>
 <p><code>RET (返回指令)</code> - 表示当前线程已执行完毕。</p>
 <p>每个寄存器由4位指定，意味着共有16个寄存器。前13个寄存器 R0-R12 是可读写的通用寄存器。最后 3 个寄存器是特殊的只读寄存器，用于提供对 SIMD 关键的 %blockIdx、%blockDim 和 %threadIdx 值。</p>
+<hr />
 <h2 id="exe">Exe</h2>
+<h3 id="_9">启动内核</h3>
+<p>每个核心遵循以下控制流，通过不同的阶段来执行每个指令：</p>
+<ol>
+<li>
+<p><code>获取 (FETCH)</code>：从程序内存中获取当前程序计数器指向的下一条指令。</p>
+</li>
+<li>
+<p><code>解码 (DECODE)</code>：将指令解码成控制信号。</p>
+</li>
+<li>
+<p><code>请求 (REQUEST)</code>：如果是加载 (LDR) 或存储 (STR) 指令，则需要从全局内存中请求数据。</p>
+</li>
+<li>
+<p><code>等待 (WAIT)</code>：如果适用，等待来自全局内存的数据。</p>
+</li>
+<li>
+<p><code>执行 (EXECUTE)</code>：对数据执行任何计算。</p>
+</li>
+<li>
+<p><code>更新 (UPDATE)</code>：更新寄存器文件和 NZP 寄存器。</p>
+</li>
+</ol>
+<p>简化理解，控制流程被这样划分开来。
+实际上，为了优化处理时间，其中几个步骤可以被压缩。GPU 还可以使用流水线 (pipelining) 技术在核心资源上流式协调执行许多指令，而无需等待先前指令完成。</p>
+<h3 id="_10">线程执行</h3>
+<p>在每个核心内的每个线程都会遵循上述执行路径，对其专用寄存器文件中的数据执行计算。
+这类似于标准的 CPU 架构图，在功能上也相当相似。主要区别在于每个线程的只读寄存器中包含 %blockIdx、%blockDim 和 %threadIdx 值，从而实现 SIMD 功能。
+<img alt="图片" src="../thread.png" /></p>
+<h2 id="simulation">Simulation</h2>
+<p>tiny-gpu 可以模拟上述两种内核的执行。在进行模拟之前，您需要安装 iverilog 和 cocotb。<br />
+安装完先决条件后，您可以使用 make test_matadd 和 make test_matmul 运行内核模拟。<br />
+执行模拟将在 test/logs 中输出一个日志文件，其中包含初始数据内存状态、内核的完整执行跟踪以及最终数据内存状态。<br />
+如果您查看每个日志文件开头记录的初始数据内存状态，您应该会看到用于计算的两个起始矩阵，并且在文件末尾的最终数据内存中，您还应该会看到结果矩阵。</p>
+<hr />
+<h2 id="_11">待优化</h2>
+<p>tiny-gpu 省略了许多现代 GPU 中实现的额外功能，这些功能可以大大提高性能和功能。本节将讨论其中一些最关键的特性。</p>
+<h3 id="_12">多级缓存和共享内存</h3>
+<p>在现代 GPU 中，使用多个不同级别的缓存来最小化需要从全局内存访问的数据量。tiny-gpu 只在请求内存的单个计算单元和存储最近缓存数据的内存控制器之间实现了一个缓存层。</p>
+<p>实现多级缓存允许将经常访问的数据更本地地缓存到其使用位置（某些缓存位于单个计算核心内），从而最小化此数据的加载时间。不同的缓存算法用于最大化缓存命中率 - 这是一个可以通过优化内存访问来改善的关键方面。</p>
+<p>此外，GPU 经常使用共享内存，使同一块中的线程可以访问单个内存空间，该空间可以用来与其他线程共享结果。</p>
+<h3 id="_13">内存合并</h3>
+<p>GPU 使用的另一个关键内存优化是内存合并。并行运行的多个线程通常需要访问内存中的连续地址（例如，一组线程访问矩阵中的相邻元素），但是每个内存请求都单独提交。</p>
+<p>内存合并用于分析排队的内存请求并将相邻请求合并成单个事务，从而最大限度地减少寻址时间并一起发出所有请求。</p>
+<h3 id="_14">流水线</h3>
+<p>在 tiny-gpu 的控制流中，内核会在对一组线程执行一条指令后才开始执行下一条指令。</p>
+<p>现代 GPU 使用流水线来一次流式执行多个顺序指令，同时确保相互依赖的指令仍然按顺序执行。这有助于最大化内核内的资源利用率，因为资源不会在等待时闲置（例如：异步内存请求期间）。</p>
+<h3 id="_15">波形调度</h3>
+<p>另一种用于最大化资源利用率的策略是波形调度。这种方法涉及将块分解成可以一起执行的单独线程批处理。可以在单个核心上同时执行多个波形，方法是在一个波形等待时从另一个波形执行指令。这类似于流水线，但处理来自不同线程的指令。</p>
+<h3 id="_16">分支分歧</h3>
+<p>tiny-gpu 假设单个批处理中的所有线程在每个指令后都最终位于相同的 PC 上，这意味着线程可以并行执行其整个生命周期。</p>
+<p>实际上，单个线程可以相互分歧并根据其数据分支到不同的行。使用不同的 PC，这些线程需要拆分成本质上不同的执行线路，这需要管理发散的线程并注意线程何时再次收敛。</p>
+<h3 id="_17">同步和屏障</h3>
+<p>现代 GPU 的另一个核心功能是能够设置屏障，以便块中的线程组可以同步并等待同一块中的所有其他线程到达某个点然后再继续执行。
+这对于线程需要相互交换共享数据的情况很有用，因此它们可以确保数据已完全处理。</p>
 
 
 
@@ -2101,7 +2263,7 @@ tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，�
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.top", "toc.integrate", "search.suggest", "search.highlight", "navigation.indexes", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.top", "toc.integrate", "search.suggest", "search.highlight", "search.share", "navigation.indexes", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
