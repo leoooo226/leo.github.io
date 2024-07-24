@@ -1024,15 +1024,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#execution-flow" class="md-nav__link">
-    <span class="md-ellipsis">
-      Execution flow
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#architecture" class="md-nav__link">
     <span class="md-ellipsis">
       Architecture
@@ -1171,9 +1162,60 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      全局内存
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      控制器
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      cache
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#isa" class="md-nav__link">
     <span class="md-ellipsis">
       ISA
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exe" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exe
     </span>
   </a>
   
@@ -1917,8 +1959,6 @@
 <li>并行化 (Parallelization)：如何在硬件中实现 SIMD 编程模型？  </li>
 <li>内存 (Memory)：GPU 如何应对内存带宽有限的限制？</li>
 </ul>
-<hr />
-<h2 id="execution-flow"><strong>Execution flow</strong></h2>
 <p>Tiny-gpu简化了执行流程，一次仅处理一个内核 (kernel)。<br />
 启动内核的步骤如下</p>
 <ul>
@@ -1980,9 +2020,25 @@ tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，�
 由于线程并行处理，tiny-gpu 假设所有线程在每个指令后都“收敛”到相同的程序计数器 - 这为了简化起见，是一个近似假设。<br />
 在真正的GPU中，单个线程可以跳转到不同的 PC，导致分支分歧 (branch divergence)，即最初一起处理的一组线程必须分裂成单独的执行部分。</p>
 <hr />
-<h2 id="isa"><strong>ISA</strong></h2>
+<h2 id="memory">Memory</h2>
+<p>GPU 通常连接外部全局内存进行数据交互。为了简化设计，tiny-gpu 将数据内存和程序内存分开存放。</p>
+<h3 id="_7">全局内存</h3>
+<p>tiny-gpu数据内存具有以下规格
+8 位寻址 (总共256行数据)
+8 位数据 (每行存储小于 256 的值)</p>
+<p>tiny-gpu程序内存具有以下规格
+8 位寻址 (256行程序内存)
+16 位数据 (根据指令集规定，每条指令为 16 位)</p>
+<h3 id="_8">控制器</h3>
+<p>全局内存具有固定的读写带宽，但是所有计算核心访问内存的数据请求可能会远远超出外部内存的实际处理能力。
+内存控制器负责跟踪来自计算核心的所有传出内存请求，根据实际外部内存带宽限制请求，并将外部内存的响应传递回相应的资源。
+每个内存控制器根据全局内存的带宽配置了固定数量的通道。</p>
+<h3 id="cache">cache</h3>
+<p>全局内存中的相同数据经常被多个计算核心请求。反复访问全局内存代价很高，因为数据已经获取过一次，所以将数据存储在设备上的 SRAM 中以便稍后更快地检索会更有效。
+这就是缓存的作用。从外部内存检索到的数据会存储在缓存中，以后的请求可以直接从缓存中读取，从而释放内存带宽用于处理新数据。</p>
+<h2 id="isa">ISA</h2>
 <p>tiny-gpu 实现了一套简单的 11 条指令的指令集架构 (ISA)，在支持用于概念验证的简单内核，例如矩阵加法和矩阵乘法。</p>
-<p><img alt="图片" src="../isa.jpg" /></p>
+<p><img alt="图片" src="../isa.png" /></p>
 <p>实现这些功能，tiny-gpu 支持以下指令<br />
 <code>BRnzp (分支指令)</code> - 如果 NZP 寄存器值满足指令中指定的 nzp 条件，则跳转到程序内存中的另一行。</p>
 <p><code>CMP (比较指令)</code> - 比较两个寄存器中的值，并将结果存储在 NZP 寄存器中，供后续的 BRnzp 指令使用。</p>
@@ -1992,6 +2048,7 @@ tiny-gpu 的调度器会顺序执行一个线程块中的所有线程指令，�
 <p><code>CONST (常量加载指令)</code> - 将常量值加载到寄存器中。</p>
 <p><code>RET (返回指令)</code> - 表示当前线程已执行完毕。</p>
 <p>每个寄存器由4位指定，意味着共有16个寄存器。前13个寄存器 R0-R12 是可读写的通用寄存器。最后 3 个寄存器是特殊的只读寄存器，用于提供对 SIMD 关键的 %blockIdx、%blockDim 和 %threadIdx 值。</p>
+<h2 id="exe">Exe</h2>
 
 
 

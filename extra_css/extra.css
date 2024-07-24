@@ -1,7 +1,7 @@
 /* 对所有标题应用加粗样式 */  
 /* 给标题添加颜色 */
 h1 {
-    font-weight: bold;
+    font-weight: bold !important;
   }
 h2 {
     font-weight: bold !important;
