@@ -4,6 +4,16 @@ h2, h3, h4, h5, h6 {
 }
 
 /* 给标题添加颜色 */
+h1 {
+    font-weight: bold;
+  }
 h2 {
-    color: red;
+    font-weight: bold;
+  }
+h3 {
+    color: #002aff;
+    font-weight: bold;
+  }
+h4 {
+    font-weight: bold;
   }
