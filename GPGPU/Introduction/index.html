@@ -2056,16 +2056,16 @@
                   
 
 
-<h1 id="gpgpu">GPGPU</h1>
-<h2 id="introduction">Introduction</h2>
+<h1 id="gpgpu">GPGPU<a class="headerlink" href="#gpgpu" title="Permanent link">Link</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">Link</a></h2>
 <p>GPGPU（General-Purpose computing on Graphics Processing Units）是一种利用图形处理单元（GPU）执行传统上由中央处理器（CPU）处理的计算任务的技术。GPU最初主要用于图形渲染，但由于其强大的并行处理能力，逐渐被应用于广泛的非图形计算领域，如科学计算、数据分析和机器学习等。随着GPU的发展，GPGPU将会成为未来计算领域的重要组成部分。</p>
 <hr />
-<h2 id="simt">SIMT</h2>
+<h2 id="simt">SIMT<a class="headerlink" href="#simt" title="Permanent link">Link</a></h2>
 <p>SIMD利用同一条指令在不同数据上执行相同操作，需要数据在空间上是连续的，还需要借助其他指令对数据进行重组和拆分；而SIMT利用不同线程执行同一指令来处理不同数据，通过各个线程独立对数据进行灵活索引，降低空间连续性的需求。<br />
 SIMD往往需要指令显式地对活掩码寄存器进行设置，以控制相应数据是否参与计算；而SIMT往往通过硬件自动对谓词寄存器进行管理。SIMT还允许线程分支，实现多执行路径，在一定程度上间接支持MIMD执行模式。<br />
 SIMD模型在不同并行元素个数往往需要设计不同格式的SIMD指令，造成指令规模的膨胀；而SIMT对线程数原则上没有限制，硬件管理方式也使得SIMT不需要设计新的指令</p>
 <hr />
-<h2 id="open-source-projects">Open Source Projects</h2>
+<h2 id="open-source-projects">Open Source Projects<a class="headerlink" href="#open-source-projects" title="Permanent link">Link</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Tiny-gpu</p>
 <p><a href="https://github.com/adam-maj/tiny-gpu">https://github.com/adam-maj/tiny-gpu</a></p>

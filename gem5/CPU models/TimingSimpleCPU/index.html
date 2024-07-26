@@ -2001,7 +2001,7 @@
                   
 
 
-<h1 id="timingsimplecpu">TimingSimpleCPU</h1>
+<h1 id="timingsimplecpu">TimingSimpleCPU<a class="headerlink" href="#timingsimplecpu" title="Permanent link">Link</a></h1>
 <p>TimingSimpleCPU是使用计时内存访问的SimpleCPU版本。它在访问高速缓存时停止，并在继续之前等待内存系统的响应。与AtomicSimpleCPU一样，TimingSimpleCPU也派生自BaseSimpleCPU，并实现了相同的一组函数。它定义了用于连接到内存的端口，并将CPU连接到缓存。它还定义了处理从内存到发出访问的响应所需的函数。
 TimingSimpleCPU 的指令执行流程由下图给出：<br />
 <img alt="Timing图片" src="../TimingSimpleCPU.jpg" /><br />
