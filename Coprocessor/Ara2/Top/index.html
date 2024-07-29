@@ -2226,6 +2226,29 @@
 <span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">        </span><span class="n">uart_pslverr_i</span>
 <span class="w">  </span><span class="p">);</span>
 </code></pre></div>
+<ol>
+<li>模块声明与参数定义
+<code>模块声明</code>：定义了ara_soc模块，导入axi_pkg和ara_pkg包。
+<code>参数定义</code>：定义了多个参数，包括向量通道数、VLEN、浮点支持、AXI接口参数等。
+<code>端口声明</code>：包括时钟、复位、扫描链、UART APB接口等。</li>
+<li>内存区域定义
+<code>AXI主从端口数</code>：定义了AXI主从端口数。
+<code>内存映射</code>：定义了DRAM、UART和控制寄存器的基地址和长度。</li>
+<li>AXI类型定义
+<code>AXI数据宽度定义</code>：定义了窄和宽数据宽度。
+<code>AXI ID宽度定义</code>：定义了Soc和Core的ID宽度。
+<code>AXI类型定义</code>：使用宏定义了多种AXI类型。</li>
+<li>AXI总线定义
+<code>AXI总线定义</code>：定义了系统AXI总线和外设AXI总线。</li>
+<li>AXI交叉开关（Crossbar）配置
+<code>交叉开关配置</code>：定义了AXI交叉开关的配置和路由规则。
+<code>AXI交叉开关实例化</code>：实例化了AXI交叉开关模块。</li>
+<li>L2缓存配置
+<code>L2缓存配置</code>：定义了L2缓存的AXI过滤器和内存接口。
+<code>AXI到内存转换</code>：实例化了AXI到内存的转换模块。
+<code>SRAM实例化</code>：实例化了SRAM模块，用于L2缓存。</li>
+<li>UART配置</li>
+</ol>
 
 
 
