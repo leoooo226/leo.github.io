@@ -830,9 +830,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#l2" class="md-nav__link">
+  <a href="#l2-cache" class="md-nav__link">
     <span class="md-ellipsis">
-      L2缓存
+      L2 Cache
     </span>
   </a>
   
@@ -2305,11 +2305,11 @@
 <li>定义路由规则：通过routing_rules数组，定义了不同设备（如CTRL、UART、L2MEM）的地址范围，用于数据包的路由。  </li>
 <li>实例化crossbar：通过axi_xbar模块，将配置和路由规则应用到实际的硬件模块中，实现了从主设备到从设备的数据传输控制。</li>
 </ul>
-<h3 id="l2">L2缓存<a class="headerlink" href="#l2" title="Permanent link">&para;</a></h3>
+<h3 id="l2-cache">L2 Cache<a class="headerlink" href="#l2-cache" title="Permanent link">&para;</a></h3>
 <ul>
-<li>L2缓存配置：定义了L2缓存的AXI过滤器和内存接口。  </li>
-<li>AXI到内存转换：实例化了AXI到内存的转换模块。  </li>
-<li>SRAM实例化：实例化了SRAM模块，用于L2缓存。  </li>
+<li>L2缓存配置：定义了L2缓存的AXI原子操作过滤器<code>axi_atop_filter</code>。  </li>
+<li>AXI到内存转换：实例化了AXI到内存的转换模块<code>axi_to_mem</code>。  </li>
+<li>SRAM实例化：实例化了SRAM模块，用于L2缓存<code>tc_sram</code>。在仿真环境中，使用tc_sram模块模拟SRAM或DRAM；在形式验证环境中，则简单地将l2_rdata赋值为0。  </li>
 </ul>
 <h3 id="uart">UART<a class="headerlink" href="#uart" title="Permanent link">&para;</a></h3>
 <ul>
