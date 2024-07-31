@@ -2301,8 +2301,9 @@
 <li>AXI ID宽度定义：定义了Soc和Core的ID宽度。  </li>
 <li>AXI类型定义：使用宏定义了多种AXI类型<code>AXI_TYPEDEF_ALL</code>和<code>AXI_LITE_TYPEDEF_ALL</code>。  </li>
 <li>AXI总线定义：定义了系统AXI总线和外设AXI总线。  </li>
-<li>交叉开关配置：定义了AXI交叉开关的配置和路由规则。  </li>
-<li>AXI交叉开关实例化：实例化了AXI交叉开关模块。  </li>
+<li>配置crossbar：通过定义XBarCfg结构体，设置了交叉开关的各种参数，如端口数量、传输限制、地址宽度、数据宽度等。  </li>
+<li>定义路由规则：通过routing_rules数组，定义了不同设备（如CTRL、UART、L2MEM）的地址范围，用于数据包的路由。  </li>
+<li>实例化交叉开关：通过axi_xbar模块，将配置和路由规则应用到实际的硬件模块中，实现了从主设备到从设备的数据传输控制。</li>
 </ul>
 <h3 id="l2">L2缓存<a class="headerlink" href="#l2" title="Permanent link">&para;</a></h3>
 <ul>
