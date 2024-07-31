@@ -2303,7 +2303,7 @@
 <li>AXI总线定义：定义了系统AXI总线和外设AXI总线。  </li>
 <li>配置crossbar：通过定义XBarCfg结构体，设置了交叉开关的各种参数，如端口数量、传输限制、地址宽度、数据宽度等。  </li>
 <li>定义路由规则：通过routing_rules数组，定义了不同设备（如CTRL、UART、L2MEM）的地址范围，用于数据包的路由。  </li>
-<li>实例化交叉开关：通过axi_xbar模块，将配置和路由规则应用到实际的硬件模块中，实现了从主设备到从设备的数据传输控制。</li>
+<li>实例化crossbar：通过axi_xbar模块，将配置和路由规则应用到实际的硬件模块中，实现了从主设备到从设备的数据传输控制。</li>
 </ul>
 <h3 id="l2">L2缓存<a class="headerlink" href="#l2" title="Permanent link">&para;</a></h3>
 <ul>
