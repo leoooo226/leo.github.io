@@ -2208,13 +2208,14 @@
 
 <h1 id="top">TOP<a class="headerlink" href="#top" title="Permanent link">&para;</a></h1>
 <h2 id="arasv">ara.sv<a class="headerlink" href="#arasv" title="Permanent link">&para;</a></h2>
-<p><strong>Ara's top-level, interfacing with Ariane.</strong></p>
-<p>该模块是 Ara 处理器的顶层模块，与cva6处理器接口。主要功能包括：<br />
-<code>参数定义</code>：定义了多个参数，包括并行向量通道数、向量长度、浮点支持、固定点支持等。<br />
-<code>端口声明</code>：声明了时钟、复位、扫描链输入输出、与 Ariane 的接口、AXI 接口等端口。<br />
-<code>定义和类型声明</code>：定义了多个类型和结构体，用于描述不同模块之间的接口和数据结构。<br />
-<code>模块实例化</code>：实例化了多个子模块，包括调度器、序列器、通道、向量加载存储单元、滑动单元、掩码单元。<br />
-<code>断言</code>：定义了多个断言，用于检查参数的合法性，确保模块在正确的配置下运行。  </p>
+<p><strong>Ara's top-level, interfacing with Ariane.</strong> Ara 处理器的顶层模块，与cva6处理器接口。</p>
+<ul>
+<li>参数定义：定义了多个参数，包括并行向量通道数、向量长度、浮点支持、固定点支持等。  </li>
+<li>端口声明：声明了时钟、复位、扫描链输入输出、与 Ariane 的接口、AXI 接口等端口。  </li>
+<li>定义和类型声明：定义了多个类型和结构体，用于描述不同模块之间的接口和数据结构。  </li>
+<li>模块实例化：实例化了多个子模块，包括调度器、序列器、通道、向量加载存储单元、滑动单元、掩码单元。  </li>
+<li>断言：定义了多个断言，用于检查参数的合法性，确保模块在正确的配置下运行。  </li>
+</ul>
 <div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">ara</span><span class="w"> </span><span class="n">import</span><span class="w"> </span><span class="n">ara_pkg</span><span class="o">::*</span><span class="p">;</span><span class="w"> </span><span class="p">#(</span>
 <span class="w">    </span><span class="c1">// RVV Parameters</span>
 <span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">NrLanes</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span><span class="w">                          </span><span class="c1">// Number of parallel vector lanes.</span>
