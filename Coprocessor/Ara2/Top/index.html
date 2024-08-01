@@ -790,6 +790,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="ara_system.sv">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      参数定义
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ara-and-cv6" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ara and CV6
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -803,7 +827,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       模块声明与参数定义
     </span>
@@ -812,7 +836,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       内存区域
     </span>
@@ -823,7 +847,7 @@
           <li class="md-nav__item">
   <a href="#axi" class="md-nav__link">
     <span class="md-ellipsis">
-      AXI
+      AXI总线
     </span>
   </a>
   
@@ -857,9 +881,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#cv6ara" class="md-nav__link">
     <span class="md-ellipsis">
-      系统
+      CV6+Ara
     </span>
   </a>
   
@@ -2184,7 +2208,7 @@
 
 <h1 id="top">TOP<a class="headerlink" href="#top" title="Permanent link">&para;</a></h1>
 <h2 id="arasv">ara.sv<a class="headerlink" href="#arasv" title="Permanent link">&para;</a></h2>
-<p>Ara's top-level, interfacing with Ariane.</p>
+<p><strong>Ara's top-level, interfacing with Ariane.</strong></p>
 <p>该模块是 Ara 处理器的顶层模块，与cva6处理器接口。主要功能包括：<br />
 <code>参数定义</code>：定义了多个参数，包括并行向量通道数、向量长度、浮点支持、固定点支持等。<br />
 <code>端口声明</code>：声明了时钟、复位、扫描链输入输出、与 Ariane 的接口、AXI 接口等端口。<br />
@@ -2236,7 +2260,23 @@
 </code></pre></div>
 <hr />
 <h2 id="ara_systemsv">ara_system.sv<a class="headerlink" href="#ara_systemsv" title="Permanent link">&para;</a></h2>
-<p>Ara's System, containing CV6 and Ara.</p>
+<p><strong>Ara's System, containing CV6 and Ara.</strong> 实现了Ariane和Ara两个核心的集成，并通过AXI接口进行高效的数据交换</p>
+<h3 id="_1">参数定义<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>参数定义：包括RVV参数、FPU支持、<a href="https://example.com" title="CVA6Cfg提供了Ariane RISC-V核心的配置">Ariane配置</a>、AXI接口参数等。</li>
+<li>端口与信号：时钟、复位、启动地址、线程ID、扫描链和AXI接口</li>
+</ul>
+<h3 id="ara-and-cv6">Ara and CV6<a class="headerlink" href="#ara-and-cv6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>导入包和定义端口: 定义与加速器相关的信号。</li>
+<li>支持核心：支持最多8个核心。</li>
+<li>无效化接口：打包无效化接口到加速器接口。</li>
+<li>条件编译：根据条件编译选择实例化理想的调度器<code>accel_dispatcher_ideal</code>或实际的CVA6核心<code>cva6</code>。</li>
+<li>AXI数据宽度转换器: 使用AXI数据宽度转换器将窄数据宽度的AXI接口转换为宽数据宽度的AXI接口。</li>
+<li>AXI无效化过滤器: 使用AXI无效化过滤器处理无效化请求和响应。</li>
+<li>Ara模块实例化: 实例化Ara模块，用于处理向量指令和数据。</li>
+<li>AXI多路复用器: 使用AXI多路复用器将多个AXI接口合并为一个AXI接口。</li>
+</ul>
 <div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">ara</span><span class="w"> </span><span class="n">import</span><span class="w"> </span><span class="n">ara_pkg</span><span class="o">::*</span><span class="p">;</span><span class="w"> </span><span class="p">#(</span>
 <span class="w">    </span><span class="c1">// RVV Parameters</span>
 <span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">NrLanes</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span><span class="w">                          </span><span class="c1">// Number of parallel vector lanes.</span>
@@ -2282,20 +2322,20 @@
 </code></pre></div>
 <hr />
 <h2 id="ara_socsv">ara_soc.sv<a class="headerlink" href="#ara_socsv" title="Permanent link">&para;</a></h2>
-<p>Ara's SoC, containing CVA6, Ara, and a L2 cache.</p>
+<p><strong>Ara's SoC, containing CVA6, Ara, and a L2 cache.</strong></p>
 <p>ara_soc模块是一个高度参数化的SoC组件，实现一个包含CVA6、Ara和L2缓存的SoC（片上系统）。模块通过AXI接口与外部进行通信，并支持向量处理、浮点运算和定点运算。模块还提供了UART APB接口用于串行通信，并包含扫描链接口用于测试。</p>
-<h3 id="_1">模块声明与参数定义<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<h3 id="_2">模块声明与参数定义<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>模块声明：定义了ara_soc模块，导入axi_pkg和ara_pkg包。</li>
 <li>参数定义：定义了多个参数，包括向量通道数、VLEN、浮点支持、定点支持、AXI接口参数等。</li>
 <li>端口声明：包括时钟、复位、扫描链、UART APB接口等。</li>
 </ul>
-<h3 id="_2">内存区域<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<h3 id="_3">内存区域<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <ul>
 <li>AXI主从端口数：定义了AXI主从端口数。  </li>
 <li>内存映射：定义了各个内存区域的长度和基地址，以便进行内存映射和地址分配。</li>
 </ul>
-<h3 id="axi">AXI<a class="headerlink" href="#axi" title="Permanent link">&para;</a></h3>
+<h3 id="axi">AXI总线<a class="headerlink" href="#axi" title="Permanent link">&para;</a></h3>
 <ul>
 <li>AXI数据宽度定义：定义了窄和宽数据宽度。  </li>
 <li>AXI ID宽度定义：定义了Soc和Core的ID宽度。  </li>
@@ -2326,15 +2366,11 @@
 <li>控制寄存器管理：通过<code>axi_to_axi_lite</code>模块将 AXI 接口转换为 AXI-Lite 接口，然后通过<code>ctrl_registers</code>模块处理控制寄存器的读写操作。</li>
 <li>AXI数据宽度转换：通<code>axi_dw_converter</code>模块将 AXI 接口的数据宽度从宽带到窄带进行转换，以便与不同数据宽度的<strong>外设</strong>进行通信。</li>
 </ul>
-<h3 id="_3">系统<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<h3 id="cv6ara">CV6+Ara<a class="headerlink" href="#cv6ara" title="Permanent link">&para;</a></h3>
 <ul>
 <li>硬件线程ID：通过<code>hart_id</code>变量设置硬件线程ID，默认值为0。</li>
-<li>
-<p>CVA6配置参数：通过<code>CVA6AraConfig</code>结构体定义了CVA6处理器的详细配置参数,如AXI接口宽度、浮点支持、指令集扩展、缓存配置等。</p>
-</li>
-<li>
-<p>模块实例化：根据<a href="https://example.com" title="如果不定义TARGET_GATESIM，则直接实例化ara_system模块，并传递相关参数和接口信号。如果定义了TARGET_GATESIM，则通过axi_cut模块进行信号切割和延迟处理后再实例化ara_system模块">条件</a>选择性地实例化<code>ara_system</code>模块(包含<strong>CV6</strong>和<strong>Ara</strong>)，并处理相关信号。</p>
-</li>
+<li>CVA6配置参数：通过<code>CVA6AraConfig</code>结构体定义了CVA6处理器的详细配置参数,如AXI接口宽度、浮点支持、指令集扩展、缓存配置等。</li>
+<li>模块实例化：根据<a href="https://example.com" title="如果不定义TARGET_GATESIM，则直接实例化ara_system模块，并传递相关参数和接口信号。如果定义了TARGET_GATESIM，则通过axi_cut模块进行信号切割和延迟处理后再实例化ara_system模块">条件</a>选择性地实例化<code>ara_system</code>模块(包含<strong>CV6</strong>和<strong>Ara</strong>)，并处理相关信号。</li>
 </ul>
 <h3 id="_4">断言<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <ul>
