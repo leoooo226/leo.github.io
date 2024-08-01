@@ -2333,8 +2333,7 @@
 </ul>
 <p class="annotate">模块实例化：根据 (1) 条件选择性地实例化<code>ara_system</code>模块(包含<strong>CV6</strong>和<strong>Ara</strong>)，并处理相关信号。</p>
 <ol>
-<li>:man_raising_hand: I'm an annotation! I can contain <code>code</code>, _formatted
-text__，图像，......基本上任何可以用 Markdown 表达的东西。</li>
+<li>如果不定义TARGET_GATESIM，则直接实例化ara_system模块，并传递相关参数和接口信号。如果定义了TARGET_GATESIM，则通过axi_cut模块进行信号切割和延迟处理后再实例化ara_system模块</li>
 </ol>
 <p class="annotate">Lorem ipsum dolor sit amet, (1) consectetur adipiscing elit.</p>
 <ol>
