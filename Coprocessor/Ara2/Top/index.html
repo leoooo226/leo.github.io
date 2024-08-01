@@ -2313,13 +2313,13 @@
 </ul>
 <h3 id="uart">UART<a class="headerlink" href="#uart" title="Permanent link">&para;</a></h3>
 <ul>
-<li>定义AXI、AXI-Lite和APB协议的类型。  </li>
+<li>定义<strong>AXI</strong>、<strong>AXI-Lite</strong>和<strong>APB</strong>协议的类型。  </li>
 <li>声明UART模块所需的请求和响应信号。  </li>
 <li>将APB请求信号连接到UART模块的输出端口，并将UART模块的输入端口连接到APB响应信号。  </li>
 <li>定义APB地址映射规则。  </li>
-<li>实例化AXI-Lite到APB的转换模块，将AXI-Lite协议转换为APB协议。  </li>
-<li>实例化AXI到AXI-Lite的转换模块，将完整的AXI协议转换为AXI-Lite协议。  </li>
-<li>实例化AXI数据宽度转换模块，将宽数据宽度的AXI请求转换为窄数据宽度的AXI请求。  </li>
+<li>实例化AXI-Lite到APB的转换模块<code>axi_lite_to_apb</code>，将AXI-Lite协议转换为APB协议。  </li>
+<li>实例化AXI到AXI-Lite的转换模块<code>axi_to_axi_lite</code>，将完整的AXI协议转换为AXI-Lite协议。  </li>
+<li>实例化AXI数据宽度转换模块<code>axi_dw_converter</code>，将宽数据宽度的AXI请求转换为窄数据宽度的AXI请求。  </li>
 </ul>
 <h3 id="csr">CSR<a class="headerlink" href="#csr" title="Permanent link">&para;</a></h3>
 <h3 id="_3">系统<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
