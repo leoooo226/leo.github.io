@@ -2359,7 +2359,7 @@
 <li>支持核心：目前最多支持最多8个核心。</li>
 <li>无效化接口：打包无效化接口到加速器接口。</li>
 <li>条件编译：根据<a href="" title="ifdef IDEAL_DISPATCHER">条件编译</a>选择实例化理想的调度器<code>accel_dispatcher_ideal</code>或实际的CVA6核心<code>cva6</code>。</li>
-<li><a href="" title="允许主设备以较宽的数据宽度与从设备进行通信，而从设备可能只能以较窄的数据宽度响应。">AXI数据宽度转换器</a>: 实现不同数据宽度的设备通信。</li>
+<li>AXI数据宽度转换器: 用于将窄数据宽度的AXI接口<code>ariane_narrow_axi_req和ariane_narrow_axi_resp</code>转换为宽数据宽度的AXI接口<code>ariane_axi_req和ariane_axi_resp</code>。</li>
 <li>AXI无效化过滤器: 使用AXI无效化过滤器处理无效化请求和响应。</li>
 <li>Ara模块实例化: 实例化Ara模块，用于处理向量指令和数据。</li>
 <li>AXI多路复用器: 使用AXI多路复用器将多个AXI接口合并为一个AXI接口。</li>
