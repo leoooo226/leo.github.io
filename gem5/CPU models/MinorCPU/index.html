@@ -1610,6 +1610,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Structure
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2087,6 +2096,20 @@
 <h1 id="minorcpu">MinorCPU<a class="headerlink" href="#minorcpu" title="Permanent link">&para;</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>Minor 是一种有序处理器模型，具有固定的流水线，但可配置的数据结构和执行行为。它旨在用于对具有严格顺序执行行为的处理器进行建模，并允许通过 MinorTrace/minorview.py 格式/工具可视化指令在流水线中的位置。其目的是提供一个框架，用于在微架构上将模型与具有类似功能的特定选定处理器相关联。</p>
+<hr />
+<h2 id="structure">Structure<a class="headerlink" href="#structure" title="Permanent link">&para;</a></h2>
+<p>minorpu类是Gem5中的一个CPU对象。minorpu实现了（cpu.hh）的接口，可以为连接到缓存系统提供数据和指令接口。该模型通过python以类似于其他gem5模型的方式配置。该配置被传递给<code>minorpu::pipeline</code>（属于类pipeline），后者实际上实现了处理器pipeline。</p>
+<p>MinorCPU 的主要层次结构如下：</p>
+<div class="highlight"><pre><span></span><code><span class="n">MinorCPU</span>
+<span class="o">---</span><span class="w"> </span><span class="n">Pipeline</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">container</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">pipeline</span><span class="p">,</span><span class="w"> </span><span class="n">owns</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">cyclic</span><span class="w"> </span><span class="err">&#39;</span><span class="n">tick</span><span class="err">&#39;</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">mechanism</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">idling</span><span class="w"> </span><span class="p">(</span><span class="n">cycle</span><span class="w"> </span><span class="n">skipping</span><span class="p">)</span><span class="w"> </span><span class="n">mechanism</span><span class="p">.</span>
+<span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">Fetch1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">instruction</span><span class="w"> </span><span class="n">fetch</span><span class="w"> </span><span class="n">unit</span><span class="w"> </span><span class="n">responsible</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">fetching</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="p">(</span><span class="n">or</span><span class="w"> </span><span class="n">parts</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">I</span><span class="o">-</span><span class="n">cache</span><span class="w"> </span><span class="n">interface</span><span class="p">).</span>
+<span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">Fetch1</span><span class="o">::</span><span class="n">IcachePort</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">interface</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">I</span><span class="o">-</span><span class="n">cache</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">Fetch1</span><span class="p">.</span>
+<span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">Fetch2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">instruction</span><span class="w"> </span><span class="n">decomposition</span><span class="p">.</span>
+<span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">Decode</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">instruction</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">micro</span><span class="o">-</span><span class="n">op</span><span class="w"> </span><span class="n">decomposition</span><span class="p">.</span>
+<span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">Execute</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">instruction</span><span class="w"> </span><span class="n">execution</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="n">interface</span><span class="p">.</span>
+<span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">LSQ</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">load</span><span class="w"> </span><span class="n">store</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="n">ref</span><span class="p">.</span><span class="w"> </span><span class="n">instructions</span><span class="p">.</span>
+<span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">LSQ</span><span class="o">::</span><span class="n">DcachePort</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">interface</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">D</span><span class="o">-</span><span class="n">ache</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">Execute</span><span class="p">.</span>
+</code></pre></div>
 
 
 
