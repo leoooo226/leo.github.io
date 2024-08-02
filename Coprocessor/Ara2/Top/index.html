@@ -2360,7 +2360,7 @@
 <li>无效化接口：打包无效化接口到加速器接口。</li>
 <li>条件编译：根据<a href="" title="ifdef IDEAL_DISPATCHER">条件编译</a>选择实例化理想的调度器<code>accel_dispatcher_ideal</code>或实际的CVA6核心<code>cva6</code>。</li>
 <li>AXI数据宽度转换器: 用于将窄数据宽度的AXI接口<code>ariane_narrow_axi_req和ariane_narrow_axi_resp</code>转换为宽数据宽度的AXI接口<code>ariane_axi_req和ariane_axi_resp</code>。</li>
-<li>AXI无效化过滤器: 使用AXI无效化过滤器处理无效化请求和响应。</li>
+<li>AXI无效化过滤器: 使用AXI无效化过滤器处理无效化请求和响应。（<strong>CVA6 L1数据缓存适应通写策略，这样由向量单元访问的主内存总是最新的。当向量单元执行向量存储时，它会使CVA6数据缓存中相应的缓存行无效</strong>）</li>
 <li>Ara模块实例化: 实例化Ara模块，用于处理向量指令和数据。</li>
 <li>AXI多路复用器: 使用AXI多路复用器将多个AXI接口合并为一个AXI接口。</li>
 </ul>
