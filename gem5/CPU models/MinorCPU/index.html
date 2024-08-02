@@ -1619,6 +1619,57 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pipeline
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fetch1-stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fetch1 stage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fetch2-stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fetch2 stage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decode-stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decode stage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execute-stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execute Stage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2110,6 +2161,36 @@
 <span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">LSQ</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">load</span><span class="w"> </span><span class="n">store</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="n">ref</span><span class="p">.</span><span class="w"> </span><span class="n">instructions</span><span class="p">.</span>
 <span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">LSQ</span><span class="o">::</span><span class="n">DcachePort</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">interface</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">D</span><span class="o">-</span><span class="n">ache</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">Execute</span><span class="p">.</span>
 </code></pre></div>
+<hr />
+<h2 id="pipeline">Pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
+<p>MinorCPU 的流水线由 <code>Pipeline</code> 类（位于 <code>cpu/minor/pipeline.cc</code>）管理。该类包含了 <code>Fetch1</code>、<code>Fetch2</code>、<code>Decode</code>、<code>Execute</code>、<code>LSQ</code> 等子模块，并负责管理它们之间的交互。</p>
+<div class="highlight"><pre><span></span><code><span class="o">------------------------------------------------------------------------------</span>
+<span class="w">    </span><span class="nl">Key</span><span class="p">:</span>
+
+<span class="w">    </span><span class="p">[]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">inter</span><span class="o">-</span><span class="n">stage</span><span class="w"> </span><span class="n">BufferBuffer</span>
+<span class="w">    </span><span class="p">,</span><span class="o">--</span><span class="p">.</span>
+<span class="w">    </span><span class="o">|</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pipeline</span><span class="w"> </span><span class="n">stage</span>
+<span class="w">    </span><span class="err">`</span><span class="o">--</span><span class="err">&#39;</span>
+<span class="w">    </span><span class="o">---&gt;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">forward</span><span class="w"> </span><span class="n">communication</span>
+<span class="w">    </span><span class="o">&lt;---</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">backward</span><span class="w"> </span><span class="n">communication</span>
+
+<span class="w">    </span><span class="nl">rv</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">reservation</span><span class="w"> </span><span class="n">information</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="n">buffers</span>
+
+<span class="w">                </span><span class="p">,</span><span class="o">------</span><span class="p">.</span><span class="w">     </span><span class="p">,</span><span class="o">------</span><span class="p">.</span><span class="w">     </span><span class="p">,</span><span class="o">------</span><span class="p">.</span><span class="w">     </span><span class="p">,</span><span class="o">-------</span><span class="p">.</span>
+<span class="w"> </span><span class="p">(</span><span class="n">from</span><span class="w">  </span><span class="o">--</span><span class="p">[]</span><span class="o">-</span><span class="n">v</span><span class="o">-&gt;|</span><span class="n">Fetch1</span><span class="o">|-</span><span class="p">[]</span><span class="o">-&gt;|</span><span class="n">Fetch2</span><span class="o">|-</span><span class="p">[]</span><span class="o">-&gt;|</span><span class="n">Decode</span><span class="o">|-</span><span class="p">[]</span><span class="o">-&gt;|</span><span class="n">Execute</span><span class="o">|--&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">to</span><span class="w"> </span><span class="n">Fetch1</span>
+<span class="w"> </span><span class="n">Execute</span><span class="p">)</span><span class="w">    </span><span class="o">|</span><span class="w">  </span><span class="o">|</span><span class="w">      </span><span class="o">|&lt;-</span><span class="p">[]</span><span class="o">-|</span><span class="w">      </span><span class="o">|&lt;-</span><span class="n">rv</span><span class="o">-|</span><span class="w">      </span><span class="o">|&lt;-</span><span class="n">rv</span><span class="o">-|</span><span class="w">       </span><span class="o">|</span><span class="w">     </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Fetch2</span><span class="p">)</span>
+<span class="w">             </span><span class="o">|</span><span class="w">  </span><span class="err">`</span><span class="o">------</span><span class="err">&#39;</span><span class="o">&lt;-</span><span class="n">rv</span><span class="o">-|</span><span class="w">      </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w">      </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w">       </span><span class="o">|</span>
+<span class="w">             </span><span class="err">`</span><span class="o">--------------&gt;|</span><span class="w">      </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w">      </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w">       </span><span class="o">|</span>
+<span class="w">                             </span><span class="err">`</span><span class="o">------</span><span class="err">&#39;</span><span class="w">     </span><span class="err">`</span><span class="o">------</span><span class="err">&#39;</span><span class="w">     </span><span class="err">`</span><span class="o">-------</span><span class="err">&#39;</span>
+<span class="o">------------------------------------------------------------------------------</span>
+</code></pre></div>
+<p>这四个管道级通过minorbuffer-fifo（stage.hh，最终从timebuffer派生）结构连接在一起，这些结构允许对级间延迟进行建模。在向前方向的相邻阶段（例如：从fetch1到fetch2的线路）之间有一个minorbuffers，在fetch2和fetch1之间有一个反向缓冲区，承载分支预测。</p>
+<p>阶段fetch2、解码和执行具有输入缓冲区，每个周期都可以接受上一阶段的输入数据，如果阶段尚未准备好处理该数据，则可以保存该数据。输入缓冲区以接收到的相同形式存储数据，因此解码和执行的输入缓冲区包含前一阶段的输出指令向量（forwardinstdata（pipe_data.hh）），指令和气泡与单个缓冲区条目位于同一位置。</p>
+<p>阶段输入缓冲区提供一个与前一阶段的可保留（stage.hh）接口，以允许在其输入缓冲区中保留插槽，并向后通信其输入缓冲区占用情况，以允许前一阶段计划是否应在给定的周期中进行输出。</p>
+<h3 id="fetch1-stage">Fetch1 stage<a class="headerlink" href="#fetch1-stage" title="Permanent link">&para;</a></h3>
+<h3 id="fetch2-stage">Fetch2 stage<a class="headerlink" href="#fetch2-stage" title="Permanent link">&para;</a></h3>
+<h3 id="decode-stage">Decode stage<a class="headerlink" href="#decode-stage" title="Permanent link">&para;</a></h3>
+<h3 id="execute-stage">Execute Stage<a class="headerlink" href="#execute-stage" title="Permanent link">&para;</a></h3>
 
 
 
