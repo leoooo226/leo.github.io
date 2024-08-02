@@ -1620,6 +1620,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#key-data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key data structures
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       Pipeline
@@ -2161,6 +2170,14 @@
 <span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">LSQ</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">load</span><span class="w"> </span><span class="n">store</span><span class="w"> </span><span class="n">queue</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="n">ref</span><span class="p">.</span><span class="w"> </span><span class="n">instructions</span><span class="p">.</span>
 <span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="o">---</span><span class="w"> </span><span class="n">LSQ</span><span class="o">::</span><span class="n">DcachePort</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">interface</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">D</span><span class="o">-</span><span class="n">ache</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">Execute</span><span class="p">.</span>
 </code></pre></div>
+<hr />
+<h2 id="key-data-structures">Key data structures<a class="headerlink" href="#key-data-structures" title="Permanent link">&para;</a></h2>
+<p><code>Instruction and line identity: Instld</code>
+这个数据结构记录了一些关键的id，比如说分支预测控制流的变更就要从这个id中看出来。</p>
+<p><code>ForwardLineData</code>
+<code>Fetch1</code> 阶段向前传递的数据。</p>
+<p><code>ForwardInstData</code>
+后续每个阶段向前传递的数据。</p>
 <hr />
 <h2 id="pipeline">Pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
 <p>MinorCPU 的流水线由 <code>Pipeline</code> 类（位于 <code>cpu/minor/pipeline.cc</code>）管理。该类包含了 <code>Fetch1</code>、<code>Fetch2</code>、<code>Decode</code>、<code>Execute</code>、<code>LSQ</code> 等子模块，并负责管理它们之间的交互。</p>
