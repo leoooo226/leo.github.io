@@ -2207,35 +2207,35 @@
 <td>S</td>
 <td>Execute</td>
 <td>Fetch1, Fetch2, Execute</td>
-<td><a href="" title="在 Execue 中更改 PC（分支、异常）后，流序列号会发生变化，并用于分离 brnach 之前和之后的 intrucion 流。">由 Execute 选择的流序列号</a></td>
+<td><a href="" title="在 Execue 中更改 PC（分支、异常）后，流序列号会发生变化，并用于分离 branch 之前和之后的 intrucion 流。">由 Execute 选择的流序列号</a></td>
 </tr>
 <tr>
 <td>InstId::predictionSeqNum</td>
 <td>P</td>
+<td>Fetch2</td>
 <td><a href="" title="在预测后丢弃行">Fetch2</a></td>
 <td><a href="" title="Fetch2 使用它来根据 Fetch2 做出的最后一个跟随的分支预测来标记行/指令/。Fetch2 可以向 Fetch1 发出信号，表明它应该更改其提取地址，并使用新的预测序列号标记行（仅当 Fetch1 期望的流序列号与请求的序列号匹配时，它才会这样做）">预测序列号表示分支预测决策</a></td>
-<td></td>
 </tr>
 <tr>
 <td>InstId::lineSeqNum</td>
 <td>L</td>
+<td>Fetch1</td>
 <td>Just for debugging</td>
 <td>此缓存行的行提取序列号或从中提取此指令的行</td>
-<td></td>
 </tr>
 <tr>
 <td>InstId::fetchSeqNum</td>
 <td>F</td>
+<td>Fetch2</td>
 <td><a href="" title="作为分支的初始序列号">Fetch2</a></td>
 <td>当行分解为指令时，由 Fetch2 分配的指令获取顺序</td>
-<td></td>
 </tr>
 <tr>
 <td>InstId::execSeqNum</td>
 <td>E</td>
+<td>Decode</td>
 <td><a href="" title="检查队列/FUs/LSQ 中的指令标识">Execute</a></td>
 <td>微操作分解后的指令顺序</td>
-<td></td>
 </tr>
 </tbody>
 </table>
