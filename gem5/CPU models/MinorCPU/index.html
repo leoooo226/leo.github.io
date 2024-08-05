@@ -2308,10 +2308,6 @@
 </tr>
 </tbody>
 </table>
-<p><strong>ForwardLineData</strong>:<code>Fetch1</code> 阶段向前传递的数据。</p>
-<p><strong>ForwardInstData</strong>:后续每个阶段向前传递的数据。</p>
-<p><strong>Fetch1::FetchRequest</strong>:表示I-cache行提取请求。在 <code>Fetch1</code> 的内存队列中使用，并在遍历内存系统时被推入/弹出<code>Packet：：senderState</code>。</p>
-<p><strong>LSQ::LSQRequest</strong>: 类似于 <code>FetchRequests</code>，但用于D-cache访问。它们携带与内存访问相关的指令。</p>
 <hr />
 <h2 id="pipeline">Pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
 <p>MinorCPU 的流水线由 <code>Pipeline</code> 类（位于 <code>cpu/minor/pipeline.cc</code>）管理。该类包含了 <code>Fetch1</code>、<code>Fetch2</code>、<code>Decode</code>、<code>Execute</code>等子模块，并负责管理它们之间的交互。</p>
