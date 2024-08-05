@@ -2270,9 +2270,13 @@
 <p>阶段<code>Fetch2</code>、<code>Decode</code>和<code>Execute</code>具有输入缓冲区，每个周期都可以接受上一阶段的输入数据，如果阶段尚未准备好处理该数据，则可以保存该数据。输入缓冲区以接收到的相同形式存储数据，因此解码和执行的输入缓冲区包含前一阶段的输出指令向量<code>forwardinstdata（pipe_data.hh）</code>，指令和气泡与单个缓冲区条目位于同一位置。</p>
 <p>阶段输入缓冲区提供一个与前一阶段的可保留（<code>stage.hh</code>）接口，以允许在其输入缓冲区中保留插槽，并向后通信其输入缓冲区占用情况，以允许前一阶段计划是否应在给定的周期中进行输出。</p>
 <h3 id="fetch1-stage">Fetch1 stage<a class="headerlink" href="#fetch1-stage" title="Permanent link">&para;</a></h3>
+<p>Fetch1 完成的工作是取指。Fetch1 首先处理的是分支预测的相关数据，可能涉及到流的改变清空指令之类的。随后进入到正常的流程就是取指，这个阶段首先发起对 ITLB 的地址翻译请求，并将请求插入到 Request 队列中；当 ITLB 请求完成的时候，发起对于内存的取指请求，并将请求放入到 Transfer 队列中。随后从内存中得到数据之后，将数据发送给 Fetch2 阶段。</p>
 <h3 id="fetch2-stage">Fetch2 stage<a class="headerlink" href="#fetch2-stage" title="Permanent link">&para;</a></h3>
+<p>这个阶段主要进行分支预测和译码。首先接受到来自 Execute 阶段的分支预测验证结果，如果之前的预测结果和验证结果出现偏差，则会对 BTB 进行更新。随后进行分支预测，并将分支预测的结果写入到 Latch 中向 Fetch1 中传递，使 Fetch1 在下个时钟周期能够获得分支预测的结果。随后进行的就是译码，根据前一阶段得到的内存数据，将指令转换成 StaticInst 的形式，并创建出 DynInst，供本阶段和后续阶段使用。</p>
 <h3 id="decode-stage">Decode stage<a class="headerlink" href="#decode-stage" title="Permanent link">&para;</a></h3>
+<p>这个阶段主要的工作是微指令的译码，对于 RISC 来说这个阶段好像没什么用。</p>
 <h3 id="execute-stage">Execute Stage<a class="headerlink" href="#execute-stage" title="Permanent link">&para;</a></h3>
+<p>利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
 
 
 
