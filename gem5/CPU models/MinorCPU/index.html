@@ -1672,6 +1672,75 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Execute Stage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functional-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functional Units
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functional-units-fifos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Functional Units FIFOs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Issue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scoreboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scoreboard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lsq" class="md-nav__link">
+    <span class="md-ellipsis">
+      LSQ
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2271,12 +2340,22 @@
 <p>阶段输入缓冲区提供一个与前一阶段的可保留（<code>stage.hh</code>）接口，以允许在其输入缓冲区中保留插槽，并向后通信其输入缓冲区占用情况，以允许前一阶段计划是否应在给定的周期中进行输出。</p>
 <h3 id="fetch1-stage">Fetch1 stage<a class="headerlink" href="#fetch1-stage" title="Permanent link">&para;</a></h3>
 <p>Fetch1 完成的工作是取指。Fetch1 首先处理的是分支预测的相关数据，可能涉及到流的改变清空指令之类的。随后进入到正常的流程就是取指，这个阶段首先发起对 ITLB 的地址翻译请求，并将请求插入到 Request 队列中；当 ITLB 请求完成的时候，发起对于内存的取指请求，并将请求放入到 Transfer 队列中。随后从内存中得到数据之后，将数据发送给 Fetch2 阶段。</p>
+<hr />
 <h3 id="fetch2-stage">Fetch2 stage<a class="headerlink" href="#fetch2-stage" title="Permanent link">&para;</a></h3>
 <p>这个阶段主要进行分支预测和译码。首先接受到来自 Execute 阶段的分支预测验证结果，如果之前的预测结果和验证结果出现偏差，则会对 BTB 进行更新。随后进行分支预测，并将分支预测的结果写入到 Latch 中向 Fetch1 中传递，使 Fetch1 在下个时钟周期能够获得分支预测的结果。</p>
+<hr />
 <h3 id="decode-stage">Decode stage<a class="headerlink" href="#decode-stage" title="Permanent link">&para;</a></h3>
 <p>这个阶段主要的工作是译码。</p>
+<hr />
 <h3 id="execute-stage">Execute Stage<a class="headerlink" href="#execute-stage" title="Permanent link">&para;</a></h3>
 <p>利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
+<h4 id="functional-units">Functional Units<a class="headerlink" href="#functional-units" title="Permanent link">&para;</a></h4>
+<h4 id="functional-units-fifos">Functional Units FIFOs<a class="headerlink" href="#functional-units-fifos" title="Permanent link">&para;</a></h4>
+<h4 id="issue">Issue<a class="headerlink" href="#issue" title="Permanent link">&para;</a></h4>
+<h4 id="commit">Commit<a class="headerlink" href="#commit" title="Permanent link">&para;</a></h4>
+<h4 id="advance">Advance<a class="headerlink" href="#advance" title="Permanent link">&para;</a></h4>
+<h4 id="scoreboard">Scoreboard<a class="headerlink" href="#scoreboard" title="Permanent link">&para;</a></h4>
+<h4 id="lsq">LSQ<a class="headerlink" href="#lsq" title="Permanent link">&para;</a></h4>
 
 
 
