@@ -903,9 +903,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#definitions" class="md-nav__link">
+  <a href="#definition" class="md-nav__link">
     <span class="md-ellipsis">
-      Definitions
+      Definition
     </span>
   </a>
   
@@ -2454,35 +2454,35 @@
 <p><strong>Ara's top-level, interfacing with Ariane.Ara 处理器的顶层模块，与cva6处理器接口。</strong></p>
 <p><strong>ara模块是一个高度可配置的向量加速器，支持多种数据类型和操作，通过AXI接口与外部内存系统交互。它的设计允许通过参数化来适应不同的应用场景和性能需求。</strong></p>
 <hr />
-<h3 id="definitions">Definitions<a class="headerlink" href="#definitions" title="Permanent link">&para;</a></h3>
+<h3 id="definition">Definition<a class="headerlink" href="#definition" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="" title="NrLanes：并行向量通道的数量.VLEN：向量长度（以位为单位）。FPUSupport：浮点数据类型支持。FPExtSupport：外部支持 vfrec7 和 vfrsqrt7。FixPtSupport：定点数据类型支持。AxiDataWidth 和 AxiAddrWidth：AXI 接口的数据和地址宽度。axi_ar_t, axi_r_t, axi_aw_t, axi_w_t, axi_b_t, axi_req_t, axi_resp_t：AXI 接口信号类型。NrPEs：处理元素的数量，等于 NrLanes + 4。vlen_t：向量长度的类型，用于表示向量长度的位宽。VLENB：向量长度（以字节为单位）。">参数定义与端口声明</a>：定义了多个参数，包括并行向量通道数<code>NrLanes</code>、向量长度<code>VLEN</code>、浮点支持<code>FPUSupport   = FPUSupportHalfSingleDouble</code>、固定点支持等。声明了时钟、复位、扫描链输入输出、与 Ariane 的接口、AXI 接口等端口。</li>
 <li>本地参数定义：定义了每个通道的最大向量长度<code>MaxVLenPerLane  = VLEN / NrLanes</code>、向量寄存器文件大小<code>VRFSizePerLane  = MaxVLenPerLane * 32</code>等。</li>
 <li>接口定义：定义了 Ara 请求和响应结构体 <code>ara_req_t</code>、<code>ara_resp_t</code>，以及pe请求和响应结构体<code>pe_req_t</code>、<code>pe_resp_t</code>，用于描述向量操作和处理元素之间的通信。通过封装指令执行所需的各种参数和状态信息，支持了高效的指令分发和执行流程。</li>
 </ul>
-<h3 id="dispatcher">Dispatcher<a class="headerlink" href="#dispatcher" title="Permanent link">&para;</a></h3>
+<h3 id="dispatcher"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Dispatcher/">Dispatcher</a><a class="headerlink" href="#dispatcher" title="Permanent link">&para;</a></h3>
 <ul>
 <li>调度器实例化：实例化了调度器模块ara_dispatcher，并连接了相关的信号，包括请求和响应的信号、与Ariane的接口信号、与向量存储单元（VSTU）的接口信号等</li>
 </ul>
-<h3 id="sequencer">Sequencer<a class="headerlink" href="#sequencer" title="Permanent link">&para;</a></h3>
+<h3 id="sequencer"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Sequencer/">Sequencer</a><a class="headerlink" href="#sequencer" title="Permanent link">&para;</a></h3>
 <ul>
 <li>序列器实例化：实例化了序列器模块ara_sequencer，并连接了相关的信号，包括请求和响应的信号、与调度器的接口信号、与处理元素（PEs）的接口信号等。</li>
 <li>组合逻辑：定义了一个组合逻辑块，用于处理掩码单元操作数的准备信号。</li>
 </ul>
-<h3 id="lanes">Lanes<a class="headerlink" href="#lanes" title="Permanent link">&para;</a></h3>
+<h3 id="lanes"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Lane/">Lanes</a><a class="headerlink" href="#lanes" title="Permanent link">&para;</a></h3>
 <ul>
 <li>数据通道接口：定义了一系列用于不同单元（如存储单元、滑动单元、加载单元和掩码单元）的接口信号。</li>
 <li>Lane模块实例化：使用生成块（generate block）来实例化多个lane模块，每个lane模块都是一个独立的数据处理单元，它接收来自不同单元的请求和响应，执行相应的操作，并产生结果。</li>
 </ul>
-<h3 id="vector-loadstore-unit">Vector Load/Store Unit<a class="headerlink" href="#vector-loadstore-unit" title="Permanent link">&para;</a></h3>
+<h3 id="vector-loadstore-unit"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Vlsu/">Vector Load/Store Unit</a><a class="headerlink" href="#vector-loadstore-unit" title="Permanent link">&para;</a></h3>
 <ul>
 <li>LSU实例化:vlsu模块负责向量加载和存储操作。它通过AXI接口与内存交互，处理加载和存储请求，并与调度器、序列器、掩码单元和通道进行通信。</li>
 </ul>
-<h3 id="slide-unit">Slide unit<a class="headerlink" href="#slide-unit" title="Permanent link">&para;</a></h3>
+<h3 id="slide-unit"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Sldu/">Slide unit</a><a class="headerlink" href="#slide-unit" title="Permanent link">&para;</a></h3>
 <ul>
 <li>滑动单元实例化:sldu模块负责向量滑动操作。它处理向量元素的滑动和重新排列，并与主序列器、通道和掩码单元进行通信。</li>
 </ul>
-<h3 id="mask-unit">Mask unit<a class="headerlink" href="#mask-unit" title="Permanent link">&para;</a></h3>
+<h3 id="mask-unit"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Masku/">Mask unit</a><a class="headerlink" href="#mask-unit" title="Permanent link">&para;</a></h3>
 <ul>
 <li>掩码单元实例化:mask模块负责向量掩码操作。它处理向量元素的掩码操作，并与主序列器、通道和向量存储单元进行通信。</li>
 </ul>
