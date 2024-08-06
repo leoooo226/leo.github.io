@@ -2454,7 +2454,6 @@
 <p><strong>Ara's top-level, interfacing with Ariane.Ara 处理器的顶层模块，与cva6处理器接口。</strong></p>
 <p><strong>ara模块是一个高度可配置的向量加速器，支持多种数据类型和操作，通过AXI接口与外部内存系统交互。它的设计允许通过参数化来适应不同的应用场景和性能需求。</strong></p>
 <hr />
-</div>
 <h3 id="definitions">Definitions<a class="headerlink" href="#definitions" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="" title="NrLanes：并行向量通道的数量.VLEN：向量长度（以位为单位）。FPUSupport：浮点数据类型支持。FPExtSupport：外部支持 vfrec7 和 vfrsqrt7。FixPtSupport：定点数据类型支持。AxiDataWidth 和 AxiAddrWidth：AXI 接口的数据和地址宽度。axi_ar_t, axi_r_t, axi_aw_t, axi_w_t, axi_b_t, axi_req_t, axi_resp_t：AXI 接口信号类型。NrPEs：处理元素的数量，等于 NrLanes + 4。vlen_t：向量长度的类型，用于表示向量长度的位宽。VLENB：向量长度（以字节为单位）。">参数定义与端口声明</a>：定义了多个参数，包括并行向量通道数<code>NrLanes</code>、向量长度<code>VLEN</code>、浮点支持<code>FPUSupport   = FPUSupportHalfSingleDouble</code>、固定点支持等。声明了时钟、复位、扫描链输入输出、与 Ariane 的接口、AXI 接口等端口。</li>
