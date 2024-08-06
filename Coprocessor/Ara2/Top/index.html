@@ -2460,91 +2460,87 @@
 <li>本地参数定义：定义了每个通道的最大向量长度<code>MaxVLenPerLane  = VLEN / NrLanes</code>、向量寄存器文件大小<code>VRFSizePerLane  = MaxVLenPerLane * 32</code>等。</li>
 <li>接口定义：定义了 <a href="" title="Interfaces between Ara's dispatcher and Sequencer">Ara 请求和响应结构体</a> <code>ara_req_t</code>、<code>ara_resp_t</code>，以及<a href="" title="Interfaces between Ara's Sequencer and Ara's PEs">pe请求和响应结构体</a><code>pe_req_t</code>、<code>pe_resp_t</code>。通过封装指令执行所需的各种参数和状态信息，支持了高效的指令分发和执行流程。</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">ara_req_t</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">ara_req_t</label><label for="__tabbed_1_2">ara_resp_t</label><label for="__tabbed_1_3">pe_req_t</label><label for="__tabbed_1_4">pe_resp_t</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="k">packed</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ara_op_e</span><span class="w"> </span><span class="n">op</span><span class="p">;</span><span class="w"> </span><span class="c1">// Operation</span>
+
+<span class="w">    </span><span class="c1">// Stores and slides do not re-shuffle the</span>
+<span class="w">    </span><span class="c1">// source registers. In these two cases, vl refers</span>
+<span class="w">    </span><span class="c1">// to the target EEW and vtype.vsew, respectively.</span>
+<span class="w">    </span><span class="c1">// Since operand requesters work with the old</span>
+<span class="w">    </span><span class="c1">// eew of the source registers, we should rescale</span>
+<span class="w">    </span><span class="c1">// vl to the old eew to fetch the correct number of Bytes.</span>
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="c1">// Another solution would be to pass directly the target</span>
+<span class="w">    </span><span class="c1">// eew (vstores) or the vtype.vsew (vslides), but this would</span>
+<span class="w">    </span><span class="c1">// create confusion with the current naming convention</span>
+
+<span class="w">    </span><span class="c1">// 存储和滑动操作不会重新排列源寄存器。在这两种情况下，vl 分别指的是目标 EEW（Effective Element Width，有效元素宽度）和 vtype.vsew（vsew 是 vtype 寄存器中的一个字段，代表 Vector SEW，即向量中的元素宽度）。 </span>
+<span class="w">    </span><span class="c1">// 由于操作数请求者使用源寄存器的旧 eew，我们应该将 vl 缩放到旧 eew 以获取正确数量的字节。  </span>
+
+<span class="w">    </span><span class="c1">// 另一种解决方案是直接传递目标 eew（在存储操作中）或 vtype.vsew（在滑动操作中），但这会与当前的命名约定造成混淆。</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">scale_vl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Mask vector register operand 掩码操作数</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">vm</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vmask</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 1st vector register operand      源1</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">opqueue_conversion_e</span><span class="w"> </span><span class="n">conversion_vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">old_eew_vs1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 2nd vector register operand   源2</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">vs2</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vs2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">opqueue_conversion_e</span><span class="w"> </span><span class="n">conversion_vs2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vs2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Use vd as an operand as well (e.g., vmacc) 目的寄存器也可以做源操作数，例如乘累加</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vd_op</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vd_op</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Scalar operand 标量操作数</span>
+<span class="w">    </span><span class="n">elen_t</span><span class="w"> </span><span class="n">scalar_op</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_scalar_op</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 2nd scalar operand: stride for constant-strided vector load/stores, slide offset for vector slides</span>
+<span class="w">    </span><span class="c1">//对于常步长向量加载/存储，这是步长值；对于向量滑动，这是滑动偏移量。</span>
+<span class="w">    </span><span class="n">elen_t</span><span class="w"> </span><span class="n">stride</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">is_stride_np2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Destination vector register 目的寄存器</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">vd</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vd</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// If asserted: vs2 is kept in MulFPU opqueue C, and vd_op in MulFPU A</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">swap_vs2_vd_op</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Effective length multiplier    有效组乘系数，与EEW对应</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vlmul_e</span><span class="w"> </span><span class="n">emul</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">//****浮点相关****</span>
+<span class="w">    </span><span class="c1">// Rounding-Mode for FP operations</span>
+<span class="w">    </span><span class="n">fpnew_pkg</span><span class="o">::</span><span class="n">roundmode_e</span><span class="w"> </span><span class="n">fp_rm</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Widen FP immediate (re-encoding)</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">wide_fp_imm</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Resizing of FP conversions</span>
+<span class="w">    </span><span class="n">resize_e</span><span class="w"> </span><span class="n">cvt_resize</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Vector machine metadata</span>
+<span class="w">    </span><span class="n">vlen_t</span><span class="w"> </span><span class="n">vl</span><span class="p">;</span><span class="c1">//记录处理的数据元素的数量</span>
+<span class="w">    </span><span class="n">vlen_t</span><span class="w"> </span><span class="n">vstart</span><span class="p">;</span><span class="c1">//指示用来第一个参与运算的数据元素的索引</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vtype_t</span><span class="w"> </span><span class="n">vtype</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Request token, for registration in the sequencer用于在序列器中注册请求。</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">token</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">ara_req_t</span><span class="p">;</span>
+</code></pre></div>
 </div>
-</div>
-<p>``` sv
-    typedef struct packed {
-        ara_op_e op; // Operation</p>
-<pre><code>    // Stores and slides do not re-shuffle the
-    // source registers. In these two cases, vl refers
-    // to the target EEW and vtype.vsew, respectively.
-    // Since operand requesters work with the old
-    // eew of the source registers, we should rescale
-    // vl to the old eew to fetch the correct number of Bytes.
-    //
-    // Another solution would be to pass directly the target
-    // eew (vstores) or the vtype.vsew (vslides), but this would
-    // create confusion with the current naming convention
-
-    // 存储和滑动操作不会重新排列源寄存器。在这两种情况下，vl 分别指的是目标 EEW（Effective Element Width，有效元素宽度）和 vtype.vsew（vsew 是 vtype 寄存器中的一个字段，代表 Vector SEW，即向量中的元素宽度）。 
-    // 由于操作数请求者使用源寄存器的旧 eew，我们应该将 vl 缩放到旧 eew 以获取正确数量的字节。
-
-    // 另一种解决方案是直接传递目标 eew（在存储操作中）或 vtype.vsew（在滑动操作中），但这会与当前的命名约定造成混淆。
-    logic scale_vl;
-
-    // Mask vector register operand 掩码操作数
-    logic vm;
-    rvv_pkg::vew_e eew_vmask;
-
-    // 1st vector register operand      源1
-    logic [4:0] vs1;
-    logic use_vs1;
-    opqueue_conversion_e conversion_vs1;
-    rvv_pkg::vew_e eew_vs1;
-    rvv_pkg::vew_e old_eew_vs1;
-
-    // 2nd vector register operand   源2
-    logic [4:0] vs2;
-    logic use_vs2;
-    opqueue_conversion_e conversion_vs2;
-    rvv_pkg::vew_e eew_vs2;
-
-    // Use vd as an operand as well (e.g., vmacc) 目的寄存器也可以做源操作数，例如乘累加
-    logic use_vd_op;
-    rvv_pkg::vew_e eew_vd_op;
-
-    // Scalar operand 标量操作数
-    elen_t scalar_op;
-    logic use_scalar_op;
-
-    // 2nd scalar operand: stride for constant-strided vector load/stores, slide offset for vector slides
-    //对于常步长向量加载/存储，这是步长值；对于向量滑动，这是滑动偏移量。
-    elen_t stride;
-    logic is_stride_np2;
-
-    // Destination vector register 目的寄存器
-    logic [4:0] vd;
-    logic use_vd;
-
-    // If asserted: vs2 is kept in MulFPU opqueue C, and vd_op in MulFPU A
-    logic swap_vs2_vd_op;
-
-    // Effective length multiplier    有效组乘系数，与EEW对应
-    rvv_pkg::vlmul_e emul;
-
-    //****浮点相关****
-    // Rounding-Mode for FP operations
-    fpnew_pkg::roundmode_e fp_rm;
-    // Widen FP immediate (re-encoding)
-    logic wide_fp_imm;
-    // Resizing of FP conversions
-    resize_e cvt_resize;
-
-    // Vector machine metadata
-    vlen_t vl;//记录处理的数据元素的数量
-    vlen_t vstart;//指示用来第一个参与运算的数据元素的索引
-    rvv_pkg::vtype_t vtype;
-
-    // Request token, for registration in the sequencer用于在序列器中注册请求。
-    logic token;
-  } ara_req_t;
-```
-</code></pre>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">ara_resp_t</label><label for="__tabbed_2_2">pe_req_t</label><label for="__tabbed_2_3">pe_resp_t</label></div>
-<div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="k">packed</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Scalar response</span>
