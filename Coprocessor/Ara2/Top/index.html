@@ -911,6 +911,69 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#dispatcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dispatcher
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sequencer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sequencer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lanes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lanes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-loadstore-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Vector Load/Store Unit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slide-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Slide unit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mask-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mask unit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assertions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Assertions
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2493,47 +2556,56 @@
 
 <span class="w">    </span><span class="c1">// New value for vstart 如果触发了异常，则提供新的vstart值</span>
 <span class="w">    </span><span class="n">vlen_t</span><span class="w"> </span><span class="n">exception_vstart</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">ara_resp_t</span><span class="p">;</span><span class="err">```</span>
-
-<span class="o">===</span><span class="w"> </span><span class="s">&quot;pe_req_t&quot;</span>
-
-<span class="o">===</span><span class="w"> </span><span class="s">&quot;pe_resp_t&quot;</span>
-
-<span class="p">###</span><span class="w"> </span><span class="p">[</span><span class="n">Dispatcher</span><span class="p">](</span><span class="nl">https:</span><span class="c1">//leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Dispatcher/)</span>
-
-<span class="o">-</span><span class="w"> </span><span class="err">调度器实例化：实例化了调度器模块</span><span class="n">ara_dispatcher</span><span class="err">，并连接了相关的信号，包括请求和响应的信号、与</span><span class="n">Ariane的接口信号</span><span class="err">、与向量存储单元（</span><span class="n">VSTU</span><span class="err">）的接口信号等</span>
-
-<span class="p">###</span><span class="w"> </span><span class="p">[</span><span class="n">Sequencer</span><span class="p">](</span><span class="nl">https:</span><span class="c1">//leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Sequencer/)</span>
-
-<span class="o">-</span><span class="w"> </span><span class="err">序列器实例化：实例化了序列器模块</span><span class="n">ara_sequencer</span><span class="err">，并连接了相关的信号，包括请求和响应的信号、与调度器的接口信号、与处理元素（</span><span class="n">PEs</span><span class="err">）的接口信号等。</span>
-<span class="o">-</span><span class="w"> </span><span class="err">组合逻辑：定义了一个组合逻辑块，用于处理掩码单元操作数的准备信号。</span>
-
-<span class="p">###</span><span class="w"> </span><span class="p">[</span><span class="n">Lanes</span><span class="p">](</span><span class="nl">https:</span><span class="c1">//leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Lane/)</span>
-
-<span class="o">-</span><span class="w"> </span><span class="err">数据通道接口：定义了一系列用于不同单元（如存储单元、滑动单元、加载单元和掩码单元）的接口信号。</span>
-<span class="o">-</span><span class="w"> </span><span class="n">Lane模块实例化</span><span class="err">：使用生成块（</span><span class="k">generate</span><span class="w"> </span><span class="n">block</span><span class="err">）来实例化多个</span><span class="n">lane模块</span><span class="err">，每个</span><span class="n">lane模块都是一个独立的数据处理单元</span><span class="err">，它接收来自不同单元的请求和响应，执行相应的操作，并产生结果。</span>
-
-<span class="p">###</span><span class="w"> </span><span class="p">[</span><span class="n">Vector</span><span class="w"> </span><span class="n">Load</span><span class="o">/</span><span class="n">Store</span><span class="w"> </span><span class="n">Unit</span><span class="p">](</span><span class="nl">https:</span><span class="c1">//leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Vlsu/)</span>
-
-<span class="o">-</span><span class="w"> </span><span class="nl">LSU实例化:</span><span class="n">vlsu模块负责向量加载和存储操作</span><span class="err">。它通过</span><span class="n">AXI接口与内存交互</span><span class="err">，处理加载和存储请求，并与调度器、序列器、掩码单元和通道进行通信。</span>
-
-<span class="p">###</span><span class="w"> </span><span class="p">[</span><span class="n">Slide</span><span class="w"> </span><span class="n">unit</span><span class="p">](</span><span class="nl">https:</span><span class="c1">//leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Sldu/)</span>
-
-<span class="o">-</span><span class="w"> </span><span class="err">滑动单元实例化</span><span class="o">:</span><span class="n">sldu模块负责向量滑动操作</span><span class="err">。它处理向量元素的滑动和重新排列，并与主序列器、通道和掩码单元进行通信。</span>
-
-<span class="p">###</span><span class="w"> </span><span class="p">[</span><span class="n">Mask</span><span class="w"> </span><span class="n">unit</span><span class="p">](</span><span class="nl">https:</span><span class="c1">//leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Masku/)</span>
-
-<span class="o">-</span><span class="w"> </span><span class="err">掩码单元实例化</span><span class="o">:</span><span class="n">mask模块负责向量掩码操作</span><span class="err">。它处理向量元素的掩码操作，并与主序列器、通道和向量存储单元进行通信。</span>
-
-<span class="p">###</span><span class="w"> </span><span class="n">Assertions</span>
-
-<span class="o">-</span><span class="w"> </span><span class="err">断言：定义了多个断言，用于检查参数的合法性，确保模块在正确的配置下运行。</span><span class="w">  </span>
-
-<span class="err">``</span><span class="no">`verilog</span>
-<span class="k">module</span><span class="w"> </span><span class="n">ara</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">ara_pkg</span><span class="o">::*</span><span class="p">;</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">ara_resp_t</span><span class="p">;</span>
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">pe_req_t</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">pe_resp_t</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+<h3 id="dispatcher"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Dispatcher/">Dispatcher</a><a class="headerlink" href="#dispatcher" title="Permanent link">&para;</a></h3>
+<ul>
+<li>调度器实例化：实例化了调度器模块ara_dispatcher，并连接了相关的信号，包括请求和响应的信号、与Ariane的接口信号、与向量存储单元（VSTU）的接口信号等</li>
+</ul>
+<h3 id="sequencer"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Sequencer/">Sequencer</a><a class="headerlink" href="#sequencer" title="Permanent link">&para;</a></h3>
+<ul>
+<li>序列器实例化：实例化了序列器模块ara_sequencer，并连接了相关的信号，包括请求和响应的信号、与调度器的接口信号、与处理元素（PEs）的接口信号等。</li>
+<li>组合逻辑：定义了一个组合逻辑块，用于处理掩码单元操作数的准备信号。</li>
+</ul>
+<h3 id="lanes"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Lane/">Lanes</a><a class="headerlink" href="#lanes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>数据通道接口：定义了一系列用于不同单元（如存储单元、滑动单元、加载单元和掩码单元）的接口信号。</li>
+<li>Lane模块实例化：使用生成块（generate block）来实例化多个lane模块，每个lane模块都是一个独立的数据处理单元，它接收来自不同单元的请求和响应，执行相应的操作，并产生结果。</li>
+</ul>
+<h3 id="vector-loadstore-unit"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Vlsu/">Vector Load/Store Unit</a><a class="headerlink" href="#vector-loadstore-unit" title="Permanent link">&para;</a></h3>
+<ul>
+<li>LSU实例化:vlsu模块负责向量加载和存储操作。它通过AXI接口与内存交互，处理加载和存储请求，并与调度器、序列器、掩码单元和通道进行通信。</li>
+</ul>
+<h3 id="slide-unit"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Sldu/">Slide unit</a><a class="headerlink" href="#slide-unit" title="Permanent link">&para;</a></h3>
+<ul>
+<li>滑动单元实例化:sldu模块负责向量滑动操作。它处理向量元素的滑动和重新排列，并与主序列器、通道和掩码单元进行通信。</li>
+</ul>
+<h3 id="mask-unit"><a href="https://leoooo226.github.io/leo.github.io/Coprocessor/Ara2/Masku/">Mask unit</a><a class="headerlink" href="#mask-unit" title="Permanent link">&para;</a></h3>
+<ul>
+<li>掩码单元实例化:mask模块负责向量掩码操作。它处理向量元素的掩码操作，并与主序列器、通道和向量存储单元进行通信。</li>
+</ul>
+<h3 id="assertions">Assertions<a class="headerlink" href="#assertions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>断言：定义了多个断言，用于检查参数的合法性，确保模块在正确的配置下运行。  </li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">ara</span><span class="w"> </span><span class="n">import</span><span class="w"> </span><span class="n">ara_pkg</span><span class="o">::*</span><span class="p">;</span><span class="w"> </span><span class="p">#(</span>
 <span class="w">    </span><span class="c1">// RVV Parameters</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">NrLanes</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">                          </span><span class="c1">// Number of parallel vector lanes.</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">VLEN</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">                          </span><span class="c1">// VLEN [bit]</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">NrLanes</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span><span class="w">                          </span><span class="c1">// Number of parallel vector lanes.</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">VLEN</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span><span class="w">                          </span><span class="c1">// VLEN [bit]</span>
 <span class="w">    </span><span class="c1">// Support for floating-point data types</span>
 <span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="n">fpu_support_e</span><span class="w">          </span><span class="n">FPUSupport</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">FPUSupportHalfSingleDouble</span><span class="p">,</span>
 <span class="w">    </span><span class="c1">// External support for vfrec7, vfrsqrt7</span>
@@ -2541,21 +2613,21 @@
 <span class="w">    </span><span class="c1">// Support for fixed-point data types</span>
 <span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="n">fixpt_support_e</span><span class="w">        </span><span class="n">FixPtSupport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FixedPointEnable</span><span class="p">,</span>
 <span class="w">    </span><span class="c1">// AXI Interface</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">AxiDataWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">AxiAddrWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">type</span><span class="w">                   </span><span class="n">axi_ar_t</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">type</span><span class="w">                   </span><span class="n">axi_r_t</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">type</span><span class="w">                   </span><span class="n">axi_aw_t</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">type</span><span class="w">                   </span><span class="n">axi_w_t</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">type</span><span class="w">                   </span><span class="n">axi_b_t</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">type</span><span class="w">                   </span><span class="n">axi_req_t</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
-<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">type</span><span class="w">                   </span><span class="n">axi_resp_t</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">AxiDataWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">AxiAddrWidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="k">type</span><span class="w">                   </span><span class="n">axi_ar_t</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="k">type</span><span class="w">                   </span><span class="n">axi_r_t</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="k">type</span><span class="w">                   </span><span class="n">axi_aw_t</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="k">type</span><span class="w">                   </span><span class="n">axi_w_t</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="k">type</span><span class="w">                   </span><span class="n">axi_b_t</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="k">type</span><span class="w">                   </span><span class="n">axi_req_t</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w">  </span><span class="k">type</span><span class="w">                   </span><span class="n">axi_resp_t</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">,</span>
 <span class="w">    </span><span class="c1">// Dependant parameters. DO NOT CHANGE!</span>
 <span class="w">    </span><span class="c1">// Ara has NrLanes + 3 processing elements: each one of the lanes, the vector load unit, the</span>
 <span class="w">    </span><span class="c1">// vector store unit, the slide unit, and the mask unit.</span>
-<span class="w">    </span><span class="k">localparam</span><span class="w"> </span><span class="kt">int</span><span class="w">           </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">NrPEs</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">NrLanes</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
-<span class="w">    </span><span class="k">localparam</span><span class="w"> </span><span class="kt">type</span><span class="w">                   </span><span class="n">vlen_t</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">[$</span><span class="n">clog2</span><span class="p">(</span><span class="n">VLEN</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">],</span>
-<span class="w">    </span><span class="k">localparam</span><span class="w"> </span><span class="kt">int</span><span class="w">           </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">VLENB</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">VLEN</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">8</span>
+<span class="w">    </span><span class="k">localparam</span><span class="w"> </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">NrPEs</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">NrLanes</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">4</span><span class="p">,</span>
+<span class="w">    </span><span class="k">localparam</span><span class="w"> </span><span class="k">type</span><span class="w">                   </span><span class="n">vlen_t</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="kt">logic</span><span class="p">[</span><span class="n">$clog2</span><span class="p">(</span><span class="n">VLEN</span><span class="o">+</span><span class="mh">1</span><span class="p">)</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">],</span>
+<span class="w">    </span><span class="k">localparam</span><span class="w"> </span><span class="kt">int</span><span class="w">           </span><span class="k">unsigned</span><span class="w"> </span><span class="n">VLENB</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="n">VLEN</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mh">8</span>
 <span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="c1">// Clock and Reset</span>
 <span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">              </span><span class="n">clk_i</span><span class="p">,</span>
