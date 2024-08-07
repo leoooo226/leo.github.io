@@ -2460,7 +2460,7 @@
 <li>本地参数定义：定义了每个通道的最大向量长度<code>MaxVLenPerLane  = VLEN / NrLanes</code>、向量寄存器文件大小<code>VRFSizePerLane  = MaxVLenPerLane * 32</code>等。</li>
 <li>接口定义：定义了 <a href="" title="Interfaces between Ara's dispatcher and Sequencer">Ara 请求和响应结构体</a> <code>ara_req_t</code>、<code>ara_resp_t</code>，以及<a href="" title="Interfaces between Ara's Sequencer and Ara's PEs">pe请求和响应结构体</a><code>pe_req_t</code>、<code>pe_resp_t</code>。通过封装指令执行所需的各种参数和状态信息，支持了高效的指令分发和执行流程。</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">ara_req_t</label><label for="__tabbed_1_2">ara_resp_t</label><label for="__tabbed_1_3">pe_req_t</label><label for="__tabbed_1_4">pe_resp_t</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">ara_req_t</label><label for="__tabbed_1_2">ara_resp_t</label><label for="__tabbed_1_3">pe_req_t</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="k">packed</span><span class="w"> </span><span class="p">{</span>
@@ -2555,9 +2555,87 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>
-</code></pre></div>
+<p>```systemverilog
+  typedef struct packed {
+    vid_t id; // ID of the vector instruction 向量指令的ID</p>
+<pre><code>ara_op_e op; // Operation
+
+// Mask vector register operand
+logic vm;
+rvv_pkg::vew_e eew_vmask;
+
+vfu_e vfu; // VFU responsible for handling this instruction 指定负责处理此指令的向量功能单元
+
+// Rescale vl taking into account the new and old EEW
+logic scale_vl;
+
+// The lane that provides the first element of the computation 计算第一个元素的lane
+logic [$clog2(MaxNrLanes)-1:0] start_lane;
+// The lane that provides the last element of the computation  计算最后一个元素的lane
+logic [$clog2(MaxNrLanes)-1:0] end_lane;
+
+// 1st vector register operand
+logic [4:0] vs1;
+logic use_vs1;
+opqueue_conversion_e conversion_vs1;
+rvv_pkg::vew_e eew_vs1;
+rvv_pkg::vew_e old_eew_vs1;
+
+// 2nd vector register operand
+logic [4:0] vs2;
+logic use_vs2;
+opqueue_conversion_e conversion_vs2;
+rvv_pkg::vew_e eew_vs2;
+
+// Use vd as an operand as well (e.g., vmacc)
+logic use_vd_op;
+rvv_pkg::vew_e eew_vd_op;
+
+// Scalar operand
+elen_t scalar_op;
+logic use_scalar_op;
+
+// If asserted: vs2 is kept in MulFPU opqueue C, and vd_op in MulFPU A
+logic swap_vs2_vd_op;
+
+// 2nd scalar operand: stride for constant-strided vector load/stores
+elen_t stride;
+logic is_stride_np2;
+
+// Destination vector register
+logic [4:0] vd;
+logic use_vd;
+
+// Effective length multiplier
+rvv_pkg::vlmul_e emul;
+
+//****浮点相关****
+// Rounding-Mode for FP operations
+fpnew_pkg::roundmode_e fp_rm;
+// Widen FP immediate (re-encoding)
+logic wide_fp_imm;
+// Resizing of FP conversions
+resize_e cvt_resize;
+
+// Vector machine metadata
+vlen_t vl;
+vlen_t vstart;
+rvv_pkg::vtype_t vtype;
+
+// Hazards 冒险信号 推测用于指示源或目的寄存器是否因之前的操作而处于危险状态（即，它们可能尚未准备好被当前操作使用）
+logic [NrVInsn-1:0] hazard_vs1;
+logic [NrVInsn-1:0] hazard_vs2;
+logic [NrVInsn-1:0] hazard_vm;
+logic [NrVInsn-1:0] hazard_vd;
+</code></pre>
 </div>
+</div>
+</div>
+<p>} pe_req_t;</p>
+<pre><code>```
+</code></pre>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">pe_resp_t</label></div>
+<div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="k">packed</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Each set bit indicates that the corresponding vector loop has finished execution 每个设置的位都表示相应的向量循环已完成执行。</span>
