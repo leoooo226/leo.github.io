@@ -2143,6 +2143,21 @@
 <h2 id="csrs">CSRs<a class="headerlink" href="#csrs" title="Permanent link">&para;</a></h2>
 <hr />
 <h2 id="backend-interface">Backend interface<a class="headerlink" href="#backend-interface" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="n">ara_req_t</span><span class="w"> </span><span class="n">ara_req_d</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">     </span><span class="n">ara_req_valid_d</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk_i</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">negedge</span><span class="w"> </span><span class="n">rst_ni</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_ni</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">ara_req_o</span><span class="w">       </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">ara_req_valid_o</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ara_req_ready_i</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">ara_req_o</span><span class="w">       </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">ara_req_d</span><span class="p">;</span>
+<span class="w">        </span><span class="n">ara_req_valid_o</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">ara_req_valid_d</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+</code></pre></div>
 <hr />
 <h2 id="state">State<a class="headerlink" href="#state" title="Permanent link">&para;</a></h2>
 <hr />
