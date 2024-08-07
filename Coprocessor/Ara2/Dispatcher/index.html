@@ -2141,6 +2141,61 @@
 <h1 id="ara_dispatcher">ara_dispatcher<a class="headerlink" href="#ara_dispatcher" title="Permanent link">&para;</a></h1>
 <p><strong>Ara's dispatcher interfaces Ariane's requests with the vector lanes. It also acknowledges instructions back to Ariane, perhaps with a response or an error message.</strong></p>
 <h2 id="csrs">CSRs<a class="headerlink" href="#csrs" title="Permanent link">&para;</a></h2>
+<p>向量扩展为基本的标量RISC-V ISA添加了32个向量寄存器和七个非特权控制与状态寄存器CSR（vstart、vxsat、vxrm、vcsr、vtype、vl、vlenb）</p>
+<table>
+<thead>
+<tr>
+<th>地址</th>
+<th>权限</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x008</td>
+<td>URW</td>
+<td>vstart</td>
+<td>向量起始位置</td>
+</tr>
+<tr>
+<td>0x009</td>
+<td>URW</td>
+<td>vxsat</td>
+<td>定点饱和标志</td>
+</tr>
+<tr>
+<td>0x00A</td>
+<td>URW</td>
+<td>vxrm</td>
+<td>定点舍入模式</td>
+</tr>
+<tr>
+<td>0x00F</td>
+<td>URW</td>
+<td>vcsr</td>
+<td>向量控制和状态寄存器</td>
+</tr>
+<tr>
+<td>0xC20</td>
+<td>URO</td>
+<td>vl</td>
+<td>向量长度</td>
+</tr>
+<tr>
+<td>0xC21</td>
+<td>URO</td>
+<td>vtype</td>
+<td>向量数据类型寄存器</td>
+</tr>
+<tr>
+<td>0xC22</td>
+<td>URO</td>
+<td>vlenb</td>
+<td>VLEN/8（向量寄存器长度（以字节为单位））</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="backend-interface">Backend interface<a class="headerlink" href="#backend-interface" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">ara_req_t</span><span class="w"> </span><span class="n">ara_req_d</span><span class="p">;</span>
