@@ -2460,7 +2460,7 @@
 <li>本地参数定义：定义了每个通道的最大向量长度<code>MaxVLenPerLane  = VLEN / NrLanes</code>、向量寄存器文件大小<code>VRFSizePerLane  = MaxVLenPerLane * 32</code>等。</li>
 <li>接口定义：定义了 <a href="" title="Interfaces between Ara's dispatcher and Sequencer">Ara 请求和响应结构体</a> <code>ara_req_t</code>、<code>ara_resp_t</code>，以及<a href="" title="Interfaces between Ara's Sequencer and Ara's PEs">pe请求和响应结构体</a><code>pe_req_t</code>、<code>pe_resp_t</code>。通过封装指令执行所需的各种参数和状态信息，支持了高效的指令分发和执行流程。</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">ara_req_t</label><label for="__tabbed_1_2">ara_resp_t</label><label for="__tabbed_1_3">pe_req_t</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">ara_req_t</label><label for="__tabbed_1_2">ara_resp_t</label><label for="__tabbed_1_3">pe_req_t</label><label for="__tabbed_1_4">pe_resp_t</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="k">packed</span><span class="w"> </span><span class="p">{</span>
@@ -2555,86 +2555,81 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<p>```systemverilog
-  typedef struct packed {
-    vid_t id; // ID of the vector instruction 向量指令的ID</p>
-<pre><code>ara_op_e op; // Operation
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="k">packed</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">vid_t</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"> </span><span class="c1">// ID of the vector instruction 向量指令的ID</span>
 
-// Mask vector register operand
-logic vm;
-rvv_pkg::vew_e eew_vmask;
+<span class="w">    </span><span class="n">ara_op_e</span><span class="w"> </span><span class="n">op</span><span class="p">;</span><span class="w"> </span><span class="c1">// Operation</span>
 
-vfu_e vfu; // VFU responsible for handling this instruction 指定负责处理此指令的向量功能单元
+<span class="w">    </span><span class="c1">// Mask vector register operand</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">vm</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vmask</span><span class="p">;</span>
 
-// Rescale vl taking into account the new and old EEW
-logic scale_vl;
+<span class="w">    </span><span class="n">vfu_e</span><span class="w"> </span><span class="n">vfu</span><span class="p">;</span><span class="w"> </span><span class="c1">// VFU responsible for handling this instruction 指定负责处理此指令的向量功能单元</span>
 
-// The lane that provides the first element of the computation 计算第一个元素的lane
-logic [$clog2(MaxNrLanes)-1:0] start_lane;
-// The lane that provides the last element of the computation  计算最后一个元素的lane
-logic [$clog2(MaxNrLanes)-1:0] end_lane;
+<span class="w">    </span><span class="c1">// Rescale vl taking into account the new and old EEW</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">scale_vl</span><span class="p">;</span>
 
-// 1st vector register operand
-logic [4:0] vs1;
-logic use_vs1;
-opqueue_conversion_e conversion_vs1;
-rvv_pkg::vew_e eew_vs1;
-rvv_pkg::vew_e old_eew_vs1;
+<span class="w">    </span><span class="c1">// The lane that provides the first element of the computation 计算第一个元素的lane</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[$</span><span class="n">clog2</span><span class="p">(</span><span class="n">MaxNrLanes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">start_lane</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// The lane that provides the last element of the computation  计算最后一个元素的lane</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[$</span><span class="n">clog2</span><span class="p">(</span><span class="n">MaxNrLanes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">end_lane</span><span class="p">;</span>
 
-// 2nd vector register operand
-logic [4:0] vs2;
-logic use_vs2;
-opqueue_conversion_e conversion_vs2;
-rvv_pkg::vew_e eew_vs2;
+<span class="w">    </span><span class="c1">// 1st vector register operand</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">opqueue_conversion_e</span><span class="w"> </span><span class="n">conversion_vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">old_eew_vs1</span><span class="p">;</span>
 
-// Use vd as an operand as well (e.g., vmacc)
-logic use_vd_op;
-rvv_pkg::vew_e eew_vd_op;
+<span class="w">    </span><span class="c1">// 2nd vector register operand</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">vs2</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vs2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">opqueue_conversion_e</span><span class="w"> </span><span class="n">conversion_vs2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vs2</span><span class="p">;</span>
 
-// Scalar operand
-elen_t scalar_op;
-logic use_scalar_op;
+<span class="w">    </span><span class="c1">// Use vd as an operand as well (e.g., vmacc)</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vd_op</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vew_e</span><span class="w"> </span><span class="n">eew_vd_op</span><span class="p">;</span>
 
-// If asserted: vs2 is kept in MulFPU opqueue C, and vd_op in MulFPU A
-logic swap_vs2_vd_op;
+<span class="w">    </span><span class="c1">// Scalar operand</span>
+<span class="w">    </span><span class="n">elen_t</span><span class="w"> </span><span class="n">scalar_op</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_scalar_op</span><span class="p">;</span>
 
-// 2nd scalar operand: stride for constant-strided vector load/stores
-elen_t stride;
-logic is_stride_np2;
+<span class="w">    </span><span class="c1">// If asserted: vs2 is kept in MulFPU opqueue C, and vd_op in MulFPU A</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">swap_vs2_vd_op</span><span class="p">;</span>
 
-// Destination vector register
-logic [4:0] vd;
-logic use_vd;
+<span class="w">    </span><span class="c1">// 2nd scalar operand: stride for constant-strided vector load/stores</span>
+<span class="w">    </span><span class="n">elen_t</span><span class="w"> </span><span class="n">stride</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">is_stride_np2</span><span class="p">;</span>
 
-// Effective length multiplier
-rvv_pkg::vlmul_e emul;
+<span class="w">    </span><span class="c1">// Destination vector register</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">vd</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">use_vd</span><span class="p">;</span>
 
-//****浮点相关****
-// Rounding-Mode for FP operations
-fpnew_pkg::roundmode_e fp_rm;
-// Widen FP immediate (re-encoding)
-logic wide_fp_imm;
-// Resizing of FP conversions
-resize_e cvt_resize;
+<span class="w">    </span><span class="c1">// Effective length multiplier</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vlmul_e</span><span class="w"> </span><span class="n">emul</span><span class="p">;</span>
 
-// Vector machine metadata
-vlen_t vl;
-vlen_t vstart;
-rvv_pkg::vtype_t vtype;
+<span class="w">    </span><span class="c1">//****浮点相关****</span>
+<span class="w">    </span><span class="c1">// Rounding-Mode for FP operations</span>
+<span class="w">    </span><span class="n">fpnew_pkg</span><span class="o">::</span><span class="n">roundmode_e</span><span class="w"> </span><span class="n">fp_rm</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Widen FP immediate (re-encoding)</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="n">wide_fp_imm</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Resizing of FP conversions</span>
+<span class="w">    </span><span class="n">resize_e</span><span class="w"> </span><span class="n">cvt_resize</span><span class="p">;</span>
 
-// Hazards 冒险信号 推测用于指示源或目的寄存器是否因之前的操作而处于危险状态（即，它们可能尚未准备好被当前操作使用）
-logic [NrVInsn-1:0] hazard_vs1;
-logic [NrVInsn-1:0] hazard_vs2;
-logic [NrVInsn-1:0] hazard_vm;
-logic [NrVInsn-1:0] hazard_vd;
-</code></pre>
+<span class="w">    </span><span class="c1">// Vector machine metadata</span>
+<span class="w">    </span><span class="n">vlen_t</span><span class="w"> </span><span class="n">vl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">vlen_t</span><span class="w"> </span><span class="n">vstart</span><span class="p">;</span>
+<span class="w">    </span><span class="n">rvv_pkg</span><span class="o">::</span><span class="n">vtype_t</span><span class="w"> </span><span class="n">vtype</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Hazards 冒险信号 推测用于指示源或目的寄存器是否因之前的操作而处于危险状态（即，它们可能尚未准备好被当前操作使用）</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">NrVInsn</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">hazard_vs1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">NrVInsn</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">hazard_vs2</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">NrVInsn</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">hazard_vm</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">NrVInsn</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">hazard_vd</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">pe_req_t</span><span class="p">;</span>
+</code></pre></div>
 </div>
-</div>
-</div>
-<p>} pe_req_t;
-    ```</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">pe_resp_t</label></div>
-<div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="k">packed</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Each set bit indicates that the corresponding vector loop has finished execution 每个设置的位都表示相应的向量循环已完成执行。</span>
