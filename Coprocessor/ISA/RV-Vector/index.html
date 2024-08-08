@@ -605,6 +605,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    RV-Vector
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -614,6 +625,124 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量扩展编程模型
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量元素到向量寄存器状态的映射
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量指令格式
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      配置和设置指令
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量加载和存储
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量内存一致性模型
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量算术指令
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量整数算术指令
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量定点算术指令
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量浮点算术指令
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2047,6 +2176,168 @@
 
 <h1 id="risc-v-vector">RISC-V Vector<a class="headerlink" href="#risc-v-vector" title="Permanent link">&para;</a></h1>
 <p>RISC-V指令集架构中的向量指令集扩展RVV（RISC-V “V” Vector），具有向量长度和向量位宽灵活可变、提供多种寻址模式、拥有用于支持条件执行的掩码寄存器等特点。目前RVV扩展的规格文档已发布了稳定的1.0版本，RISC-V向量加解密标准也在2023年10月发布了1.0正式版。</p>
+<h2 id="_1">向量扩展编程模型<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>向量扩展为基本的标量RISC-V ISA添加了32个向量寄存器和七个非特权控制与状态寄存器CSR（vstart、vxsat、vxrm、vcsr、vtype、vl、vlenb）</p>
+<table>
+<thead>
+<tr>
+<th>地址</th>
+<th>权限</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x008</td>
+<td>URW</td>
+<td>vstart</td>
+<td>向量起始位置</td>
+</tr>
+<tr>
+<td>0x009</td>
+<td>URW</td>
+<td>vxsat</td>
+<td><a href="" title="vxsat具有一个单独的读写最低有效位（vxsat[0]），该位指示是否有定点指令必须将输出值饱和以适应目标格式。">定点饱和标志</a></td>
+</tr>
+<tr>
+<td>0x00A</td>
+<td>URW</td>
+<td>vxrm</td>
+<td><a href="" title="四舍五入，向最近的偶数舍入，向下舍入，向奇数舍入">定点舍入模式</a></td>
+</tr>
+<tr>
+<td>0x00F</td>
+<td>URW</td>
+<td>vcsr</td>
+<td><a href="" title="可配置vxrm、vxsat">向量控制和状态寄存器</a></td>
+</tr>
+<tr>
+<td>0xC20</td>
+<td>URO</td>
+<td>vl</td>
+<td><a href="" title="如VLEN=32，LMUL=8和SEW=8时，VLMAX=32,若vl=0或vstart&gt;=vl则没有元素参与指令执行或者说向量指令不执行">向量个数</a></td>
+</tr>
+<tr>
+<td>0xC21</td>
+<td>URO</td>
+<td>vtype</td>
+<td>向量数据类型</td>
+</tr>
+<tr>
+<td>0xC22</td>
+<td>URO</td>
+<td>vlenb</td>
+<td><a href="" title="向量寄存器长度（以字节为单位）">VLEN/8</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">RVV1.0 Spec</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
+</div>
+<h2 id="_2">向量元素到向量寄存器状态的映射<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">LMUL = 1</label><label for="__tabbed_1_2">LMUL &lt; 1</label><label for="__tabbed_1_3">LMUL &gt; 1</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<pre><code>```c
+VLEN=32b
+Byte 3 2 1 0
+SEW=8b 3 2 1 0
+SEW=16b 1 0
+SEW=32b 0
+VLEN=64b
+Byte 7 6 5 4 3 2 1 0
+SEW=8b 7 6 5 4 3 2 1 0
+SEW=16b 3 2 1 0
+SEW=32b 1 0
+SEW=64b 0
+VLEN=128b
+Byte F E D C B A 9 8 7 6 5 4 3 2 1 0
+SEW=8b F E D C B A 9 8 7 6 5 4 3 2 1 0
+SEW=16b 7 6 5 4 3 2 1 0
+SEW=32b 3 2 1 0
+SEW=64b 1 0
+VLEN=256b
+Byte 1F1E1D1C1B1A19181716151413121110 F E D C B A 9 8 7 6 5 4 3 2 1 0
+SEW=8b 1F1E1D1C1B1A19181716151413121110 F E D C B A 9 8 7 6 5 4 3 2 1 0
+SEW=16b F E D C B A 9 8 7 6 5 4 3 2 1 0
+SEW=32b 7 6 5 4 3 2 1 0
+SEW=64b 3 2 1 0
+```
+</code></pre>
+</div>
+<div class="tabbed-block">
+<pre><code>```c
+Example, VLEN=128b, LMUL=1/4
+Byte F E D C B A 9 8 7 6 5 4 3 2 1 0
+SEW=8b - - - - - - - - - - - - 3 2 1 0
+SEW=16b - - - - - - 1 0
+SEW=32b - - - 0
+```
+</code></pre>
+</div>
+<div class="tabbed-block">
+<pre><code>```c
+LMUL &gt; 1 examples
+VLEN=32b, SEW=8b, LMUL=2
+Byte 3 2 1 0
+v2*n 3 2 1 0
+v2*n+1 7 6 5 4
+VLEN=32b, SEW=16b, LMUL=2
+Byte 3 2 1 0
+v2*n 1 0
+v2*n+1 3 2
+VLEN=32b, SEW=16b, LMUL=4
+Byte 3 2 1 0
+v4*n 1 0
+v4*n+1 3 2
+v4*n+2 5 4
+v4*n+3 7 6
+VLEN=32b, SEW=32b, LMUL=4
+Byte 3 2 1 0
+v4*n 0
+v4*n+1 1
+v4*n+2 2
+v4*n+3 3
+VLEN=64b, SEW=32b, LMUL=2
+Byte 7 6 5 4 3 2 1 0
+v2*n 1 0
+v2*n+1 3 2
+VLEN=64b, SEW=32b, LMUL=4
+Byte 7 6 5 4 3 2 1 0
+v4*n 1 0
+v4*n+1 3 2
+v4*n+2 5 4
+v4*n+3 7 6
+VLEN=128b, SEW=32b, LMUL=2
+Byte F E D C B A 9 8 7 6 5 4 3 2 1 0
+v2*n 3 2 1 0
+v2*n+1 7 6 5 4
+VLEN=128b, SEW=32b, LMUL=4
+Byte F E D C B A 9 8 7 6 5 4 3 2 1 0
+v4*n 3 2 1 0
+v4*n+1 7 6 5 4
+v4*n+2 B A 9 8
+v4*n+3 F E D C
+```
+</code></pre>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">RVV1.0 Spec</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
+</div>
+<h2 id="_3">向量指令格式<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">配置和设置指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">向量加载和存储<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_6">向量内存一致性模型<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_7">向量算术指令<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_9">向量定点算术指令<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_10">向量浮点算术指令<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_11">参考资料<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">RVV1.0 Spec</p>
 <p><a href="https://github.com/riscv/riscv-v-spec">https://github.com/riscv/riscv-v-spec</a></p>
