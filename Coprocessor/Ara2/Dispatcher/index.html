@@ -2221,7 +2221,7 @@
 <li><code>WAIT_IDLE</code>：等待Ara空闲，以便发出新的操作。</li>
 <li><code>RESHUFFLE</code>：注入一个重排序的微操作（uop）。</li>
 </ul>
-<p>处理多种操作模式，包括重新排列向量元素，同时跟踪每个向量的元素宽度（EEW）和LMUL约束，以及处理与加载和存储操作相关的特殊情况。不过，对于is_stride_np2的实现，存在逻辑上的不准确之处。</p>
+<p>处理多种操作模式，包括重新排列向量元素<code>RESHUFFLE</code>，同时跟踪每个向量的<code>EEW</code>和<code>LMUL</code>，以及处理与加载和存储操作相关的特殊情况<code>ignore_zero_vl_check</code>。不过，对于<code>is_stride_np2</code>的实现，存在逻辑上的不准确之处?</p>
 <hr />
 <h2 id="decoder">Decoder<a class="headerlink" href="#decoder" title="Permanent link">&para;</a></h2>
 <hr />
