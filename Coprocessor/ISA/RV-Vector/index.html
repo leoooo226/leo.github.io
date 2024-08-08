@@ -2233,7 +2233,7 @@
 </tbody>
 </table>
 <div class="admonition note">
-<p class="admonition-title">RVV1.0 Spec</p>
+<p class="admonition-title">向量扩展编程模型</p>
 <p><a href="https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
 </div>
 <hr />
@@ -2320,25 +2320,59 @@
 </div>
 </div>
 <div class="admonition note">
-<p class="admonition-title">RVV1.0 Spec</p>
+<p class="admonition-title">映射</p>
 <p><a href="https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
 </div>
 <hr />
 <h2 id="_3">向量指令格式<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>向量扩展的指令位于两个现有的主要操作码（LOAD-FP 和 STORE-FP）以及一个新的主要操作码（OP-V）之下。
+向量加载和存储是在标量浮点加载和存储主要操作码（LOAD-FP/STORE-FP）内编码的。向量加载和存储编码重新利用了标准标量浮点加载/存储12位立即字段的一部分，以提供进一步的向量指令编码，其中第25位保留标准向量掩码位（参见掩码编码）</p>
+<div class="admonition note">
+<p class="admonition-title">向量指令格式</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_4">配置和设置指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">配置和设置指令</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137382379?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137382379?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_5">向量加载和存储<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">向量加载和存储</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137383491?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137383491?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_6">向量内存一致性模型<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">向量内存一致性模型</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_7">向量算术指令<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">向量算术指令</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">向量整数算术指令</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137435646?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137435646?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_9">向量定点算术指令<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">向量定点算术指令</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137437687?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137437687?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_10">向量浮点算术指令<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">向量浮点算术指令</p>
+<p><a href="https://blog.csdn.net/u011376987/article/details/137439362?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137439362?spm=1001.2014.3001.5502</a></p>
+</div>
 <hr />
 <h2 id="_11">参考资料<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
