@@ -2215,6 +2215,13 @@
 </code></pre></div>
 <hr />
 <h2 id="state">State<a class="headerlink" href="#state" title="Permanent link">&para;</a></h2>
+<p>后端（backend）可以处于三种状态之一：</p>
+<ul>
+<li><code>NORMAL_OPERATION</code>：正常执行操作。</li>
+<li><code>WAIT_IDLE</code>：等待Ara空闲，以便发出新的操作。</li>
+<li><code>RESHUFFLE</code>：注入一个重排序的微操作（uop）。</li>
+</ul>
+<p>处理多种操作模式，包括重新排列向量元素，同时跟踪每个向量的元素宽度（EEW）和LMUL约束，以及处理与加载和存储操作相关的特殊情况。不过，对于is_stride_np2的实现，存在逻辑上的不准确之处。</p>
 <hr />
 <h2 id="decoder">Decoder<a class="headerlink" href="#decoder" title="Permanent link">&para;</a></h2>
 <hr />
