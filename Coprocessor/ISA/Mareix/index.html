@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../../Introduction/">
+        <link rel="prev" href="../Vector/">
       
       
-        <link rel="next" href="../RV-Mareix/">
+        <link rel="next" href="../../Ara2/Introduction/">
       
       
       <link rel="icon" href="../../../icon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>RV-Vector - leo's site</title>
+        <title>Mareix - leo's site</title>
       
     
     
@@ -115,7 +115,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#risc-v-vector" class="md-skip">
+        <a href="#risc-v-matrix" class="md-skip">
           Skip to content
         </a>
       
@@ -150,7 +150,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              RV-Vector
+              Mareix
             
           </span>
         </div>
@@ -593,6 +593,27 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../Vector/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vector
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -609,7 +630,7 @@
           
   
   <span class="md-ellipsis">
-    RV-Vector
+    Mareix
   </span>
   
 
@@ -620,7 +641,7 @@
         
   
   <span class="md-ellipsis">
-    RV-Vector
+    Mareix
   </span>
   
 
@@ -642,99 +663,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#introduction" class="md-nav__link">
     <span class="md-ellipsis">
-      向量扩展编程模型
+      Introduction
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#matrix-register" class="md-nav__link">
     <span class="md-ellipsis">
-      向量元素到向量寄存器状态的映射
+      Matrix Register
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#matrix-size" class="md-nav__link">
     <span class="md-ellipsis">
-      向量指令格式
+      Matrix Size
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#matrix-isa" class="md-nav__link">
     <span class="md-ellipsis">
-      配置和设置指令
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      向量加载和存储
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      向量内存一致性模型
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      向量算术指令
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      向量整数算术指令
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      向量定点算术指令
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      向量浮点算术指令
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
-    <span class="md-ellipsis">
-      参考资料
+      Matrix ISA
     </span>
   </a>
   
@@ -744,27 +702,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../RV-Mareix/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    RV-Mareix
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -2192,226 +2129,24 @@
                   
 
 
-<h1 id="risc-v-vector">RISC-V Vector<a class="headerlink" href="#risc-v-vector" title="Permanent link">&para;</a></h1>
-<p>RISC-V指令集架构中的向量指令集扩展RVV（RISC-V “V” Vector），具有向量长度和向量位宽灵活可变、提供多种寻址模式、拥有用于支持条件执行的掩码寄存器等特点。目前RVV扩展的规格文档已发布了稳定的1.0版本，RISC-V向量加解密标准也在2023年10月发布了1.0正式版。</p>
-<h2 id="_1">向量扩展编程模型<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>向量扩展为基本的标量RISC-V ISA添加了32个向量寄存器和七个非特权控制与状态寄存器CSR（vstart、vxsat、vxrm、vcsr、vtype、vl、vlenb）</p>
-<table>
-<thead>
-<tr>
-<th>地址</th>
-<th>权限</th>
-<th>名称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0x008</td>
-<td>URW</td>
-<td>vstart</td>
-<td>向量起始位置</td>
-</tr>
-<tr>
-<td>0x009</td>
-<td>URW</td>
-<td>vxsat</td>
-<td><a href="" title="vxsat具有一个单独的读写最低有效位（vxsat[0]），该位指示是否有定点指令必须将输出值饱和以适应目标格式。">定点饱和标志</a></td>
-</tr>
-<tr>
-<td>0x00A</td>
-<td>URW</td>
-<td>vxrm</td>
-<td><a href="" title="四舍五入，向最近的偶数舍入，向下舍入，向奇数舍入">定点舍入模式</a></td>
-</tr>
-<tr>
-<td>0x00F</td>
-<td>URW</td>
-<td>vcsr</td>
-<td><a href="" title="可配置vxrm、vxsat">向量控制和状态寄存器</a></td>
-</tr>
-<tr>
-<td>0xC20</td>
-<td>URO</td>
-<td>vl</td>
-<td><a href="" title="如VLEN=32，LMUL=8和SEW=8时，VLMAX=32,若vl=0或vstart&gt;=vl则没有元素参与指令执行或者说向量指令不执行">向量个数</a></td>
-</tr>
-<tr>
-<td>0xC21</td>
-<td>URO</td>
-<td>vtype</td>
-<td>向量数据类型</td>
-</tr>
-<tr>
-<td>0xC22</td>
-<td>URO</td>
-<td>vlenb</td>
-<td><a href="" title="向量寄存器长度（以字节为单位）">VLEN/8</a></td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">向量扩展编程模型</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
-</div>
+<h1 id="risc-v-matrix">RISC-V Matrix<a class="headerlink" href="#risc-v-matrix" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>目前RISC-V国际基金会正在积极推动矩阵指令集扩展正式版的进展。现在有两种矩阵指令集扩展的思路，一种是在RVV的基础上，复用向量寄存器的状态来扩展矩阵运算的能力，另一种则是设计全新的矩阵状态，通过与向量进行解耦形成一套完整独立的矩阵指令集扩展。目前来说，本方案倾向于制定一套完整独立的矩阵指令集扩展，因为向量和矩阵的应用场景并不重合，向量扩展可以更好地解决不规则矩阵运算，而矩阵扩展可以在规则的矩阵运算中得到更好的性能。独立的矩阵指令集扩展对不同的人工智能场景也会有不同的应用。利用向量扩展可以更好地进行加解密的操作，而通过矩阵扩展可以进行人工智能复杂场景的运算。并且独立的矩阵扩展具备更大的灵活性，并不依赖于向量扩展，可以更好地面对不同的人工智能场景。<br />
+在此，研究玄铁团队的自定义矩阵扩展。</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 独立解耦的矩阵扩展</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 设计矩阵寄存器组及相关指令集</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> 矩阵扩展可以进行人工智能复杂场景的运算</li>
+</ul>
 <hr />
-<h2 id="_2">向量元素到向量寄存器状态的映射<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">LMUL = 1</label><label for="__tabbed_1_2">LMUL &lt; 1</label><label for="__tabbed_1_3">LMUL &gt; 1</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">8</span><span class="n">b</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">16</span><span class="n">b</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">64</span><span class="n">b</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">8</span><span class="n">b</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">16</span><span class="n">b</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">64</span><span class="n">b</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">128</span><span class="n">b</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">8</span><span class="n">b</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">16</span><span class="n">b</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">64</span><span class="n">b</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">256</span><span class="n">b</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mf">1F1E1</span><span class="n">D1C1B1A19181716151413121110</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">8</span><span class="n">b</span><span class="w"> </span><span class="mf">1F1E1</span><span class="n">D1C1B1A19181716151413121110</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">16</span><span class="n">b</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">64</span><span class="n">b</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">128</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">8</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">16</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">0</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">8</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">2</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">16</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">2</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">16</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">4</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">4</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="w"> </span><span class="mi">2</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="w"> </span><span class="mi">3</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">64</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">2</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">64</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">4</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">128</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">2</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span>
-<span class="w">    </span><span class="n">VLEN</span><span class="o">=</span><span class="mi">128</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">SEW</span><span class="o">=</span><span class="mi">32</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">LMUL</span><span class="o">=</span><span class="mi">4</span>
-<span class="w">    </span><span class="n">Byte</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">4</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">8</span>
-<span class="w">    </span><span class="n">v4</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="mi">3</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="n">E</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="n">C</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">映射</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
-</div>
+<h2 id="matrix-register">Matrix Register<a class="headerlink" href="#matrix-register" title="Permanent link">&para;</a></h2>
 <hr />
-<h2 id="_3">向量指令格式<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>向量扩展的指令位于两个现有的主要操作码（LOAD-FP 和 STORE-FP）以及一个新的主要操作码（OP-V）之下。
-向量加载和存储是在标量浮点加载和存储主要操作码（LOAD-FP/STORE-FP）内编码的。向量加载和存储编码重新利用了标准标量浮点加载/存储12位立即字段的一部分，以提供进一步的向量指令编码，其中第25位保留标准向量掩码位（参见掩码编码）</p>
-<div class="admonition note">
-<p class="admonition-title">向量指令格式</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502</a></p>
-</div>
+<h2 id="matrix-size">Matrix Size<a class="headerlink" href="#matrix-size" title="Permanent link">&para;</a></h2>
 <hr />
-<h2 id="_4">配置和设置指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="matrix-isa">Matrix ISA<a class="headerlink" href="#matrix-isa" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
-<p class="admonition-title">配置和设置指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137382379?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137382379?spm=1001.2014.3001.5502</a></p>
-</div>
-<hr />
-<h2 id="_5">向量加载和存储<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量加载和存储</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137383491?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137383491?spm=1001.2014.3001.5502</a></p>
-</div>
-<hr />
-<h2 id="_6">向量内存一致性模型<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量内存一致性模型</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502</a></p>
-</div>
-<hr />
-<h2 id="_7">向量算术指令<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502</a></p>
-</div>
-<hr />
-<h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量整数算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137435646?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137435646?spm=1001.2014.3001.5502</a></p>
-</div>
-<hr />
-<h2 id="_9">向量定点算术指令<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量定点算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137437687?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137437687?spm=1001.2014.3001.5502</a></p>
-</div>
-<hr />
-<h2 id="_10">向量浮点算术指令<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量浮点算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137439362?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137439362?spm=1001.2014.3001.5502</a></p>
-</div>
-<hr />
-<h2 id="_11">参考资料<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">RVV1.0 Spec</p>
-<p><a href="https://github.com/riscv/riscv-v-spec">https://github.com/riscv/riscv-v-spec</a></p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">RVV intrinsic</p>
-<p><a href="https://github.com/riscv-non-isa/rvv-intrinsic-doc">https://github.com/riscv-non-isa/rvv-intrinsic-doc</a></p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">RVV Crypto Spec</p>
-<p><a href="https://github.com/riscv/riscv-crypto">https://github.com/riscv/riscv-crypto</a></p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">中文参考资料</p>
-<p><a href="https://www.cnblogs.com/lyc-seu/p/16999784.html">https://www.cnblogs.com/lyc-seu/p/16999784.html</a></p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">中文参考资料</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137439362">https://blog.csdn.net/u011376987/article/details/137439362</a></p>
+<p class="admonition-title"> XuantieSpec</p>
+<p><a href="https://github.com/XUANTIE-RV/riscv-matrix-extension-spec">https://github.com/XUANTIE-RV/riscv-matrix-extension-spec</a></p>
 </div>
 
 
@@ -2448,7 +2183,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../Introduction/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction">
+          <a href="../Vector/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Vector">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -2458,20 +2193,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Introduction
+                Vector
               </div>
             </div>
           </a>
         
         
           
-          <a href="../RV-Mareix/" class="md-footer__link md-footer__link--next" aria-label="Next: RV-Mareix">
+          <a href="../../Ara2/Introduction/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                RV-Mareix
+                Introduction
               </div>
             </div>
             <div class="md-footer__button md-icon">
