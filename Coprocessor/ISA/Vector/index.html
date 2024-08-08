@@ -2343,8 +2343,12 @@
 </div>
 <hr />
 <h2 id="_3">向量指令格式<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>向量扩展的指令位于两个现有的主要操作码（LOAD-FP 和 STORE-FP）以及一个新的主要操作码（OP-V）之下。
-向量加载和存储是在标量浮点加载和存储主要操作码（LOAD-FP/STORE-FP）内编码的。向量加载和存储编码重新利用了标准标量浮点加载/存储12位立即字段的一部分，以提供进一步的向量指令编码，其中第25位保留标准向量掩码位（参见掩码编码）</p>
+<p>RVV指令分为三大类</p>
+<ul>
+<li>加载和存储指令</li>
+<li>算术指令</li>
+<li>配置指令</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">向量指令格式</p>
 <p><a href="https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502</a></p>
