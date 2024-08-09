@@ -2468,12 +2468,15 @@
 <h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <hr />
 <h2 id="_9">向量定点算术指令<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>将整数运算指令扩展即可支持定点运算指令。</p>
 <hr />
 <h2 id="_10">向量浮点算术指令<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <hr />
 <h2 id="_11">向量掩码指令<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <hr />
 <h2 id="_12">向量归约操作<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<p>归约指令接收一个向量寄存器组的元素,和一个放在向量寄存器元素0位置的标量, 通过某种归约操作得到一个标量值, 该标量值也放在一个向量寄存器的元素0位置.
+归约操作中的标量都是放在一个向量寄存器中, 而不是向量寄存器组，之所以不把结果放在标量寄存器, 是为了与标量core 去耦。</p>
 <hr />
 <h2 id="_13">参考资料<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
