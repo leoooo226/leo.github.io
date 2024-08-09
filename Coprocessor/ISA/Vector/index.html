@@ -2379,16 +2379,16 @@
 </ul>
 <p>=== "unit-stride</p>
 <div class="language-text highlight"><pre><span></span><code>```py
-    # vd destination, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)
-    vle8.v    vd, (rs1), vm  #    8-bit unit-stride load
-    vle16.v   vd, (rs1), vm  #   16-bit unit-stride load
-    vle32.v   vd, (rs1), vm  #   32-bit unit-stride load
-    vle64.v   vd, (rs1), vm  #   64-bit unit-stride load
-    # vs3 store data, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)
-    vse8.v    vs3, (rs1), vm  #    8-bit unit-stride store
-    vse16.v   vs3, (rs1), vm  #   16-bit unit-stride store
-    vse32.v   vs3, (rs1), vm  #   32-bit unit-stride store
-    vse64.v   vs3, (rs1), vm  #   64-bit unit-stride store
+# vd destination, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)
+vle8.v    vd, (rs1), vm  #    8-bit unit-stride load
+vle16.v   vd, (rs1), vm  #   16-bit unit-stride load
+vle32.v   vd, (rs1), vm  #   32-bit unit-stride load
+vle64.v   vd, (rs1), vm  #   64-bit unit-stride load
+# vs3 store data, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)
+vse8.v    vs3, (rs1), vm  #    8-bit unit-stride store
+vse16.v   vs3, (rs1), vm  #   16-bit unit-stride store
+vse32.v   vs3, (rs1), vm  #   32-bit unit-stride store
+vse64.v   vs3, (rs1), vm  #   64-bit unit-stride store
 ```
 </code></pre></div>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">stride</label><label for="__tabbed_2_2">index</label></div>
