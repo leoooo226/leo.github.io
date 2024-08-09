@@ -698,7 +698,7 @@
         <li class="md-nav__item">
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
-      向量算术指令
+      向量算术指令格式
     </span>
   </a>
   
@@ -2420,12 +2420,26 @@ rod：舍入到奇数值方向。</li>
 </div>
 <hr />
 <h2 id="_6">向量内存一致性模型<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>向量存储器指令在指令级遵循 RVWMO</p>
 <div class="admonition note">
 <p class="admonition-title">向量内存一致性模型</p>
 <p><a href="https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502</a></p>
 </div>
 <hr />
-<h2 id="_7">向量算术指令<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_7">向量算术指令格式<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>OP-V 主要操作码下向量算术指令的格式:
+<img alt="图片" src="../ins.png" /></p>
+<p>funct3编码了操作类型和源地址
+| funct3[2:0] | Category| Operand  | Type of Scale Operand     |
+| ----------- | -------------|-------------- |---------- |
+| 000      |OPIVV    |vector-vector  |N/A |
+|001        | OPFVV  |vector-vector  |N/A |
+|010       | OPMVV   |vector-vector  |N/A|
+| 011       | OPIVI  |vector-immediate  |imm[4:0]|
+|100        | OPIVX  |vector-scalar  |GPR x register rs1|
+| 101       | OPFVF  |vector-scalar  |FP f register rs1|
+| 110       | OPMVX  |vector-scalar  |GPR x register rs1|
+| 111       | OPCFG  |scalars-imms  |GPR x register rs1 &amp; rs2/imm|</p>
 <div class="admonition note">
 <p class="admonition-title">向量算术指令</p>
 <p><a href="https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502</a></p>
