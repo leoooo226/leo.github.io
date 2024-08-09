@@ -2360,7 +2360,7 @@
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsetivli rd, uimm, vtypei</span><span class="w">   </span><span class="c1">#rd= new vl, uimm = AVL, vtypei = new vtype setting</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsetvl  rd, rs1, rs2</span><span class="w">        </span><span class="c1">#rd= new vl, rs1  = AVL, rs2    = new vtype value</span>
 </span></code></pre></div>
-<div class="language-yaml highlight"><span class="filename">Eg</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsetvli t0, a0, e16, m4, ta, ma</span><span class="w">    </span><span class="c1"># (1)!</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsetvli t0, a0, e16, m4, ta, ma</span><span class="w">    </span><span class="c1"># (1)!</span>
 </span></code></pre></div>
 <ol>
 <li>t0寄存器存放一次能处理的数据元素数量，a0寄存器存放待处理数据元素数量，数据元素位宽16位，4个向量寄存器为一组，ta尾部采取未知策略，ma未活跃采取未知策略。</li>
