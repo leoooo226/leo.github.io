@@ -2377,22 +2377,21 @@
 <li>任意步长<code>stride</code></li>
 <li>索引（分散/收集<code>gather-load/scatter-store</code>）模式<code>index</code></li>
 </ul>
-<p>=== "unit-stride</p>
-<div class="language-text highlight"><pre><span></span><code>```py
-# vd destination, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)
-vle8.v    vd, (rs1), vm  #    8-bit unit-stride load
-vle16.v   vd, (rs1), vm  #   16-bit unit-stride load
-vle32.v   vd, (rs1), vm  #   32-bit unit-stride load
-vle64.v   vd, (rs1), vm  #   64-bit unit-stride load
-# vs3 store data, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)
-vse8.v    vs3, (rs1), vm  #    8-bit unit-stride store
-vse16.v   vs3, (rs1), vm  #   16-bit unit-stride store
-vse32.v   vs3, (rs1), vm  #   32-bit unit-stride store
-vse64.v   vs3, (rs1), vm  #   64-bit unit-stride store
-```
-</code></pre></div>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">stride</label><label for="__tabbed_2_2">index</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">unit-stride</label><label for="__tabbed_2_2">stride</label><label for="__tabbed_2_3">index</label></div>
 <div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-py highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># vd destination, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">vle8</span><span class="o">.</span><span class="n">v</span>    <span class="n">vd</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#    8-bit unit-stride load</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">vle16</span><span class="o">.</span><span class="n">v</span>   <span class="n">vd</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#   16-bit unit-stride load</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">vle32</span><span class="o">.</span><span class="n">v</span>   <span class="n">vd</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#   32-bit unit-stride load</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">vle64</span><span class="o">.</span><span class="n">v</span>   <span class="n">vd</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#   64-bit unit-stride load</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># vs3 store data, rs1 base address, vm is mask encoding (v0.t or &lt;missing&gt;)</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">vse8</span><span class="o">.</span><span class="n">v</span>    <span class="n">vs3</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#    8-bit unit-stride store</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">vse16</span><span class="o">.</span><span class="n">v</span>   <span class="n">vs3</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#   16-bit unit-stride store</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">vse32</span><span class="o">.</span><span class="n">v</span>   <span class="n">vs3</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#   32-bit unit-stride store</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">vse64</span><span class="o">.</span><span class="n">v</span>   <span class="n">vs3</span><span class="p">,</span> <span class="p">(</span><span class="n">rs1</span><span class="p">),</span> <span class="n">vm</span>  <span class="c1">#   64-bit unit-stride store</span>
+</span></code></pre></div>
+</div>
 <div class="tabbed-block">
 <div class="language-py highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Vector strided loads and stores</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># vd destination, rs1 base address, rs2 byte stride</span>
