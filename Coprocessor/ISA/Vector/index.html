@@ -2403,17 +2403,67 @@
 <h2 id="_7">向量算术指令格式<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>OP-V 主要操作码下向量算术指令的格式:
 <img alt="图片" src="../ins.png" /></p>
-<p>funct3编码了操作类型和源地址
-| funct3[2:0] | Category| Operand  | Type of Scale Operand     |
-| ----------- | -------------|-------------- |---------- |
-| 000      |OPIVV    |vector-vector  |N/A |
-|001        | OPFVV  |vector-vector  |N/A |
-|010       | OPMVV   |vector-vector  |N/A|
-| 011       | OPIVI  |vector-immediate  |imm[4:0]|
-|100        | OPIVX  |vector-scalar  |GPR x register rs1|
-| 101       | OPFVF  |vector-scalar  |FP f register rs1|
-| 110       | OPMVX  |vector-scalar  |GPR x register rs1|
-| 111       | OPCFG  |scalars-imms  |GPR x register rs1 &amp; rs2/imm|</p>
+<p>funct3编码了操作类型和源地址</p>
+<table>
+<thead>
+<tr>
+<th>funct3[2:0]</th>
+<th>Category</th>
+<th>Operand</th>
+<th>Type of Scale Operand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>000</td>
+<td>OPIVV</td>
+<td>vector-vector</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>001</td>
+<td>OPFVV</td>
+<td>vector-vector</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>010</td>
+<td>OPMVV</td>
+<td>vector-vector</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>011</td>
+<td>OPIVI</td>
+<td>vector-immediate</td>
+<td>imm[4:0]</td>
+</tr>
+<tr>
+<td>100</td>
+<td>OPIVX</td>
+<td>vector-scalar</td>
+<td>GPR x register rs1</td>
+</tr>
+<tr>
+<td>101</td>
+<td>OPFVF</td>
+<td>vector-scalar</td>
+<td>FP f register rs1</td>
+</tr>
+<tr>
+<td>110</td>
+<td>OPMVX</td>
+<td>vector-scalar</td>
+<td>GPR x register rs1</td>
+</tr>
+<tr>
+<td>111</td>
+<td>OPCFG</td>
+<td>scalars-imms</td>
+<td>GPR x register rs1 &amp; rs2/imm</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <hr />
