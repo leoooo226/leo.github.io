@@ -2375,7 +2375,7 @@
 <ul>
 <li>单位步长<code>unit-stride</code></li>
 <li>任意步长<code>stride</code></li>
-<li>索引（分散/收集<code>gather-load/scatter-store</code>）模式<code>index</code></li>
+<li>索引（<code>gather-load/scatter-store</code>）模式<code>index</code></li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">unit-stride</label><label for="__tabbed_2_2">stride</label><label for="__tabbed_2_3">index</label></div>
 <div class="tabbed-content">
@@ -2407,8 +2407,8 @@
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Vector indexed loads and stores (1)! </span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Vector indexed-unordered load instructions (1)!</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Vector indexed loads and stores (1)</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Vector indexed-unordered load instructions (1)</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># vd destination, rs1 base address, vs2 byte</span>
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="l l-Scalar l-Scalar-Plain">vluxei8.v    vd, (rs1), vs2, vm</span><span class="w">  </span><span class="c1"># unordered</span>
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="l l-Scalar l-Scalar-Plain">vluxei16.v   vd, (rs1), vs2, vm</span><span class="w">  </span><span class="c1"># unordered</span>
