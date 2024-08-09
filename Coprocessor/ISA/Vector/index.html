@@ -2240,7 +2240,7 @@
 <td>0x00A</td>
 <td>URW</td>
 <td>vxrm</td>
-<td>定点舍入模式(1)</td>
+<td><a href="" title="rnu：向距离近的方向进行舍入，当距离与两边都相等时，向上舍入;  rne：向距离近的方向进行舍入，当距离与两边都相等时，向偶数方向舍入;  rdn：向下舍入，直接取移位后的值;  rod：舍入到奇数值方向。">定点舍入模式</a></td>
 </tr>
 <tr>
 <td>0x00F</td>
@@ -2268,16 +2268,6 @@
 </tr>
 </tbody>
 </table>
-<ol>
-<li>rnu：向距离近的方向进行舍入，当距离与两边都相等时，向上舍入。
-rne：向距离近的方向进行舍入，当距离与两边都相等时，向偶数方向舍入。
-rdn：向下舍入，直接取移位后的值。
-rod：舍入到奇数值方向。</li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">向量扩展编程模型</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136424150?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136424150%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
-</div>
 <hr />
 <h2 id="_2">向量元素到向量寄存器状态的映射<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">LMUL &lt; 1</label><label for="__tabbed_1_2">LMUL = 1</label><label for="__tabbed_1_3">LMUL &gt; 1</label></div>
@@ -2310,10 +2300,6 @@ rod：舍入到奇数值方向。</li>
 </div>
 </div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">映射</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D">https://blog.csdn.net/u011376987/article/details/136468199?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22136468199%22%2C%22source%22%3A%22u011376987%22%7D</a></p>
-</div>
 <hr />
 <h2 id="_3">向量指令格式<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>RVV指令分为三大类</p>
@@ -2322,10 +2308,6 @@ rod：舍入到奇数值方向。</li>
 <li>算术指令</li>
 <li>配置指令</li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">向量指令格式</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137203916?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_4">配置和设置指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>vset{i}vl{i}指令根据其参数设置vtype和vl。</p>
@@ -2338,10 +2320,6 @@ rod：舍入到奇数值方向。</li>
 <ol>
 <li>t0寄存器存放一次能处理的数据元素数量，a0寄存器存放待处理数据元素数量，数据元素位宽16位，4个向量寄存器为一组，ta尾部采取未知策略，ma未活跃采取未知策略。</li>
 </ol>
-<div class="admonition note">
-<p class="admonition-title">配置和设置指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137382379?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137382379?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_5">向量加载和存储<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <p>向量扩展支持3种地址寻址模式：</p>
@@ -2414,17 +2392,9 @@ rod：舍入到奇数值方向。</li>
 将打包的连续段移动到多个目标向量寄存器组中</p>
 <p><strong>Vector Load/Store Whole Register Instructions</strong><br />
 加载和存储整个向量寄存器组</p>
-<div class="admonition note">
-<p class="admonition-title">向量加载和存储</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137383491?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137383491?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_6">向量内存一致性模型<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>向量存储器指令在指令级遵循 RVWMO</p>
-<div class="admonition note">
-<p class="admonition-title">向量内存一致性模型</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137434971?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_7">向量算术指令格式<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>OP-V 主要操作码下向量算术指令的格式:
@@ -2440,28 +2410,12 @@ rod：舍入到奇数值方向。</li>
 | 101       | OPFVF  |vector-scalar  |FP f register rs1|
 | 110       | OPMVX  |vector-scalar  |GPR x register rs1|
 | 111       | OPCFG  |scalars-imms  |GPR x register rs1 &amp; rs2/imm|</p>
-<div class="admonition note">
-<p class="admonition-title">向量算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137435122?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量整数算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137435646?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137435646?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_9">向量定点算术指令<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量定点算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137437687?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137437687?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_10">向量浮点算术指令<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">向量浮点算术指令</p>
-<p><a href="https://blog.csdn.net/u011376987/article/details/137439362?spm=1001.2014.3001.5502">https://blog.csdn.net/u011376987/article/details/137439362?spm=1001.2014.3001.5502</a></p>
-</div>
 <hr />
 <h2 id="_11">向量掩码指令<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <hr />
