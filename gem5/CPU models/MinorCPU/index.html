@@ -2357,6 +2357,7 @@
 <p>利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
 <h4 id="functional-units">Functional Units<a class="headerlink" href="#functional-units" title="Permanent link">&para;</a></h4>
 <p><code>Execute</code>阶段包含每个功能单元的pipeline。功能单元通过 <code>executeFuncUnits</code> 参数进行配置。</p>
+<p>每个活动周期，<code>Execute::evaluate</code> 都会执行以下操作:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="nt">Execute::evaluate</span><span class="p">:</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">push input to inputBuffer</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">setup references to input/output data slots and branch output slot</span>
