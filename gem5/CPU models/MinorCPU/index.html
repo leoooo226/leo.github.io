@@ -2344,20 +2344,37 @@
 <p>阶段<code>Fetch2</code>、<code>Decode</code>和<code>Execute</code>具有输入缓冲区，每个周期都可以接受上一阶段的输入数据，如果阶段尚未准备好处理该数据，则可以保存该数据。输入缓冲区以接收到的相同形式存储数据。</p>
 <p>阶段输入缓冲区提供一个与前一阶段的可保留（<code>stage.hh</code>）接口，以允许在其输入缓冲区中保留插槽，并向后通信其输入缓冲区占用情况，以允许前一阶段计划是否应在给定的周期中进行输出。</p>
 <h3 id="fetch1-stage">Fetch1 stage<a class="headerlink" href="#fetch1-stage" title="Permanent link">&para;</a></h3>
-<p>Fetch1 完成的工作是<strong>取指</strong>。Fetch1 首先处理的是分支预测的相关数据， (1) 可能涉及到流<code>stream</code>的改变清空指令之类的。随后进入到正常的流程就是取指，这个阶段首先发起对 ITLB 的地址翻译请求<code>itb-&gt;translateTiming</code>，并将请求<code>FetchRequest</code> 插入到 Request 队列中；当 ITLB 请求完成的时候，发起对于内存的取指请求，并将请求放入到 Transfer 队列中<code>Fetch1::tryToSendToTransfers</code>。随后从内存中得到数据之后，将数据发送给 Fetch2 阶段 <code>Fetch1::evaluate</code>。</p>
-<ol>
-<li>当 Execute 和 Fetch2 同时发出流变化信号时，Fetch1 将接受 Execute 的更改</li>
-</ol>
+<p>Fetch1 完成的工作是<strong>取指</strong>。Fetch1 首先处理的是分支预测的相关数据， 可能涉及到流<code>stream</code>的改变清空指令之类的。随后进入到正常的流程就是取指，这个阶段首先发起对 ITLB 的地址翻译请求<code>itb-&gt;translateTiming</code>，并将请求<code>FetchRequest</code> 插入到 Request 队列中；当 ITLB 请求完成的时候，发起对于内存的取指请求，并将请求放入到 Transfer 队列中<code>Fetch1::tryToSendToTransfers</code>。随后从内存中得到数据之后，将数据发送给 Fetch2 阶段 <code>Fetch1::evaluate</code>。</p>
 <hr />
 <h3 id="fetch2-stage">Fetch2 stage<a class="headerlink" href="#fetch2-stage" title="Permanent link">&para;</a></h3>
-<p>这个阶段主要进行<strong>分支预测和译码</strong>。首先接受到来自 Execute 阶段的分支预测验证结果，如果之前的预测结果和验证结果出现偏差，则会对 BTB 进行更新。随后进行分支预测，并将分支预测的结果写入到 Latch 中向 Fetch1 中传递，使 Fetch1 在下个时钟周期能够获得分支预测的结果。</p>
+<p>这个阶段主要进行<strong>分支预测和译码</strong>。首先接受到来自 Execute 阶段的分支预测验证结果，如果之前的预测结果和验证结果出现偏差，则会对 BTB 进行更新。随后进行分支预测，并将分支预测的结果写入到 Latch 中向 Fetch1 中传递，使 Fetch1 在下个时钟周期能够获得分支预测的结果。随后进行的就是译码，根据前一阶段得到的内存数据，将指令转换成 StaticInst 的形式，并创建出 DynInst，供本阶段和后续阶段使用。</p>
 <hr />
 <h3 id="decode-stage">Decode stage<a class="headerlink" href="#decode-stage" title="Permanent link">&para;</a></h3>
-<p>这个阶段主要的工作是<strong>译码</strong>，将指令分解为微操作。Decode 阶段会将指令分解为微操作，并将它们放入到 Execute 阶段的输入缓冲区中。</p>
+<p>这个阶段主要的工作是<strong>译码</strong>。Decode 从 Fetch2 获取指令向量，并将这些指令分解为微操作<code>micro-ops</code>（如有必要）并将它们打包到其输出指令向量中。</p>
 <hr />
 <h3 id="execute-stage">Execute Stage<a class="headerlink" href="#execute-stage" title="Permanent link">&para;</a></h3>
-<p>这个阶段主要的工作是<strong>发射、执行、提交等</strong>,利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
+<p>这个阶段主要的工作是<strong>发射、执行、提交等</strong>,提供所有指令执行和内存访问机制。通过 Execute 的指令可能需要多个周期，其精确时序由<code>functional unit pipeline FIFO</code>建模。</p>
+<p>利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
 <h4 id="functional-units">Functional Units<a class="headerlink" href="#functional-units" title="Permanent link">&para;</a></h4>
+<p><code>Execute</code>阶段包含每个功能单元的pipeline。功能单元通过 <code>executeFuncUnits</code> 参数进行配置。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="nt">Execute::evaluate</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">push input to inputBuffer</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">setup references to input/output data slots and branch output slot</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">step D-cache interface queues (similar to Fetch1)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">if interrupt posted</span><span class="p p-Indicator">:</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">take interrupt (signalling branch to Fetch1/Fetch2)</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">else</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">commit instructions</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">issue new instructions</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">advance functional unit pipelines</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">reactivate Execute if the unit is still active</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">commit the push to the inputBuffer if that data hasn&#39;t all been used</span>
+</span></code></pre></div>
 <h4 id="functional-units-fifos">Functional Units FIFOs<a class="headerlink" href="#functional-units-fifos" title="Permanent link">&para;</a></h4>
 <h4 id="issue">Issue<a class="headerlink" href="#issue" title="Permanent link">&para;</a></h4>
 <h4 id="commit">Commit<a class="headerlink" href="#commit" title="Permanent link">&para;</a></h4>
