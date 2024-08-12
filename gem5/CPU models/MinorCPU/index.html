@@ -1694,11 +1694,6 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
           <li class="md-nav__item">
   <a href="#functional-units-fifos" class="md-nav__link">
     <span class="md-ellipsis">
@@ -1706,8 +1701,7 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Functional Units FIFOs">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#issue" class="md-nav__link">
@@ -2369,7 +2363,8 @@
 <hr />
 <h3 id="execute-stage">Execute Stage<a class="headerlink" href="#execute-stage" title="Permanent link">&para;</a></h3>
 <p>这个阶段主要的工作是<strong>发射、执行、提交等</strong>,提供所有指令执行和内存访问机制。通过 Execute 的指令可能需要多个周期，其精确时序由<code>functional unit pipeline FIFO</code>建模。</p>
-<p>利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
+<p>利用<code>Scoreboard</code>管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
+<hr />
 <h4 id="functional-units">Functional Units<a class="headerlink" href="#functional-units" title="Permanent link">&para;</a></h4>
 <p><code>Execute</code>阶段包含每个功能单元的pipeline。功能单元通过 <code>executeFuncUnits</code> 参数进行配置。</p>
 <p>每个活动周期，<code>Execute::evaluate</code> 都会执行以下操作:</p>
@@ -2391,7 +2386,7 @@
 </span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
 </span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">commit the push to the inputBuffer if that data hasn&#39;t all been used</span>
 </span></code></pre></div>
-<h3 id="functional-units-fifos">Functional Units FIFOs<a class="headerlink" href="#functional-units-fifos" title="Permanent link">&para;</a></h3>
+<h4 id="functional-units-fifos">Functional Units FIFOs<a class="headerlink" href="#functional-units-fifos" title="Permanent link">&para;</a></h4>
 <p><code>TimeBuffer FIFO</code>,通过<code>stalled flag</code>控制功能单元的时序。</p>
 <p><code>issue</code>、<code>commit</code>和<code>advance</code>操作作用于<code>functional units</code></p>
 <h4 id="issue">Issue<a class="headerlink" href="#issue" title="Permanent link">&para;</a></h4>
