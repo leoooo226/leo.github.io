@@ -1694,6 +1694,11 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#functional-units-fifos" class="md-nav__link">
     <span class="md-ellipsis">
@@ -1701,7 +1706,8 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Functional Units FIFOs">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#issue" class="md-nav__link">
@@ -1716,6 +1722,15 @@
   <a href="#commit" class="md-nav__link">
     <span class="md-ellipsis">
       Commit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advance
     </span>
   </a>
   
@@ -2347,7 +2362,7 @@
 <p>Fetch1 完成的工作是<strong>取指</strong>。Fetch1 首先处理的是分支预测的相关数据， 可能涉及到流<code>stream</code>的改变清空指令之类的。随后进入到正常的流程就是取指，这个阶段首先发起对 ITLB 的地址翻译请求<code>itb-&gt;translateTiming</code>，并将请求<code>FetchRequest</code> 插入到 Request 队列中；当 ITLB 请求完成的时候，发起对于内存的取指请求，并将请求放入到 Transfer 队列中<code>Fetch1::tryToSendToTransfers</code>。随后从内存中得到数据之后，将数据发送给 Fetch2 阶段 <code>Fetch1::evaluate</code>。</p>
 <hr />
 <h3 id="fetch2-stage">Fetch2 stage<a class="headerlink" href="#fetch2-stage" title="Permanent link">&para;</a></h3>
-<p>这个阶段主要进行<strong>分支预测和译码</strong>。首先接受到来自 Execute 阶段的分支预测验证结果，如果之前的预测结果和验证结果出现偏差，则会对 BTB 进行更新。随后进行分支预测，并将分支预测的结果写入到 Latch 中向 Fetch1 中传递，使 Fetch1 在下个时钟周期能够获得分支预测的结果。随后进行的就是译码，根据前一阶段得到的内存数据，将指令转换成 StaticInst 的形式，并创建出 DynInst，供本阶段和后续阶段使用。</p>
+<p>这个阶段主要进行<strong>分支预测和译码</strong>。首先接受到来自 Execute 阶段的分支预测验证结果，如果之前的预测结果和验证结果出现偏差，则会对 BTB 进行更新。随后进行分支预测，并将分支预测的结果写入到 Latch 中向 Fetch1 中传递，使 Fetch1 在下个时钟周期能够获得分支预测的结果。随后进行的就是译码，根据前一阶段得到的内存数据，将指令转换成<code>StaticInst</code>的形式，并创建出 <code>DynInst</code>，供本阶段和后续阶段使用。</p>
 <hr />
 <h3 id="decode-stage">Decode stage<a class="headerlink" href="#decode-stage" title="Permanent link">&para;</a></h3>
 <p>这个阶段主要的工作是<strong>译码</strong>。Decode 从 Fetch2 获取指令向量，并将这些指令分解为微操作<code>micro-ops</code>（如有必要）并将它们打包到其输出指令向量中。</p>
@@ -2356,6 +2371,7 @@
 <p>这个阶段主要的工作是<strong>发射、执行、提交等</strong>,提供所有指令执行和内存访问机制。通过 Execute 的指令可能需要多个周期，其精确时序由<code>functional unit pipeline FIFO</code>建模。</p>
 <p>利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
 <h4 id="functional-units">Functional Units<a class="headerlink" href="#functional-units" title="Permanent link">&para;</a></h4>
+<p><code>TimeBuffer FIFO</code>,通过<code>stalled flag</code>控制功能单元的时序。</p>
 <p><code>Execute</code>阶段包含每个功能单元的pipeline。功能单元通过 <code>executeFuncUnits</code> 参数进行配置。</p>
 <p>每个活动周期，<code>Execute::evaluate</code> 都会执行以下操作:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="nt">Execute::evaluate</span><span class="p">:</span>
@@ -2376,9 +2392,15 @@
 </span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
 </span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">commit the push to the inputBuffer if that data hasn&#39;t all been used</span>
 </span></code></pre></div>
-<h4 id="functional-units-fifos">Functional Units FIFOs<a class="headerlink" href="#functional-units-fifos" title="Permanent link">&para;</a></h4>
+<h3 id="functional-units-fifos">Functional Units FIFOs<a class="headerlink" href="#functional-units-fifos" title="Permanent link">&para;</a></h3>
+<p><code>issue</code>、<code>commit</code>和<code>advance</code>操作作用于<code>functional units</code></p>
 <h4 id="issue">Issue<a class="headerlink" href="#issue" title="Permanent link">&para;</a></h4>
+<p>发射指令需要遍历输入缓冲区指令和功能单元的头部，以按顺序发出指令</p>
+<p>每个发射的指令被推送到 <a href="decorated with the functional unit number to which the instruction was issued">Execute:::inFlightInsts</a>中。内存引用指令被推送到 <code>Execute：：inFUMemInsts</code> 。</p>
 <h4 id="commit">Commit<a class="headerlink" href="#commit" title="Permanent link">&para;</a></h4>
+<p>通过检查 <code>Execute：：inFlightInsts</code> 队列的头部来提交指令。然后，可以在其功能单元中找到的指令将被执行并从 <code>Execute：：inFlightInsts</code> 中弹出</p>
+<h4 id="advance">Advance<a class="headerlink" href="#advance" title="Permanent link">&para;</a></h4>
+<p>所有未<code>stalled</code>的pipeline都会advance</p>
 <h4 id="scoreboard">Scoreboard<a class="headerlink" href="#scoreboard" title="Permanent link">&para;</a></h4>
 <h4 id="lsq">LSQ<a class="headerlink" href="#lsq" title="Permanent link">&para;</a></h4>
 
