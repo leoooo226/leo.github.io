@@ -2371,7 +2371,6 @@
 <p>这个阶段主要的工作是<strong>发射、执行、提交等</strong>,提供所有指令执行和内存访问机制。通过 Execute 的指令可能需要多个周期，其精确时序由<code>functional unit pipeline FIFO</code>建模。</p>
 <p>利用记分牌管理依赖关系，将合适的指令发送到功能单元进行执行。如果执行是分支指令，需要把结果向 Fetch1 和 Fetch2 传递。</p>
 <h4 id="functional-units">Functional Units<a class="headerlink" href="#functional-units" title="Permanent link">&para;</a></h4>
-<p><code>TimeBuffer FIFO</code>,通过<code>stalled flag</code>控制功能单元的时序。</p>
 <p><code>Execute</code>阶段包含每个功能单元的pipeline。功能单元通过 <code>executeFuncUnits</code> 参数进行配置。</p>
 <p>每个活动周期，<code>Execute::evaluate</code> 都会执行以下操作:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="nt">Execute::evaluate</span><span class="p">:</span>
@@ -2393,14 +2392,16 @@
 </span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">commit the push to the inputBuffer if that data hasn&#39;t all been used</span>
 </span></code></pre></div>
 <h3 id="functional-units-fifos">Functional Units FIFOs<a class="headerlink" href="#functional-units-fifos" title="Permanent link">&para;</a></h3>
+<p><code>TimeBuffer FIFO</code>,通过<code>stalled flag</code>控制功能单元的时序。</p>
 <p><code>issue</code>、<code>commit</code>和<code>advance</code>操作作用于<code>functional units</code></p>
 <h4 id="issue">Issue<a class="headerlink" href="#issue" title="Permanent link">&para;</a></h4>
 <p>发射指令需要遍历输入缓冲区指令和功能单元的头部，以按顺序发出指令</p>
 <p>每个发射的指令被推送到 <a href="" title="decorated with the functional unit number to which the instruction was issued">Execute:::inFlightInsts</a>中。内存引用指令被推送到 <code>Execute：：inFUMemInsts</code> 。</p>
 <h4 id="commit">Commit<a class="headerlink" href="#commit" title="Permanent link">&para;</a></h4>
-<p>通过检查 <code>Execute：：inFlightInsts</code> 队列的头部来提交指令。然后，可以在其功能单元中找到的指令将被执行并从 <code>Execute：：inFlightInsts</code> 中弹出</p>
+<p>通过检查 <code>Execute：：inFlightInsts</code> 队列的头部来提交指令。可以在其功能单元中找到的指令被执行并从 <code>Execute：：inFlightInsts</code> 中弹出</p>
+<p>任何分支、故障或中断都会导致<code>stream</code>序列号更改，并向 Fetch1/Fetch2 发出分支信号。只有具有当前流序列号的指令才会被发射或提交。</p>
 <h4 id="advance">Advance<a class="headerlink" href="#advance" title="Permanent link">&para;</a></h4>
-<p>所有未<code>stalled</code>的pipeline都会advance</p>
+<p>所有未<code>stalled</code>的pipeline都会advance。</p>
 <h4 id="scoreboard">Scoreboard<a class="headerlink" href="#scoreboard" title="Permanent link">&para;</a></h4>
 <h4 id="lsq">LSQ<a class="headerlink" href="#lsq" title="Permanent link">&para;</a></h4>
 
