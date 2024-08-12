@@ -2396,7 +2396,7 @@
 <p><code>issue</code>、<code>commit</code>和<code>advance</code>操作作用于<code>functional units</code></p>
 <h4 id="issue">Issue<a class="headerlink" href="#issue" title="Permanent link">&para;</a></h4>
 <p>发射指令需要遍历输入缓冲区指令和功能单元的头部，以按顺序发出指令</p>
-<p>每个发射的指令被推送到 <a href="decorated with the functional unit number to which the instruction was issued">Execute:::inFlightInsts</a>中。内存引用指令被推送到 <code>Execute：：inFUMemInsts</code> 。</p>
+<p>每个发射的指令被推送到 <a href="" title="decorated with the functional unit number to which the instruction was issued">Execute:::inFlightInsts</a>中。内存引用指令被推送到 <code>Execute：：inFUMemInsts</code> 。</p>
 <h4 id="commit">Commit<a class="headerlink" href="#commit" title="Permanent link">&para;</a></h4>
 <p>通过检查 <code>Execute：：inFlightInsts</code> 队列的头部来提交指令。然后，可以在其功能单元中找到的指令将被执行并从 <code>Execute：：inFlightInsts</code> 中弹出</p>
 <h4 id="advance">Advance<a class="headerlink" href="#advance" title="Permanent link">&para;</a></h4>
