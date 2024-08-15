@@ -3173,8 +3173,13 @@
 <hr />
 <h2 id="_38">向量排列指令<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h2>
 <h3 id="_39">整数标量移动指令<a class="headerlink" href="#_39" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv.x.s rd, vs2</span><span class="w"> </span><span class="c1"># x[rd] = vs2[0] (vs1=0)</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv.s.x vd, rs1</span><span class="w"> </span><span class="c1"># vd[0] = x[rs1] (vs2=0)</span>
+</span></code></pre></div>
 <h3 id="_40">浮点标量移动指令<a class="headerlink" href="#_40" title="Permanent link">&para;</a></h3>
-<p>同上。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vfmv.f.s rd, vs2</span><span class="w"> </span><span class="c1"># f[rd] = vs2[0] (rs1=0)</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vfmv.s.f vd, rs1</span><span class="w"> </span><span class="c1"># vd[0] = f[rs1] (vs2=0)</span>
+</span></code></pre></div>
 <h3 id="_41">向量滑动指令<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h3>
 <h4 id="slideup">Slideup<a class="headerlink" href="#slideup" title="Permanent link">&para;</a></h4>
 <h4 id="slidedown">Slidedown<a class="headerlink" href="#slidedown" title="Permanent link">&para;</a></h4>
