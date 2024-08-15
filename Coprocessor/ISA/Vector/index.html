@@ -2575,9 +2575,9 @@
 </span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsra.vi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
 </span></code></pre></div>
 <ul>
-<li>向量变窄右移指令
-变窄指令从较宽的操作数中提取一个较小的字段，并具有零扩展（srl）和符号扩展（sra）两种形式。移位量可以来自向量寄存器组、标量x寄存器或零扩展的5位立即数。移位量值的低lg2(2*SEW)位被使用（例如，对于SEW=64位到SEW=32位的缩小操作，使用低6位）。</li>
+<li>向量变窄右移指令</li>
 </ul>
+<p>变窄指令从较宽的操作数中提取一个较小的字段，并具有零扩展（srl）和符号扩展（sra）两种形式。移位量可以来自向量寄存器组、标量x寄存器或零扩展的5位立即数。移位量值的低lg2(2*SEW)位被使用（例如，对于SEW=64位到SEW=32位的缩小操作，使用低6位）。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="w">    </span><span class="c1">#Narrowing shift right logical, SEW = (2*SEW) &gt;&gt;SEW</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnsrl.wv vd, vs2, vs1, vm</span><span class="w">   </span><span class="c1"># vector-vector</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnsrl.wx vd, vs2, rs1, vm</span><span class="w">   </span><span class="c1"># vector-scalar</span>
