@@ -711,10 +711,160 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="向量整数算术指令">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量整数加法和减法
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      加宽向量加法和减法
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量整数扩展指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量整数进位加/借位减指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      位逻辑运算
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量移位指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量变窄右移指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      整数比较指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量整数的最小值和最大值指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量单宽度乘法指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量扩展整数乘法指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量单宽度整数乘加指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量扩展整数乘法-加法指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量除法和取余指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量整数合并指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量整数移动指令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_24" class="md-nav__link">
     <span class="md-ellipsis">
       向量定点算术指令
     </span>
@@ -723,7 +873,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#_25" class="md-nav__link">
     <span class="md-ellipsis">
       向量浮点指令
     </span>
@@ -732,7 +882,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
+  <a href="#_26" class="md-nav__link">
     <span class="md-ellipsis">
       向量掩码指令
     </span>
@@ -741,7 +891,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
+  <a href="#_27" class="md-nav__link">
     <span class="md-ellipsis">
       向量归约指令
     </span>
@@ -750,7 +900,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_13" class="md-nav__link">
+  <a href="#_28" class="md-nav__link">
     <span class="md-ellipsis">
       参考资料
     </span>
@@ -2514,9 +2664,7 @@
 <hr />
 <h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
 <p>提供了一组向量整数算术指令。除非另有说明，否则整数运算会在溢出时wrap（ 相当于不对溢出做特殊处理）。</p>
-<ul>
-<li>向量整数加法和减法</li>
-</ul>
+<h3 id="_9">向量整数加法和减法<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="w">    </span><span class="c1"># Integer adds.</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vadd.vv vd, vs2, vs1, vm</span><span class="w">    </span><span class="c1"># Vector-vector</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vadd.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
@@ -2528,9 +2676,7 @@
 </span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrsub.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vd[i] = x[rs1] - vs2[i]</span>
 </span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrsub.vi vd, vs2, imm, vm</span><span class="w">    </span><span class="c1"># vd[i] = imm - vs2[i]</span>
 </span></code></pre></div>
-<ul>
-<li>加宽向量加法和减法</li>
-</ul>
+<h3 id="_10">加宽向量加法和减法<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
 <p>根据较窄的源操作数在形成双倍宽度和之前是否首先进行符号扩展或零扩展，提供了有符号和无符号两种扩展的加/减指令。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">    </span><span class="c1"># Widening unsigned integer add/subtract, 2*SEW= SEW +/- SEW</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwaddu.vv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
@@ -2553,12 +2699,11 @@
 </span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsub.wv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
 </span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsub.wx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
 </span></code></pre></div>
-<ul>
-<li>向量整数扩展指令</li>
-<li>向量整数进位加/借位减指令</li>
-<li>位逻辑运算</li>
-<li>向量移位指令</li>
-</ul>
+<h3 id="_11">向量整数扩展指令<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<h3 id="_12">向量整数进位加/借位减指令<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<h3 id="_13">位逻辑运算<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<p>与、或、异或运算</p>
+<h3 id="_14">向量移位指令<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
 <p>提供了一套完整的向量移位指令，包括逻辑左移(sll)以及逻辑右移（零扩展srl）和算术右移（符号扩展sra）。要移位的数据位于由vs2指定的向量寄存器组中，并且移位量值可以来自向量寄存器组vs1、标量整数寄存器rs1或零扩展的5位立即数。仅使用移位量值的低lg2(SEW)位来控制移位量。</p>
 <p>移位量值的低lg2(SEW)位用于控制移位量是因为这些位能够覆盖所有可能的移位操作范围。例如，对于32位数据，lg2(32)等于5，因此我们使用5位来表示0到31的移位量，这足以覆盖所有可能的移位范围。这样做简化了硬件设计，避免了处理超出数据位宽的移位量，同时保证了移位操作在实际应用中的效率和正确性。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="w">    </span><span class="c1"># Bit shift operations</span>
@@ -2574,9 +2719,7 @@
 </span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsra.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
 </span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsra.vi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
 </span></code></pre></div>
-<ul>
-<li>向量变窄右移指令</li>
-</ul>
+<h3 id="_15">向量变窄右移指令<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
 <p>变窄指令从较宽的操作数中提取一个较小的字段，并具有零扩展（srl）和符号扩展（sra）两种形式。移位量可以来自向量寄存器组、标量x寄存器或零扩展的5位立即数。移位量值的低lg2(2*SEW)位被使用（例如，对于SEW=64位到SEW=32位的缩小操作，使用低6位）。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="w">    </span><span class="c1">#Narrowing shift right logical, SEW = (2*SEW) &gt;&gt;SEW</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnsrl.wv vd, vs2, vs1, vm</span><span class="w">   </span><span class="c1"># vector-vector</span>
@@ -2587,30 +2730,58 @@
 </span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnsra.wx vd, vs2, rs1, vm</span><span class="w">   </span><span class="c1"># vector-scalar</span>
 </span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnsra.wi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
 </span></code></pre></div>
-<ul>
-<li>整数比较指令</li>
-<li>向量整数的最小值和最大值指令</li>
-<li>向量单宽度乘法指令</li>
-<li>向量除法和取余指令</li>
-<li>向量扩展整数乘法指令</li>
-<li>向量整数乘加指令</li>
-<li>向量扩展整数乘法-加法指令</li>
-<li>向量整数合并指令</li>
-<li>向量整数移动指令</li>
-</ul>
+<h3 id="_16">整数比较指令<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
+<p>整数比较指令在比较结果为真时将1写入目标掩码寄存器元素，否则写入0。</p>
+<h3 id="_17">向量整数的最小值和最大值指令<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
+<h3 id="_18">向量单宽度乘法指令<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
+<p>单宽度乘法指令执行SEW位*SEW位的乘法以生成2SEW位乘积，然后在SEW位宽的目标位置返回乘积的一半。mul版本将乘积的低字写入目标寄存器，而mulh版本将乘积的高字写入目标寄存器。</p>
+<h3 id="_19">向量扩展整数乘法指令<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h3>
+<p>加宽的整数乘法指令从SEW位<em>SEW位的乘法中返回完整的2</em>SEW位乘积。</p>
+<h3 id="_20">向量单宽度整数乘加指令<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
+<p>整数乘加指令是具有破坏性的（会修改源操作寄存器的值），有两种形式，一种是覆盖加数或减数（vmacc, vnmsac），一种是覆盖第一个乘数（vmadd, vnmsub）。</p>
+<p>乘积的低半部分与第三个操作数相加或相减</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="w">    </span><span class="c1"># Integer multiply-add, overwrite addend</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmacc.vv vd, vs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = +(vs1[i] * vs2[i]) + vd[i]</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmacc.vx vd, rs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = +(x[rs1] * vs2[i]) + vd[i]</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="c1"># Integer multiply-sub, overwrite minuend</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnmsac.vv vd, vs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = -(vs1[i] * vs2[i]) + vd[i]</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnmsac.vx vd, rs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = -(x[rs1] * vs2[i]) + vd[i]</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="c1"># Integer multiply-add, overwrite multiplicand</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmadd.vv vd, vs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = (vs1[i] * vd[i]) + vs2[i]</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmadd.vx vd, rs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = (x[rs1] * vd[i]) + vs2[i]</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">    </span><span class="c1"># Integer multiply-sub, overwrite multiplicand</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnmsub.vv vd, vs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = -(vs1[i] * vd[i]) + vs2[i]</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vnmsub.vx vd, rs1, vs2, vm</span><span class="w">    </span><span class="c1"># vd[i] = -(x[rs1] * vd[i]) + vs2[i]</span>
+</span></code></pre></div>
+<h3 id="-">向量扩展整数乘法-加法指令<a class="headerlink" href="#-" title="Permanent link">&para;</a></h3>
+<p>加宽的整数乘加指令将SEW位<em>SEW位乘法的全部2</em>SEW位乘积加到2<em>SEW位值，并产生2</em>SEW位结果。支持有符号和无符号乘法操作数的所有组合。</p>
+<h3 id="_21">向量除法和取余指令<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
+<h3 id="_22">向量整数合并指令<a class="headerlink" href="#_22" title="Permanent link">&para;</a></h3>
+<p>向量整数合并指令基于掩码组合两个源操作数。与常规算术指令不同，合并操作对所有主体元素（即从vstart到当前向量长度vl的元素集）进行操作。</p>
+<p>vmerge指令被编码为带掩码的指令（vm=0）。这些指令按以下方式组合两个源。在掩码值为零的元素处，将第一个操作数复制到目标元素，否则将第二个操作数复制到目标元素。第一个操作数始终是由vs2指定的向量寄存器组。第二个操作数是由vs1指定的向量寄存器组，或由rs1指定的标量x寄存器，或是一个5位符号扩展的立即数。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmerge.vvm vd, vs2, vs1, v0</span><span class="w">  </span><span class="c1"># vd[i] = v0.mask[i] ? vs1[i] : vs2[i]</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmerge.vxm vd, vs2, rs1, v0</span><span class="w">  </span><span class="c1"># vd[i] = v0.mask[i] ? x[rs1] : vs2[i]</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmerge.vim vd, vs2, imm, v0</span><span class="w">  </span><span class="c1"># vd[i] = v0.mask[i] ? imm     : vs2[i]</span>
+</span></code></pre></div>
+<h3 id="_23">向量整数移动指令<a class="headerlink" href="#_23" title="Permanent link">&para;</a></h3>
+<p>向量整数移动指令将一个源操作数复制到向量寄存器组。vmv.v.v变体复制一个向量寄存器组，而vmv.v.x和vmv.v.i变体将标量寄存器或立即数分散到目标向量寄存器组的所有活动元素中。这些指令被编码为未屏蔽的指令（vm=1）。第一个操作数指定器（vs2）必须包含v0，vs2中的任何其他向量寄存器号都是保留的。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv.v.v vd, vs1</span><span class="w">    </span><span class="c1">#vd[i]=vs1[i]</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv.v.x vd, rs1</span><span class="w">    </span><span class="c1">#vd[i]=x[rs1]</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv.v.i vd, imm</span><span class="w">    </span><span class="c1">#vd[i]=imm</span>
+</span></code></pre></div>
 <hr />
-<h2 id="_9">向量定点算术指令<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_24">向量定点算术指令<a class="headerlink" href="#_24" title="Permanent link">&para;</a></h2>
 <p>将整数运算指令扩展即可支持定点运算指令。</p>
 <hr />
-<h2 id="_10">向量浮点指令<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<h2 id="_25">向量浮点指令<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h2>
 <hr />
-<h2 id="_11">向量掩码指令<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
+<h2 id="_26">向量掩码指令<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h2>
 <hr />
-<h2 id="_12">向量归约指令<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<h2 id="_27">向量归约指令<a class="headerlink" href="#_27" title="Permanent link">&para;</a></h2>
 <p>归约指令接收一个向量寄存器组的元素,和一个放在向量寄存器元素0位置的标量, 通过某种归约操作得到一个标量值, 该标量值也放在一个向量寄存器的元素0位置.
 归约操作中的标量都是放在一个向量寄存器中, 而不是向量寄存器组，之所以不把结果放在标量寄存器, 是为了与标量core 去耦。</p>
 <hr />
-<h2 id="_13">参考资料<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
+<h2 id="_28">参考资料<a class="headerlink" href="#_28" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">RVV1.0 Spec</p>
 <p><a href="https://github.com/riscv/riscv-v-spec">https://github.com/riscv/riscv-v-spec</a></p>
