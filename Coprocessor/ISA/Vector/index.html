@@ -2513,6 +2513,62 @@
 </div>
 <hr />
 <h2 id="_8">向量整数算术指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>提供了一组向量整数算术指令。除非另有说明，否则整数运算会在溢出时wrap（ 相当于不对溢出做特殊处理）。</p>
+<ul>
+<li>向量整数加法和减法</li>
+</ul>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="w">    </span><span class="c1"># Integer adds.</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vadd.vv vd, vs2, vs1, vm</span><span class="w">    </span><span class="c1"># Vector-vector</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vadd.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vadd.vi vd, vs2, imm, vm</span><span class="w">    </span><span class="c1"># vector-immediate</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="c1"># Integer subtract</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsub.vv vd, vs2, vs1, vm</span><span class="w">     </span><span class="c1"># Vector-vector</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsub.vx vd, vs2, rs1, vm</span><span class="w">     </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="c1"># Integer reverse subtract</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrsub.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vd[i] = x[rs1] - vs2[i]</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrsub.vi vd, vs2, imm, vm</span><span class="w">    </span><span class="c1"># vd[i] = imm - vs2[i]</span>
+</span></code></pre></div>
+<ul>
+<li>加宽向量加法和减法</li>
+</ul>
+<p>根据较窄的源操作数在形成双倍宽度和之前是否首先进行符号扩展或零扩展，提供了有符号和无符号两种扩展的加/减指令。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">    </span><span class="c1"># Widening unsigned integer add/subtract, 2*SEW= SEW +/- SEW</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwaddu.vv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwaddu.vx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsubu.vv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsubu.vx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="c1"># Widening signed integer add/subtract, 2*SEW =SEW +/- SEW</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwadd.vv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwadd.vx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsub.vv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsub.vx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span><span class="c1"># Widening unsigned integer add/subtract, 2*SEW= 2*SEW +/- SEW</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwaddu.wv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwaddu.wx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsubu.wv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsubu.wx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">    </span><span class="c1"># Widening signed integer add/subtract, 2*SEW =2*SEW +/- SEW</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwadd.wv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwadd.wx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsub.wv  vd, vs2, vs1, vm</span><span class="w">  </span><span class="c1"># vector-vector</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwsub.wx  vd, vs2, rs1, vm</span><span class="w">  </span><span class="c1"># vector-scalar</span>
+</span></code></pre></div>
+<ul>
+<li>向量整数扩展指令</li>
+<li>向量整数进位加/借位减指令</li>
+<li>位逻辑运算</li>
+<li>向量移位指令</li>
+<li>向量变窄右移指令</li>
+<li>整数比较指令</li>
+<li>向量整数的最小值和最大值指令</li>
+<li>向量单宽度乘法指令</li>
+<li>向量除法和取余指令</li>
+<li>向量扩展整数乘法指令</li>
+<li>向量整数乘加指令</li>
+<li>向量扩展整数乘法-加法指令</li>
+<li>向量整数合并指令</li>
+<li>向量整数移动指令</li>
+</ul>
 <hr />
 <h2 id="_9">向量定点算术指令<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <p>将整数运算指令扩展即可支持定点运算指令。</p>
