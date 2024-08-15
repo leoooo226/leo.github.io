@@ -2560,18 +2560,19 @@
 <li>向量移位指令</li>
 </ul>
 <p>提供了一套完整的向量移位指令，包括逻辑左移(sll)以及逻辑右移（零扩展srl）和算术右移（符号扩展sra）。要移位的数据位于由vs2指定的向量寄存器组中，并且移位量值可以来自向量寄存器组vs1、标量整数寄存器rs1或零扩展的5位立即数。仅使用移位量值的低lg2(SEW)位来控制移位量。</p>
+<p>移位量值的低lg2(SEW)位用于控制移位量是因为这些位能够覆盖所有可能的移位操作范围。例如，对于32位数据，lg2(32)等于5，因此我们使用5位来表示0到31的移位量，这足以覆盖所有可能的移位范围。这样做简化了硬件设计，避免了处理超出数据位宽的移位量，同时保证了移位操作在实际应用中的效率和正确性。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="w">    </span><span class="c1"># Bit shift operations</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsll.vv vd, vs2, vs1, vm</span><span class="w">    </span><span class="c1"># Vector-vector</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsll.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
 </span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsll.vi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
 </span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vs rl.vv vd, vs2, vs1, vm</span><span class="w">    </span><span class="c1"># Vector-vector</span>
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vs rl.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
-</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vs rl.vi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsrl.vv vd, vs2, vs1, vm</span><span class="w">    </span><span class="c1"># Vector-vector</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsrl.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsrl.vi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
 </span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
-</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vs ra.vv vd, vs2, vs1, vm</span><span class="w">    </span><span class="c1"># Vector-vector</span>
-</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vs ra.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
-</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vs ra.vi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsra.vv vd, vs2, vs1, vm</span><span class="w">    </span><span class="c1"># Vector-vector</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsra.vx vd, vs2, rs1, vm</span><span class="w">    </span><span class="c1"># vector-scalar</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vsra.vi vd, vs2, uimm, vm</span><span class="w">   </span><span class="c1"># vector-immediate</span>
 </span></code></pre></div>
 <ul>
 <li>向量变窄右移指令
