@@ -939,19 +939,130 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="向量掩码指令">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_32" class="md-nav__link">
+    <span class="md-ellipsis">
+      逻辑操作指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vcpopm" class="md-nav__link">
+    <span class="md-ellipsis">
+      VCPOP.M
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vfirstm" class="md-nav__link">
+    <span class="md-ellipsis">
+      VFIRST.M
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vmsbfm" class="md-nav__link">
+    <span class="md-ellipsis">
+      VMSBF.M
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vmsifm" class="md-nav__link">
+    <span class="md-ellipsis">
+      VMSIF.M
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vmsofm" class="md-nav__link">
+    <span class="md-ellipsis">
+      VMSOF.M
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_32" class="md-nav__link">
+  <a href="#_33" class="md-nav__link">
     <span class="md-ellipsis">
       向量归约指令
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="向量归约指令">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_34" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量单宽度整数归约指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_35" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量加宽整数归约指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_36" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量单宽度浮点归约指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_37" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量加宽浮点归约指令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_38" class="md-nav__link">
+    <span class="md-ellipsis">
+      向量排列指令
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_33" class="md-nav__link">
+  <a href="#_39" class="md-nav__link">
     <span class="md-ellipsis">
       参考资料
     </span>
@@ -2855,16 +2966,59 @@
 </span></code></pre></div>
 <hr />
 <h2 id="_31">向量掩码指令<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h2>
+<h3 id="_32">逻辑操作指令<a class="headerlink" href="#_32" title="Permanent link">&para;</a></h3>
+<p>使用一个向量寄存器作为掩码寄存器，掩码寄存器的每一位表示一个数据元素的状态。掩码指令只在一个矢量寄存器中操作。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmand.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = vs2.mask[i] &amp;&amp; vs1.mask[i]</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmnand.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = !(vs2.mask[i] &amp;&amp; vs1.mask[i])</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmandn.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = vs2.mask[i] &amp;&amp; !vs1.mask[i]</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmxor.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = vs2.mask[i] ^^ vs1.mask[i]</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmor.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = vs2.mask[i] || vs1.mask[i]</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmnor.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = !(vs2.mask[i] || vs1.mask[i])</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmorn.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = vs2.mask[i] || !vs1.mask[i]</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmxnor.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = !(vs2.mask[i] ^^ vs1.mask[i])</span>
+</span></code></pre></div>
+<h3 id="vcpopm">VCPOP.M<a class="headerlink" href="#vcpopm" title="Permanent link">&para;</a></h3>
+<p>统计掩码寄存器中活跃状态数据元素的数量。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vcpop.m rd, vs2, vm</span>
+</span></code></pre></div>
+<h3 id="vfirstm">VFIRST.M<a class="headerlink" href="#vfirstm" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vfirst.m rd, vs2, vm</span>
+</span></code></pre></div>
+<h3 id="vmsbfm">VMSBF.M<a class="headerlink" href="#vmsbfm" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmsbf.m vd, vs2, vm</span>
+</span></code></pre></div>
+<h3 id="vmsifm">VMSIF.M<a class="headerlink" href="#vmsifm" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmsif.m vd, vs2, vm</span>
+</span></code></pre></div>
+<h3 id="vmsofm">VMSOF.M<a class="headerlink" href="#vmsofm" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmsof.m vd, vs2, vm</span>
+</span></code></pre></div>
 <hr />
-<h2 id="_32">向量归约指令<a class="headerlink" href="#_32" title="Permanent link">&para;</a></h2>
+<h2 id="_33">向量归约指令<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h2>
 <ul>
 <li>归约指令接收一个向量寄存器组的元素,和一个放在向量寄存器元素0位置的标量, 通过某种归约操作得到一个标量值, 该标量值也放在一个向量寄存器的元素0位置.</li>
 <li>归约操作中的标量都是放在一个向量寄存器中, 而不是向量寄存器组，之所以不把结果放在标量寄存器, 是为了与标量core 去耦</li>
 <li>源向量寄存器组中的非活跃元素将不参与归约操作.</li>
 <li>目的向量寄存器中, 除了元素0的部分都是tail, 遵循当前的尾部不可知或不变(tail agnostic/undisturbed)的原则.</li>
 </ul>
+<h3 id="_34">向量单宽度整数归约指令<a class="headerlink" href="#_34" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="w">    </span><span class="c1"># Simple reductions, where [*] denotes all active elements:</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredsum.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = sum( vs1[0] , vs2[*] )</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredmaxu.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = maxu( vs1[0] , vs2[*] )</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredmax.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = max( vs1[0] , vs2[*] )</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredminu.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = minu( vs1[0] , vs2[*] )</span>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredmin.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = min( vs1[0] , vs2[*] )</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredand.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = and( vs1[0] , vs2[*] )</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredor.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = or( vs1[0] , vs2[*] )</span>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vredxor.vs vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[0] = xor( vs1[0] , vs2[*] )</span>
+</span></code></pre></div>
+<h3 id="_35">向量加宽整数归约指令<a class="headerlink" href="#_35" title="Permanent link">&para;</a></h3>
+<h3 id="_36">向量单宽度浮点归约指令<a class="headerlink" href="#_36" title="Permanent link">&para;</a></h3>
+<h3 id="_37">向量加宽浮点归约指令<a class="headerlink" href="#_37" title="Permanent link">&para;</a></h3>
 <hr />
-<h2 id="_33">参考资料<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h2>
+<h2 id="_38">向量排列指令<a class="headerlink" href="#_38" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="_39">参考资料<a class="headerlink" href="#_39" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">RVV1.0 Spec</p>
 <p><a href="https://github.com/riscv/riscv-v-spec">https://github.com/riscv/riscv-v-spec</a></p>
