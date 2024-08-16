@@ -3202,8 +3202,33 @@
 </span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vfslide1down.vf vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = vs2[i+1], vd[vl-1]=f[rs1]</span>
 </span></code></pre></div>
 <h3 id="_42">向量寄存器聚集指令<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vv vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (vs1[i] &gt;= VLMAX) ? 0 : vs2[vs1[i]];</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgatherei16.vv vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (vs1[i] &gt;= VLMAX) ? 0 : vs2[vs1[i]];</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vx vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (x[rs1] &gt;= VLMAX) ? 0 : vs2[x[rs1]]</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vi vd, vs2, uimm, vm</span><span class="w"> </span><span class="c1"># vd[i] = (uimm &gt;= VLMAX) ? 0 : vs2[uimm]</span>
+</span></code></pre></div>
 <h3 id="_43">向量压缩指令<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vcompress.vm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># Compress into vd elements of vs2 where vs1 is enabled</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">Example use of vcompress instruction</span>
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>
+</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">8 7 6 5 4 3 2 1 0 Element number</span>
+</span><span id="__span-33-5"><a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>
+</span><span id="__span-33-6"><a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">1 1 0 1 0 0 1 0 1 v0</span>
+</span><span id="__span-33-7"><a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">8 7 6 5 4 3 2 1 0 v1</span>
+</span><span id="__span-33-8"><a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">1 2 3 4 5 6 7 8 9 v2</span>
+</span><span id="__span-33-9"><a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a>
+</span><span id="__span-33-10"><a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vcompress.vm v2, v1, v0</span>
+</span><span id="__span-33-11"><a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">1 2 3 4 8 7 5 2 0 v2</span>
+</span></code></pre></div>
 <h3 id="_44">整个寄存器移动<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h3>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv&lt;nr&gt;r.v vd, vs2</span><span class="w">  </span><span class="c1"># General form</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv1r.v v1, v2</span><span class="w">      </span><span class="c1"># Copy v1=v2</span>
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv2r.v v10, v12</span><span class="w">    </span><span class="c1"># Copy v10=v12; v11=v13</span>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv4r.v v4, v8</span><span class="w">      </span><span class="c1"># Copy v4=v8; v5=v9; v6=v10; v7=v11</span>
+</span><span id="__span-34-6"><a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv8r.v v0, v8</span><span class="w">      </span><span class="c1"># Copy v0=v8; v1=v9; ...; v7=v15</span>
+</span></code></pre></div>
 <hr />
 <h2 id="_45">参考资料<a class="headerlink" href="#_45" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
