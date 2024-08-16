@@ -3181,10 +3181,26 @@
 </span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vfmv.s.f vd, rs1</span><span class="w"> </span><span class="c1"># vd[0] = f[rs1] (vs2=0)</span>
 </span></code></pre></div>
 <h3 id="_41">向量滑动指令<a class="headerlink" href="#_41" title="Permanent link">&para;</a></h3>
+<p>滑动指令在向量寄存器组中上下移动数据元素。</p>
+<p>滑动操作在处理滑动窗口、重叠窗口或其他需要元素间相对位移的场景时非常有用。</p>
 <h4 id="slideup">Slideup<a class="headerlink" href="#slideup" title="Permanent link">&para;</a></h4>
+<p><code>vslideup</code>指令允许将一个向量寄存器（vs2）的内容向上滑动（即向更高索引位置移动）一定数量的位置，并将结果写入到另一个向量寄存器（vd）中。滑动距离（OFFSET）可以通过一个寄存器（rs1）或一个立即数（uimm）来指定。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vslideup.vx vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i+rs1] = vs2[i]</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vslideup.vi vd, vs2, uimm, vm</span><span class="w"> </span><span class="c1"># vd[i+uimm] = vs2[i]</span>
+</span></code></pre></div>
 <h4 id="slidedown">Slidedown<a class="headerlink" href="#slidedown" title="Permanent link">&para;</a></h4>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vslidedown.vx vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = vs2[i+rs1]</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vslidedown.vi vd, vs2, uimm, vm</span><span class="w"> </span><span class="c1"># vd[i] = vs2[i+uimm]</span>
+</span></code></pre></div>
 <h4 id="slide1up">Slide1up<a class="headerlink" href="#slide1up" title="Permanent link">&para;</a></h4>
+<p>vslide1up和vfslide1up指令在需要向目标向量的开头插入一个标量值，并将剩余元素向上移动一个位置的场景中非常有用。这在处理窗口函数、数据填充或任何需要修改向量头部元素时特别有用。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vslide1up.vx vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[0]=x[rs1], vd[i+1] = vs2[i]</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vfslide1up.vf vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[0]=f[rs1], vd[i+1] = vs2[i]</span>
+</span></code></pre></div>
 <h4 id="slide1down">Slide1down<a class="headerlink" href="#slide1down" title="Permanent link">&para;</a></h4>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vslide1down.vx vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = vs2[i+1], vd[vl-1]=x[rs1]</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vfslide1down.vf vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = vs2[i+1], vd[vl-1]=f[rs1]</span>
+</span></code></pre></div>
 <h3 id="_42">向量寄存器聚集指令<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h3>
 <h3 id="_43">向量压缩指令<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h3>
 <h3 id="_44">整个寄存器移动<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h3>
