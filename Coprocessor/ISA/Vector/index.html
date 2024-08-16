@@ -3052,7 +3052,8 @@
 <hr />
 <h2 id="_30">向量掩码指令<a class="headerlink" href="#_30" title="Permanent link">&para;</a></h2>
 <h3 id="_31">逻辑操作指令<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
-<p>使用一个向量寄存器作为掩码寄存器，掩码寄存器的每一位表示一个数据元素的状态。掩码指令只在一个矢量寄存器中操作。</p>
+<p>向量掩码寄存器逻辑指令是专门用于操作掩码寄存器的一系列指令。这些掩码寄存器中的每个元素都是单个比特位，因此这些指令操作的是单一的向量寄存器</p>
+<p>这些指令在需要对向量中的元素进行位级操作（如位与、位或、位异或等）时非常有用。由于它们直接操作掩码寄存器，这些操作通常用于控制向量计算的流程，例如，在条件执行或选择性更新向量元素时。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmand.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = vs2.mask[i] &amp;&amp; vs1.mask[i]</span>
 </span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmnand.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = !(vs2.mask[i] &amp;&amp; vs1.mask[i])</span>
 </span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vmandn.mm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># vd.mask[i] = vs2.mask[i] &amp;&amp; !vs1.mask[i]</span>
