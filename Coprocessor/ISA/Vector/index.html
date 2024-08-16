@@ -3202,13 +3202,17 @@
 </span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">vfslide1down.vf vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = vs2[i+1], vd[vl-1]=f[rs1]</span>
 </span></code></pre></div>
 <h3 id="_42">向量寄存器聚集指令<a class="headerlink" href="#_42" title="Permanent link">&para;</a></h3>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vv vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (vs1[i] &gt;= VLMAX) ? 0 : vs2[vs1[i]];</span>
-</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgatherei16.vv vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (vs1[i] &gt;= VLMAX) ? 0 : vs2[vs1[i]];</span>
-</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>
-</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vx vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (x[rs1] &gt;= VLMAX) ? 0 : vs2[x[rs1]]</span>
-</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vi vd, vs2, uimm, vm</span><span class="w"> </span><span class="c1"># vd[i] = (uimm &gt;= VLMAX) ? 0 : vs2[uimm]</span>
+<p>向量寄存器聚集（gather）指令从由第二个源向量寄存器组指定的位置读取第一个源向量寄存器组的元素。第二个向量中的索引值被视为无符号整数。无论vl的值如何，都可以从源向量中读取任何索引小于VLMAX的元素。写入目标寄存器的元素最大数量由vl给定，而超过vl的元素则根据当前的尾部策略处理（参见向量尾部无关和向量掩码无关的部分，即vta和vma）。此操作可以是有掩码的，对于不活动的元素，遵循掩码未变/无关策略。</p>
+<p>与滑动指令相比，索引值可以不相连，操作数据更加灵活，对于不规则数据有优势</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="w">    </span><span class="c1"># </span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vv vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (vs1[i] &gt;= VLMAX) ? 0 : vs2[vs1[i]];</span>
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgatherei16.vv vd, vs2, vs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (vs1[i] &gt;= VLMAX) ? 0 : vs2[vs1[i]];</span>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="c1"># 此时只会从源寄存器读出一个元素</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vx vd, vs2, rs1, vm</span><span class="w"> </span><span class="c1"># vd[i] = (x[rs1] &gt;= VLMAX) ? 0 : vs2[x[rs1]]</span>
+</span><span id="__span-32-6"><a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vrgather.vi vd, vs2, uimm, vm</span><span class="w"> </span><span class="c1"># vd[i] = (uimm &gt;= VLMAX) ? 0 : vs2[uimm]</span>
 </span></code></pre></div>
 <h3 id="_43">向量压缩指令<a class="headerlink" href="#_43" title="Permanent link">&para;</a></h3>
+<p>vcompress.vm 指令是向量处理中的一个高级指令，它允许根据向量掩码寄存器（mask register）指定的条件，将源向量寄存器组（source vector register group）中的选定元素压缩并打包到目标向量寄存器组（destination vector register group）的起始位置。这个指令特别有用于在向量计算中筛选和重新组织数据。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vcompress.vm vd, vs2, vs1</span><span class="w"> </span><span class="c1"># Compress into vd elements of vs2 where vs1 is enabled</span>
 </span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">Example use of vcompress instruction</span>
 </span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>
@@ -3222,6 +3226,7 @@
 </span><span id="__span-33-11"><a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">1 2 3 4 8 7 5 2 0 v2</span>
 </span></code></pre></div>
 <h3 id="_44">整个寄存器移动<a class="headerlink" href="#_44" title="Permanent link">&para;</a></h3>
+<p>指令用于复制整个向量寄存器（即所有 VLEN 位）以及整个向量寄存器组。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv&lt;nr&gt;r.v vd, vs2</span><span class="w">  </span><span class="c1"># General form</span>
 </span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>
 </span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vmv1r.v v1, v2</span><span class="w">      </span><span class="c1"># Copy v1=v2</span>
