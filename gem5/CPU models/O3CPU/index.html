@@ -2111,10 +2111,12 @@
 每个周期获取指令，根据所选策略选择要从哪个线程获取。此阶段是首次创建 DynInst 的地方。还处理分支预测。</p>
 </li>
 <li>
-<p>Decode
-<img alt="图片" src="../struct_decode.png" />
-每个周期解码指令。还处理 PC 相对无条件分支的早期解析。</p>
+<p>Decode</p>
 </li>
+</ul>
+<p><img alt="图片" src="../struct_decode.png" /></p>
+<p>每个周期解码指令。还处理 PC 相对无条件分支的早期解析。</p>
+<ul>
 <li>
 <p>Rename
 <img alt="图片" src="../struct_rename.png" />
