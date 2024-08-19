@@ -1633,9 +1633,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pipeline-stages" class="md-nav__link">
+  <a href="#fetch" class="md-nav__link">
     <span class="md-ellipsis">
-      Pipeline stages
+      Fetch
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decode
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rename" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rename
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issueexecutewriteback" class="md-nav__link">
+    <span class="md-ellipsis">
+      Issue/Execute/Writeback
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commit
     </span>
   </a>
   
@@ -2103,36 +2139,25 @@
 
 
 <h1 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h1>
-<h2 id="pipeline-stages">Pipeline stages<a class="headerlink" href="#pipeline-stages" title="Permanent link">&para;</a></h2>
-<ul>
-<li>
-<p>Fetch
-<img alt="图片" src="../struct_fetch.png" /><br />
+<h2 id="fetch">Fetch<a class="headerlink" href="#fetch" title="Permanent link">&para;</a></h2>
+<p><img alt="图片" src="../struct_fetch.png" /><br />
 每个周期获取指令，根据所选策略选择要从哪个线程获取。此阶段是首次创建 DynInst 的地方。还处理分支预测。</p>
-</li>
-<li>
-<p>Decode</p>
-</li>
-</ul>
+<hr />
+<h2 id="decode">Decode<a class="headerlink" href="#decode" title="Permanent link">&para;</a></h2>
 <p><img alt="图片" src="../struct_decode.png" /></p>
 <p>每个周期解码指令。还处理 PC 相对无条件分支的早期解析。</p>
-<ul>
-<li>
-<p>Rename
-<img alt="图片" src="../struct_rename.png" />
+<hr />
+<h2 id="rename">Rename<a class="headerlink" href="#rename" title="Permanent link">&para;</a></h2>
+<p><img alt="图片" src="../struct_rename.png" />
 使用带有空闲列表的物理寄存器文件重命名指令。如果没有足够的寄存器可以重命名到，或者后端资源已满，则会停止。此时，还可以通过在重命名中停止它们直到后端耗尽来处理任何序列化指令。</p>
-</li>
-<li>
-<p>Issue/Execute/Writeback
-<img alt="图片" src="../struct_iew.png" />
+<hr />
+<h2 id="issueexecutewriteback">Issue/Execute/Writeback<a class="headerlink" href="#issueexecutewriteback" title="Permanent link">&para;</a></h2>
+<p><img alt="图片" src="../struct_iew.png" />
 当在指令上调用 execute（） 函数时，我们的模拟器模型会处理执行和写回，因此我们将这三个阶段合并为一个阶段。此阶段 （IEW） 处理向指令队列发送指令，告诉指令队列发出指令，以及执行和写回指令。</p>
-</li>
-<li>
-<p>Commit
-<img alt="图片" src="../struct_commit.png" />
+<hr />
+<h2 id="commit">Commit<a class="headerlink" href="#commit" title="Permanent link">&para;</a></h2>
+<p><img alt="图片" src="../struct_commit.png" />
 每个周期提交指令，处理指令可能导致的任何故障。还处理在分支预测错误的情况下重定向前端。</p>
-</li>
-</ul>
 <hr />
 
 
