@@ -850,32 +850,47 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#vector-stores" class="md-nav__link">
+    <nav class="md-nav" aria-label="Decoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Vector Stores
+      配置和算数指令
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#csr-reads-and-writes" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      CSR Reads and Writes
+      加载指令
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#accel_dispatcher_ideal" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      accel_dispatcher_ideal
+      存储指令
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#csr" class="md-nav__link">
+    <span class="md-ellipsis">
+      CSR
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2237,13 +2252,14 @@
 <ul>
 <li><code>NORMAL_OPERATION</code>：正常执行操作。</li>
 <li><code>WAIT_IDLE</code>：等待Ara空闲，以便发出新的操作。</li>
-<li><code>RESHUFFLE</code>：注入一个重排序的微操作（uop）。</li>
+<li><code>RESHUFFLE</code>：注入一个重排的微操作（uop）。</li>
 </ul>
 <p>处理多种操作模式，包括重新排列向量元素<code>RESHUFFLE</code>，同时跟踪每个向量的<code>EEW</code>和<code>LMUL</code>，以及处理与加载和存储操作相关的特殊情况<code>ignore_zero_vl_check</code>。不过，对于<code>is_stride_np2</code>的实现，存在逻辑上的不准确之处?</p>
 <hr />
 <h2 id="decoder">Decoder<a class="headerlink" href="#decoder" title="Permanent link">&para;</a></h2>
-<p>处理向量寄存器的重排操作<code>RESHUFFLE</code>。也就是滑动指令？由SLDU执行，这里应该是控制状态</p>
+<p>处理向量寄存器的重排操作<code>RESHUFFLE</code>。也就是<strong>滑动指令？</strong>由SLDU执行，这里应该是控制状态</p>
 <p>在<code>NORMAL_OPERATION</code>下，对指令进行解码：</p>
+<h3 id="_1">配置和算数指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>OPCFG</li>
 <li>OPIVV</li>
@@ -2254,12 +2270,9 @@
 <li>OPFVV</li>
 <li>OPFVF</li>
 </ul>
-<hr />
-<h2 id="vector-stores">Vector Stores<a class="headerlink" href="#vector-stores" title="Permanent link">&para;</a></h2>
-<hr />
-<h2 id="csr-reads-and-writes">CSR Reads and Writes<a class="headerlink" href="#csr-reads-and-writes" title="Permanent link">&para;</a></h2>
-<hr />
-<h2 id="accel_dispatcher_ideal">accel_dispatcher_ideal<a class="headerlink" href="#accel_dispatcher_ideal" title="Permanent link">&para;</a></h2>
+<h3 id="_2">加载指令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<h3 id="_3">存储指令<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<h3 id="csr">CSR<a class="headerlink" href="#csr" title="Permanent link">&para;</a></h3>
 
 
 
