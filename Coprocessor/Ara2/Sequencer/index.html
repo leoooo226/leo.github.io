@@ -114,6 +114,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#sequencer" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -793,6 +798,19 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Sequencer
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -803,6 +821,79 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      模块定义与参数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      运行中向量指令
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      全局冲突表
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      开始和结束通道
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      指令调度
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      指令队列和计数器
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2056,9 +2147,14 @@
                   
 
 
-  <h1>Sequencer</h1>
-
-
+<h1 id="sequencer">Sequencer<a class="headerlink" href="#sequencer" title="Permanent link">&para;</a></h1>
+<p>主要功能是管理和控制并行向量计算中的指令执行顺序和冲突，确保与Ara计算架构中各功能单元的接口协调工作。它通过记录和分析指令状态、冲突情况，优化计算资源的分配和提高执行效率。同时，模块实现了对未完成指令的等待与处理机制，以确保在复杂数据路径中的正确性。</p>
+<h2 id="_1">模块定义与参数<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_2">运行中向量指令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">全局冲突表<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">开始和结束通道<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">指令调度<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_6">指令队列和计数器<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 
 
 
