@@ -2141,6 +2141,9 @@
 <h1 id="sequencer">Sequencer<a class="headerlink" href="#sequencer" title="Permanent link">&para;</a></h1>
 <p><strong>主要功能是管理和控制并行向量计算中的指令执行顺序和依赖关系，确保与Ara计算架构中各功能单元的接口协调工作。它通过记录和分析指令状态、冲突情况，优化计算资源的分配和提高执行效率。同时，模块实现了对未完成指令的等待与处理机制，以确保在复杂数据路径中的正确性。</strong></p>
 <h2 id="_1">运行中向量指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>运行中的向量指令管理：维护一个矩阵pe_vinsn_running_d和pe_vinsn_running_q，表示每个处理单元上运行的向量指令。</li>
+</ul>
 <div class="language-sv highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">NrPEs</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">][</span><span class="n">NrVInsn</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">pe_vinsn_running_d</span><span class="p">,</span><span class="w"> </span><span class="n">pe_vinsn_running_q</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="cm">/*</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="cm">       INS0  INS1  INS2  ...  INSn-1</span>
@@ -2156,7 +2159,55 @@
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="cm">  ...</span>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="cm">  */</span>
 </span></code></pre></div>
+<p>转置后</p>
+<div class="language-sv highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">NrVInsn</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">][</span><span class="n">NrPEs</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">pe_vinsn_running_q_trns</span><span class="p">;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="cm">/*</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="cm">       PE0  PE1  PE2  ...  PEn-1</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="cm">  INS0  </span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="cm">  INS1</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="cm">  INS2</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="cm">  INS3</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="cm">  INS4</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="cm">  INS5</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="cm">  INS6</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="cm">  INS7</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="cm">  INS8</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="cm">  ...</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="cm">  PEn-1</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="cm">  */</span>
+</span></code></pre></div>
+<ul>
+<li>查找下一个ID：使用<code>lzc模块</code>查找下一个可用的指令ID。</li>
+<li>更新运行中的向量指令：在时钟上升沿更新运行中的向量指令状态。</li>
+<li>通道同步停滞：检测并处理通道不同步的情况。</li>
+</ul>
+<div class="language-sv highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">genvar</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">NrVInsn</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">gen_stall_lane_desynch</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="k">assign</span><span class="w"> </span><span class="n">stall_lanes_desynch_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">pe_vinsn_running_q</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">|</span><span class="n">pe_vinsn_running_q_trns</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">NrLanes</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">1</span><span class="p">];</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="k">end</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">stall_lanes_desynch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">|</span><span class="n">stall_lanes_desynch_vec</span><span class="p">;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w"> </span><span class="c1">//如果任何一个车道（除了车道0）还在执行该操作，则结果为1。</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w"> </span><span class="c1">//只有当车道0已完成该操作且至少有一个其他车道还在执行时，结果才为1，表示车道间出现了不同步。</span>
+</span></code></pre></div>
 <h2 id="_2">全局冲突表<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="language-sv highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">  </span><span class="c1">// Global table of the dependencies between instructions</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="c1">//</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="c1">// The row at index N is the hazard vector belonging to instruction N</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="c1">// It indicates all the instruction on which instruction N depends</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="c1">//</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="c1">// For example, with the following table, instruction 3 depends on</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="c1">// instruction 0 and instruction 2</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="c1">//</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="c1">// +--------+--------+--------+--------+--------+</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="c1">// |   -    | Insn 0 | Insn 1 | Insn 2 | Insn 3 |</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="c1">// +--------+--------+--------+--------+--------+</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="c1">// | Insn 0 |      0 |      0 |      0 |      0 |</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="c1">// | Insn 1 |      1 |      0 |      0 |      0 |</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="c1">// | Insn 2 |      0 |      0 |      0 |      0 |</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="c1">// | Insn 3 |      1 |      0 |      1 |      0 |</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span><span class="c1">// +--------+--------+--------+--------+--------+</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="c1">//</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="c1">// This information is forwarded to the operand requesters of each lane</span>
+</span></code></pre></div>
 <h2 id="_3">开始和结束通道<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <h2 id="_4">指令调度<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <h2 id="_5">指令队列和计数器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
