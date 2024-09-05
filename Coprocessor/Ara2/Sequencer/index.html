@@ -840,7 +840,7 @@
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
-      模块定义与参数
+      运行中向量指令
     </span>
   </a>
   
@@ -849,7 +849,7 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      运行中向量指令
+      全局冲突表
     </span>
   </a>
   
@@ -858,7 +858,7 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      全局冲突表
+      开始和结束通道
     </span>
   </a>
   
@@ -867,15 +867,6 @@
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
-      开始和结束通道
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
       指令调度
     </span>
   </a>
@@ -883,7 +874,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       指令队列和计数器
     </span>
@@ -2148,13 +2139,27 @@
 
 
 <h1 id="sequencer">Sequencer<a class="headerlink" href="#sequencer" title="Permanent link">&para;</a></h1>
-<p>主要功能是管理和控制并行向量计算中的指令执行顺序和冲突，确保与Ara计算架构中各功能单元的接口协调工作。它通过记录和分析指令状态、冲突情况，优化计算资源的分配和提高执行效率。同时，模块实现了对未完成指令的等待与处理机制，以确保在复杂数据路径中的正确性。</p>
-<h2 id="_1">模块定义与参数<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h2 id="_2">运行中向量指令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<h2 id="_3">全局冲突表<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<h2 id="_4">开始和结束通道<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<h2 id="_5">指令调度<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<h2 id="_6">指令队列和计数器<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p><strong>主要功能是管理和控制并行向量计算中的指令执行顺序和依赖关系，确保与Ara计算架构中各功能单元的接口协调工作。它通过记录和分析指令状态、冲突情况，优化计算资源的分配和提高执行效率。同时，模块实现了对未完成指令的等待与处理机制，以确保在复杂数据路径中的正确性。</strong></p>
+<h2 id="_1">运行中向量指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<div class="language-sv highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">NrPEs</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">][</span><span class="n">NrVInsn</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">pe_vinsn_running_d</span><span class="p">,</span><span class="w"> </span><span class="n">pe_vinsn_running_q</span><span class="p">;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="cm">/*</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="cm">       INS0  INS1  INS2  ...  INSn-1</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="cm">  PE0  </span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="cm">  PE1</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="cm">  PE2</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="cm">  PE3</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="cm">  PE4</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="cm">  PE5</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="cm">  PE6</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="cm">  PE7</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="cm">  PE8</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="cm">  ...</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="cm">  */</span>
+</span></code></pre></div>
+<h2 id="_2">全局冲突表<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">开始和结束通道<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">指令调度<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">指令队列和计数器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 
 
 
