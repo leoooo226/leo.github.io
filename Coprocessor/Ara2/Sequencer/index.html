@@ -2257,11 +2257,23 @@
 </span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="w">    </span><span class="k">endcase</span>
 </span><span id="__span-4-35"><a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="w">  </span><span class="k">end</span>
 </span></code></pre></div>
-<p>VRF布局（我认为的，待确认）</p>
+<p>VRF布局（ VLEN=4096 and 4 lanes）</p>
 <p>sew=64时，VRF布局如下：
 <img alt="图片" src="../image5.png" /></p>
 <p>sew=32时，VRF布局如下
 <img alt="图片" src="../image26.png" /></p>
+<p>疑问？<code>end_lane</code>的计算</p>
+<div class="language-sv highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">      </span><span class="c1">// EW64, default</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">        </span><span class="n">start_lane</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pe_req_d</span><span class="p">.</span><span class="n">vstart</span><span class="p">[$</span><span class="n">clog2</span><span class="p">(</span><span class="n">NrLanes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">];</span><span class="c1">//vstart % NrLanes</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">        </span><span class="n">end_lane</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">pe_req_d</span><span class="p">.</span><span class="n">vl</span><span class="p">[$</span><span class="n">clog2</span><span class="p">(</span><span class="n">NrLanes</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="c1">//(vl % NrLanes) - 1 不用加start_lane吗？</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="k">end</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="k">endcase</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title"> VRF</p>
+<p><a href="https://10x-engineers.github.io/ara/lane.html">https://10x-engineers.github.io/ara/lane.html</a></p>
+</div>
 <h2 id="_4">指令调度<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <h2 id="_5">指令队列和计数器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 
