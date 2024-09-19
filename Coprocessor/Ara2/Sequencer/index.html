@@ -876,15 +876,6 @@
         <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
-      标量移动
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
       指令队列和计数器
     </span>
   </a>
@@ -2379,8 +2370,8 @@
 <li>发射 管理冒险检测和指令准备过程，确保了向量指令在向量处理器中的正确和高效执行。通过检查冒险位和指令的特定条件，它决定了哪些指令可以安全地发布给执行单元，哪些需要等待，以及如何更新执行状态表和读写列表</li>
 <li>更新全局冒险表</li>
 </ul>
-<h2 id="_5">标量移动<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<h2 id="_6">指令队列和计数器<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_5">指令队列和计数器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>负责处理指令的接收、排队和发射，确保功能单元在执行过程中不会因为资源的竞争而发生冲突。它设计了多个状态寄存器和计数器来跟踪各个 VFU 的指令进度，同时引入了优先级和“黄金票”机制来提高指令处理的灵活性和效率。整体目标是实现高效的指令调度，以应对并行处理的复杂性。</p>
 
 
 
