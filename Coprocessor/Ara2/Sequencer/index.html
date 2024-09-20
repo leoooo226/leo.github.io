@@ -840,7 +840,7 @@
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
-      运行中向量指令
+      关键定义
     </span>
   </a>
   
@@ -849,7 +849,7 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      全局冲突表
+      运行中向量指令
     </span>
   </a>
   
@@ -858,7 +858,7 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      开始和结束通道
+      全局冲突表
     </span>
   </a>
   
@@ -867,7 +867,7 @@
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
-      指令调度
+      开始和结束通道
     </span>
   </a>
   
@@ -875,6 +875,15 @@
       
         <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      指令调度
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       指令队列和计数器
     </span>
@@ -2140,7 +2149,26 @@
 
 <h1 id="sequencer">Sequencer<a class="headerlink" href="#sequencer" title="Permanent link">&para;</a></h1>
 <p><strong>主要功能是管理和控制并行向量计算中的指令执行顺序和依赖关系，确保与Ara计算架构中各功能单元的接口协调工作。它通过记录和分析指令状态、冲突情况，优化计算资源的分配和提高执行效率。同时，模块实现了对未完成指令的等待与处理机制，以确保在复杂数据路径中的正确性。</strong></p>
-<h2 id="_1">运行中向量指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_1">关键定义<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>VFU：向量运算单元</p>
+<div class="language-text highlight"><pre><span></span><code>```sv
+</code></pre></div>
+<p>// This function determines the VFU responsible for handling this operation.
+  function automatic vfu_e vfu(ara_op_e op = VADD);
+    unique case (op) inside
+      [VADD:VWREDSUM]      : vfu = VFU_Alu;
+      [VMUL:VFWREDOSUM]    : vfu = VFU_MFpu;
+      [VMFEQ:VMXNOR]       : vfu = VFU_MaskUnit;
+      [VLE:VLXE]           : vfu = VFU_LoadUnit;
+      [VSE:VSXE]           : vfu = VFU_StoreUnit;
+      [VSLIDEUP:VSLIDEDOWN]: vfu = VFU_SlideUnit;
+      [VMVXS:VFMVFS]       : vfu = VFU_None;
+      default              : vfu = VFU_None;
+    endcase
+  endfunction : vfu
+    ```</p>
+<p>PE：Ara has NrLanes + 3 processing elements: each one of the lanes, the vector load unit, the vector store unit, the slide unit, and the mask unit</p>
+<h2 id="_2">运行中向量指令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
 <li>运行中的向量指令管理：维护一个矩阵pe_vinsn_running_d和pe_vinsn_running_q，表示每个处理单元上运行的向量指令。</li>
 </ul>
@@ -2195,7 +2223,7 @@
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w"> </span><span class="c1">//如果任何一个车道（除了车道0）还在执行该操作，则结果为1。</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w"> </span><span class="c1">//只有当车道0已完成该操作且至少有一个其他车道还在执行时，结果才为1，表示车道间出现了不同步。</span>
 </span></code></pre></div>
-<h2 id="_2">全局冲突表<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">全局冲突表<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>如果Insn N在某一列（假设为Insn M列）的值为1，则意味着Insn N依赖于Insn M的结果。换句话说，Insn N不能在Insn M执行完成并得到结果之前开始执行。</p>
 <p>这里用到了SV的合并数组，既可以被当做数组也可以当成单独数据，<code>logic[NrVInsn-1:0][NrVInsn-1:0] global_hazard_table_d;</code>。</p>
 <div class="language-sv highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">  </span><span class="c1">// Global table of the dependencies between instructions</span>
@@ -2217,7 +2245,7 @@
 </span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span><span class="c1">//</span>
 </span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span><span class="c1">// This information is forwarded to the operand requesters of each lane</span>
 </span></code></pre></div>
-<h2 id="_3">开始和结束通道<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">开始和结束通道<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>根据向量指令的起始位置和长度，以及向量元素宽度，计算出起始车道和结束车道的索引。</p>
 <p>计算单次获取的元素数量：根据向量元素宽度（vsew）和车道数量（NrLanes）计算出单次获取的元素数量。</p>
 <p>计算起始车道索引：通过vstart的余数确定起始车道的索引。</p>
@@ -2275,7 +2303,7 @@
 <p class="admonition-title"> VRF</p>
 <p><a href="https://10x-engineers.github.io/ara/lane.html">https://10x-engineers.github.io/ara/lane.html</a></p>
 </div>
-<h2 id="_4">指令调度<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="_5">指令调度<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
 <li>返回每个指令对应的VFU<code>target_vfus</code></li>
 </ul>
@@ -2370,7 +2398,7 @@
 <li>发射 管理冒险检测和指令准备过程，确保了向量指令在向量处理器中的正确和高效执行。通过检查冒险位和指令的特定条件，它决定了哪些指令可以安全地发布给执行单元，哪些需要等待，以及如何更新执行状态表和读写列表</li>
 <li>更新全局冒险表</li>
 </ul>
-<h2 id="_5">指令队列和计数器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<h2 id="_6">指令队列和计数器<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>负责处理指令的接收、排队和发射，确保功能单元在执行过程中不会因为资源的竞争而发生冲突。它设计了多个状态寄存器和计数器来跟踪各个 VFU 的指令进度，同时引入了优先级和“黄金票”机制来提高指令处理的灵活性和效率。整体目标是实现高效的指令调度，以应对并行处理的复杂性。</p>
 
 
