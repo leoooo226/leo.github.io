@@ -2242,8 +2242,8 @@
 <p><img alt="tp" src="../reg.png" /></p>
 <hr />
 <h2 id="matrix-isa">Matrix ISA<a class="headerlink" href="#matrix-isa" title="Permanent link">&para;</a></h2>
+<p>矩阵乘法指令从ms1和ms2指定的矩阵寄存器中提取矩阵A（sizeMxsizeK）和矩阵B（sizeNxsizeK），将AMK*（BNK）T的乘法结果加到从md寄存器获取的矩阵C（sizeMxsizeN）中，输出将覆盖累积寄存器。</p>
 <p>ISA规范提供了不同的指令来支持浮点矩阵和整数矩阵的乘法和操作。硬件设计具有所支持的数据类型的灵活性。</p>
-<p>矩阵乘法指令从ms1和ms2指定的矩阵寄存器中提取矩阵A（sizeMxsizeK）和矩阵B（sizeNxsizeK），将AMK*（BNK）T）的乘法结果加到从md寄存器获取的矩阵C（sizeMxsizeN）中，输出将覆盖累积寄存器。</p>
 <ul>
 <li>Float Matrix Multiplication(non-widen)
 <img alt="tp" src="../FM_e1.jpeg" />
