@@ -2242,24 +2242,26 @@
 <p><img alt="tp" src="../reg.png" /></p>
 <hr />
 <h2 id="matrix-isa">Matrix ISA<a class="headerlink" href="#matrix-isa" title="Permanent link">&para;</a></h2>
+<h3 id="matrix-multiplication-instructions">Matrix Multiplication Instructions<a class="headerlink" href="#matrix-multiplication-instructions" title="Permanent link">&para;</a></h3>
 <p>矩阵乘法指令从ms1和ms2指定的矩阵寄存器中提取矩阵A（sizeMxsizeK）和矩阵B（sizeNxsizeK），将AMK*（BNK）T的乘法结果加到从md寄存器获取的矩阵C（sizeMxsizeN）中，输出将覆盖累积寄存器。</p>
 <p>ISA规范提供了不同的指令来支持浮点矩阵和整数矩阵的乘法和操作。硬件设计具有所支持的数据类型的灵活性。</p>
 <ul>
 <li>Float Matrix Multiplication(non-widen)</li>
 </ul>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="c1">#float matrix multiplication, md = md + ms1*ms2</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">fmmacc.h md, ms2, ms1</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">fmmacc.s md, ms2, ms1</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">fmmacc.d md, ms2, ms1</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">fmmacc.h md, ms2, ms1</span><span class="w"> </span><span class="c1"># fmmacc.h: fp16/bf16 floating-point ,illegal if bit[3] of xmisa register is 0</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">fmmacc.s md, ms2, ms1</span><span class="w"> </span><span class="c1"># fmmacc.s: fp32 floating-point, illegal if bit[4] of xmisa register is 0</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">fmmacc.d md, ms2, ms1</span><span class="w"> </span><span class="c1"># fmmacc.d: fp64 floating-point, illegal if bit[5] of xmisa register is 0</span>
 </span></code></pre></div>
 <p><img alt="tp" src="../FM_e1.jpeg" />
 <img alt="tp" src="../FM_e2.jpeg" />
-<img alt="tp" src="../FM_e3.jpeg" />
-- Float Matrix Multiplication(widen)
-- Integer Matrix Multiplication (4x widen)</p>
-<h3 id="matrix-multiplication-instructions">Matrix Multiplication Instructions<a class="headerlink" href="#matrix-multiplication-instructions" title="Permanent link">&para;</a></h3>
-<p><img alt="tp" src="../MLS.jpeg" /></p>
+<img alt="tp" src="../FM_e3.jpeg" /></p>
+<ul>
+<li>Float Matrix Multiplication(widen)</li>
+<li>Integer Matrix Multiplication (4x widen)</li>
+</ul>
 <h3 id="matrix-loadstore-instructions">Matrix Load/Store Instructions<a class="headerlink" href="#matrix-loadstore-instructions" title="Permanent link">&para;</a></h3>
+<p><img alt="tp" src="../MLS.jpeg" /></p>
 <h3 id="configuration-instructions">Configuration Instructions<a class="headerlink" href="#configuration-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
