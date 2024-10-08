@@ -687,6 +687,66 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Matrix ISA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matrix-multiplication-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Matrix Multiplication Instructions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-loadstore-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Matrix Load/Store Instructions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration Instructions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointwise-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pointwise Instructions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#float-pointwise-arithmetic-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Float Pointwise Arithmetic Instructions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other Instructions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2136,23 +2196,58 @@
 </ul>
 <hr />
 <h2 id="matrix-register">Matrix Register<a class="headerlink" href="#matrix-register" title="Permanent link">&para;</a></h2>
+<p>矩阵扩展增加了8个二维矩阵寄存器和6个csr寄存器。</p>
+<table>
+<thead>
+<tr>
+<th>Privilege</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URW</td>
+<td>xmrstart</td>
+<td>矩阵开始行位置</td>
+</tr>
+<tr>
+<td>URW</td>
+<td>xmcsr</td>
+<td>矩阵控制和状态寄存器</td>
+</tr>
+<tr>
+<td>URW</td>
+<td>xmsize</td>
+<td>矩阵大小配置，矩阵大小</td>
+</tr>
+<tr>
+<td>URO</td>
+<td>xmlenb</td>
+<td>矩阵寄存器大小，mrows*xrlenb</td>
+</tr>
+<tr>
+<td>URO</td>
+<td>xrlenb</td>
+<td>RLEN（字节）</td>
+</tr>
+<tr>
+<td>URO</td>
+<td>xmisa</td>
+<td>矩阵指令子集</td>
+</tr>
+</tbody>
+</table>
 <p>8个二维矩阵寄存器，分别为M0、M1、M2、M3、M4、M5、M6和M7。RLEN以位单位表示每个寄存器行的长度。它在任何实现中都是一个常数值，可用的RLEN选项为128、256或512或更多。矩阵寄存器行数是RLEN除以32，结果是4、8或16或更多。因此，每个矩阵寄存器由[M x K] MSEW元素组成，其中M计算为RLEN除以32，K计算为RLEN除以MSEW，MSEW表示元素大小。</p>
 <p><img alt="tp" src="../reg.png" /></p>
 <hr />
 <h2 id="matrix-isa">Matrix ISA<a class="headerlink" href="#matrix-isa" title="Permanent link">&para;</a></h2>
-<ul>
-<li>MATRIX_MULT_I4I32：对于矩阵乘法指令，源寄存器中的元素为int4，目标寄存器中为int 32；</li>
-<li>MATRIX_MULT_I8I32：对于矩阵乘法指令，源寄存器中的元素为int8，目标寄存器中为int 32；</li>
-<li>MATRIX_MULT_I16I64：对于矩阵乘法指令，源寄存器中的元素为int16，目标寄存器中的元素为int 64；</li>
-<li>MATRIX_MULT_F16F16：对于矩阵乘法指令，源和目标寄存器中的元素为fp16/bf16；</li>
-<li>MATRIX_MULT_F32F32：对于矩阵乘法指令，源寄存器和目标寄存器中的元素为fp32；</li>
-<li>MATRIX_MULT_F64F64：对于矩阵乘法指令，源寄存器和目标寄存器中的元素为fp64；</li>
-<li>MATRIX_MULT_F16F32：对于加宽矩阵乘法指令，源寄存器中的元素是fp16/bf16，目标寄存器中的元素是fp16/bf16；</li>
-<li>MATRIX_MULT_F32F64：对于加宽矩阵乘法指令，源寄存器中的元素是目标寄存器中的fp32元素是fp64；</li>
-<li>MATRIX_PW_INT：对于整数点态指令，不能单独设置，仅在相应的整数乘法指令下工作(参见第2节。4)；</li>
-<li>MATRIX_PW_FP：对于浮点式指令，不能单独设置，仅在启用相应的乘法指令时工作（详情请参考2.4节）。</li>
-<li>MATRIX_FLOAT_INT_CVT：对于浮点整数转换指令，不能单独设置，只有在使用相应的乘法指令启用时才能工作（详情请参见第2.4节）。</li>
-</ul>
+<h3 id="matrix-multiplication-instructions">Matrix Multiplication Instructions<a class="headerlink" href="#matrix-multiplication-instructions" title="Permanent link">&para;</a></h3>
+<h3 id="matrix-loadstore-instructions">Matrix Load/Store Instructions<a class="headerlink" href="#matrix-loadstore-instructions" title="Permanent link">&para;</a></h3>
+<h3 id="configuration-instructions">Configuration Instructions<a class="headerlink" href="#configuration-instructions" title="Permanent link">&para;</a></h3>
+<h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
+<h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
+<h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
 <div class="admonition note">
 <p class="admonition-title"> XuantieSpec</p>
 <p><a href="https://github.com/XUANTIE-RV/riscv-matrix-extension-spec">https://github.com/XUANTIE-RV/riscv-matrix-extension-spec</a></p>
