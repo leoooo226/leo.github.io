@@ -2145,6 +2145,7 @@
 </ul>
 <hr />
 <h2 id="matrix-register">Matrix Register<a class="headerlink" href="#matrix-register" title="Permanent link">&para;</a></h2>
+<p>8个二维矩阵寄存器，分别为M0、M1、M2、M3、M4、M5、M6和M7。RLEN以位单位表示每个寄存器行的长度。它在任何实现中都是一个常数值，可用的RLEN选项为128、256或512或更多。矩阵寄存器行数是RLEN除以32，结果是4、8或16或更多。因此，每个矩阵寄存器由[M x K] MSEW元素组成，其中M计算为RLEN除以32，K计算为RLEN除以MSEW，MSEW表示元素大小。</p>
 <hr />
 <h2 id="matrix-size">Matrix Size<a class="headerlink" href="#matrix-size" title="Permanent link">&para;</a></h2>
 <hr />
