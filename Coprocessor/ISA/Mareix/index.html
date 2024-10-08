@@ -681,15 +681,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#matrix-size" class="md-nav__link">
-    <span class="md-ellipsis">
-      Matrix Size
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#matrix-isa" class="md-nav__link">
     <span class="md-ellipsis">
       Matrix ISA
@@ -2146,10 +2137,22 @@
 <hr />
 <h2 id="matrix-register">Matrix Register<a class="headerlink" href="#matrix-register" title="Permanent link">&para;</a></h2>
 <p>8个二维矩阵寄存器，分别为M0、M1、M2、M3、M4、M5、M6和M7。RLEN以位单位表示每个寄存器行的长度。它在任何实现中都是一个常数值，可用的RLEN选项为128、256或512或更多。矩阵寄存器行数是RLEN除以32，结果是4、8或16或更多。因此，每个矩阵寄存器由[M x K] MSEW元素组成，其中M计算为RLEN除以32，K计算为RLEN除以MSEW，MSEW表示元素大小。</p>
-<hr />
-<h2 id="matrix-size">Matrix Size<a class="headerlink" href="#matrix-size" title="Permanent link">&para;</a></h2>
+<p><img alt="tp" src="../reg.png" /></p>
 <hr />
 <h2 id="matrix-isa">Matrix ISA<a class="headerlink" href="#matrix-isa" title="Permanent link">&para;</a></h2>
+<ul>
+<li>MATRIX_MULT_I4I32：对于矩阵乘法指令，源寄存器中的元素为int4，目标寄存器中为int 32；</li>
+<li>MATRIX_MULT_I8I32：对于矩阵乘法指令，源寄存器中的元素为int8，目标寄存器中为int 32；</li>
+<li>MATRIX_MULT_I16I64：对于矩阵乘法指令，源寄存器中的元素为int16，目标寄存器中的元素为int 64；</li>
+<li>MATRIX_MULT_F16F16：对于矩阵乘法指令，源和目标寄存器中的元素为fp16/bf16；</li>
+<li>MATRIX_MULT_F32F32：对于矩阵乘法指令，源寄存器和目标寄存器中的元素为fp32；</li>
+<li>MATRIX_MULT_F64F64：对于矩阵乘法指令，源寄存器和目标寄存器中的元素为fp64；</li>
+<li>MATRIX_MULT_F16F32：对于加宽矩阵乘法指令，源寄存器中的元素是fp16/bf16，目标寄存器中的元素是fp16/bf16；</li>
+<li>MATRIX_MULT_F32F64：对于加宽矩阵乘法指令，源寄存器中的元素是目标寄存器中的fp32元素是fp64；</li>
+<li>MATRIX_PW_INT：对于整数点态指令，不能单独设置，仅在相应的整数乘法指令下工作(参见第2节。4)；</li>
+<li>MATRIX_PW_FP：对于浮点式指令，不能单独设置，仅在启用相应的乘法指令时工作（详情请参考2.4节）。</li>
+<li>MATRIX_FLOAT_INT_CVT：对于浮点整数转换指令，不能单独设置，只有在使用相应的乘法指令启用时才能工作（详情请参见第2.4节）。</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title"> XuantieSpec</p>
 <p><a href="https://github.com/XUANTIE-RV/riscv-matrix-extension-spec">https://github.com/XUANTIE-RV/riscv-matrix-extension-spec</a></p>
