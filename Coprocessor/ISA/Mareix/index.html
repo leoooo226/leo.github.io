@@ -2310,6 +2310,8 @@
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#whole matrix store</span>
 </span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mst&lt;1/2/4/8&gt;m.&lt;b/h/w/d&gt; ms3, (rs1)</span>
 </span></code></pre></div>
+<p>矩阵形状（MxK）是基于矩阵大小的配置寄存器，M由sizeM给出，K由sizeK给出（以字节为单位）。M=sizeM⇐RLEN/32，K=sizeK/元素大小为字节，sizeK⇐RLEN/8。如果sizeM &lt; RLEN/32或sizeK &lt; RLEN/8，则将具有行索引&gt; sizeM或列索引&gt;（sizeK/元素大小为字节）的矩阵寄存器数据设置为零进行加载，并且不写入内存进行存储。</p>
+<p>提供了2个版本：(1)正常(2)整个寄存器加载/存储。</p>
 <h3 id="configuration-instructions">Configuration Instructions<a class="headerlink" href="#configuration-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
