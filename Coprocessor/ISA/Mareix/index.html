@@ -2391,22 +2391,19 @@
 <h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
 <p>对于整数矩阵逐点运算的指令格式，包括矩阵-矩阵和矩阵-向量的运算，以及32位和64位整数指令的可选支持。以下是对关键信息的详细解释：</p>
 <ul>
-<li>32位指令的合法性：</li>
+<li>
+<p>32位指令：当xmisa寄存器的bit[28]和bit[1]都被设置为1时，32位指令是合法的。当xmisa寄存器的bit[28]和bit[0]都被设置为1时，32位指令也是合法的。在其他所有情况下，32位指令是非法的。</p>
+</li>
+<li>
+<p>64位指令：当xmisa寄存器的bit[15]和bit[2]都被设置为1时，64位指令是合法的。在其他所有情况下，64位指令是非法的。</p>
+</li>
+<li>
+<p>矩阵操作数的形状：矩阵的形状由M/K给出，其中M和K的值通过sizeM和sizeK计算得出。</p>
+</li>
 </ul>
-<p>当xmisa寄存器的bit[28]和bit[1]都被设置为1时，32位指令是合法的。</p>
-<p>当xmisa寄存器的bit[28]和bit[0]都被设置为1时，32位指令也是合法的。</p>
-<p>在其他所有情况下，32位指令是非法的。</p>
-<ul>
-<li>64位指令的合法性：</li>
-</ul>
-<p>当xmisa寄存器的bit[15]和bit[2]都被设置为1时，64位指令是合法的。</p>
-<p>在其他所有情况下，64位指令是非法的。</p>
-<ul>
-<li>矩阵操作数的形状：</li>
-</ul>
-<p>矩阵的形状由M/K给出，其中M和K的值通过sizeM和sizeK计算得出，这两个值又由RLEN（可能是指某种寄存器长度或相关参数）和元素大小（以字节为单位）决定。</p>
 <p>sizeM⇐RLEN/32。</p>
 <p>sizeK⇐RLEN/8。</p>
+<p>对于矩阵-矩阵指令，这两个源都是矩阵。对于矩阵向量指令，src2是矩阵，src1是一行矩阵。以第0行为例，向量操作数操作在每一行矩阵操作数上，作为md[i，j] = ms2[i，j] op ms1[0，j]。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="c1">#matrix-matrix add</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">madd.&lt;s/d&gt;.mm md, ms2, ms1</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector add</span>
