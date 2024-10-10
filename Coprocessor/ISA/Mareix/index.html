@@ -2407,6 +2407,39 @@
 <p>矩阵的形状由M/K给出，其中M和K的值通过sizeM和sizeK计算得出，这两个值又由RLEN（可能是指某种寄存器长度或相关参数）和元素大小（以字节为单位）决定。</p>
 <p>sizeM⇐RLEN/32。</p>
 <p>sizeK⇐RLEN/8。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="c1">#matrix-matrix add</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">madd.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector add</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">madd.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix sub</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msub.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector sub</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msub.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix mul</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmul.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector mul</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmul.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix mulh</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmulh.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector mulh</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmulh.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix max</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmax.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector max</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmax.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix unsigned max</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mumax.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector unsigned max</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mumax.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix min</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmin.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector min</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mmin.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix unsigned min</span>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mumin.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector unsigned min</span>
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mumin.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span></code></pre></div>
 <h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
 <div class="admonition note">
