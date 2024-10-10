@@ -2310,9 +2310,53 @@
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#whole matrix store</span>
 </span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mst&lt;1/2/4/8&gt;m.&lt;b/h/w/d&gt; ms3, (rs1)</span>
 </span></code></pre></div>
-<p>矩阵形状（MxK）是基于矩阵大小的配置寄存器，M由sizeM给出，K由sizeK给出（以字节为单位）。M=sizeM⇐RLEN/32，K=sizeK/元素大小为字节，sizeK⇐RLEN/8。如果sizeM &lt; RLEN/32或sizeK &lt; RLEN/8，则将具有行索引&gt; sizeM或列索引&gt;（sizeK/元素大小为字节）的矩阵寄存器数据设置为零进行加载，并且不写入内存进行存储。</p>
+<p>矩阵形状（MxK）是基于矩阵大小的配置寄存器，M由sizeM给出，K由sizeK给出（以字节为单位）。M=sizeM⇐RLEN/32，K=sizeK/元素大小，sizeK⇐RLEN/8。如果sizeM &lt; RLEN/32或sizeK &lt; RLEN/8，则将具有行索引&gt; sizeM或列索引&gt;（sizeK/元素大小为字节）的矩阵寄存器数据设置为零进行加载，并且不写入内存进行存储。</p>
 <p>提供了2个版本：(1)正常(2)整个寄存器加载/存储。</p>
 <h3 id="configuration-instructions">Configuration Instructions<a class="headerlink" href="#configuration-instructions" title="Permanent link">&para;</a></h3>
+<p>矩阵配置指令用于配置矩阵中的某个字段或者整个矩阵大小配置寄存器。如果某个字段没有被配置指令改变，它将保持原有值。指令中的索引字段指示了要更新的字段，包括sizeM、sizeK、sizeN或者整个配置寄存器，如下表所示。更新后的矩阵大小会被返回到rd。</p>
+<table>
+<thead>
+<tr>
+<th>索引</th>
+<th>指令</th>
+<th>对矩阵大小的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>000</td>
+<td>mcfgk(i)</td>
+<td>msize.half1 = x[rs1]（将rs1寄存器中的值赋给msize的半字1字段）</td>
+</tr>
+<tr>
+<td>001</td>
+<td>mcfgm(i)</td>
+<td>msize.byte0 = x[rs1]（将rs1寄存器中的值赋给msize的字节0字段）</td>
+</tr>
+<tr>
+<td>010</td>
+<td>mcfgn(i)</td>
+<td>msize.byte1 = x[rs1]（将rs1寄存器中的值赋给msize的字节1字段）</td>
+</tr>
+<tr>
+<td>111</td>
+<td>mcfg</td>
+<td>msize.byte0 = x[rs1].byte0，msize.byte1 = x[rs1].byte1，msize.half1 = x[rs1].half1</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>-</td>
+<td>保留（未定义或不可用）</td>
+</tr>
+</tbody>
+</table>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="c1">#imm type</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg&lt;m/n/k&gt;i uimm7</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#register type</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg&lt;m/n/k&gt; rs1</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#entire register</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg rs1</span>
+</span></code></pre></div>
 <h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
