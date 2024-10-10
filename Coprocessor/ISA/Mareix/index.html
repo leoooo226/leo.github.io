@@ -2350,11 +2350,42 @@
 </tr>
 </tbody>
 </table>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="c1">#imm type</span>
+<table>
+<thead>
+<tr>
+<th>bits</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XLEN-1:XLEN-32</td>
+<td>0</td>
+<td>reserved if non-zero</td>
+</tr>
+<tr>
+<td>31:16</td>
+<td>sizeK[15:0]</td>
+<td>column of Matrix A or Matrix B, in bytes</td>
+</tr>
+<tr>
+<td>15:8</td>
+<td>sizeN[7:0]</td>
+<td>row of Matrix B</td>
+</tr>
+<tr>
+<td>7:0</td>
+<td>sizeM[7:0]</td>
+<td>row of Matrix A</td>
+</tr>
+</tbody>
+</table>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="c1"># imm type</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg&lt;m/n/k&gt;i uimm7</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#register type</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain"># register type</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg&lt;m/n/k&gt; rs1</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#entire register</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain"># entire register</span>
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg rs1</span>
 </span></code></pre></div>
 <h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
