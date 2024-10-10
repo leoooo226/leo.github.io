@@ -2389,6 +2389,24 @@
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg rs1</span>
 </span></code></pre></div>
 <h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
+<p>对于整数矩阵逐点运算的指令格式，包括矩阵-矩阵和矩阵-向量的运算，以及32位和64位整数指令的可选支持。以下是对关键信息的详细解释：</p>
+<ul>
+<li>32位指令的合法性：</li>
+</ul>
+<p>当xmisa寄存器的bit[28]和bit[1]都被设置为1时，32位指令是合法的。</p>
+<p>当xmisa寄存器的bit[28]和bit[0]都被设置为1时，32位指令也是合法的。</p>
+<p>在其他所有情况下，32位指令是非法的。</p>
+<ul>
+<li>64位指令的合法性：</li>
+</ul>
+<p>当xmisa寄存器的bit[15]和bit[2]都被设置为1时，64位指令是合法的。</p>
+<p>在其他所有情况下，64位指令是非法的。</p>
+<ul>
+<li>矩阵操作数的形状：</li>
+</ul>
+<p>矩阵的形状由M/K给出，其中M和K的值通过sizeM和sizeK计算得出，这两个值又由RLEN（可能是指某种寄存器长度或相关参数）和元素大小（以字节为单位）决定。</p>
+<p>sizeM⇐RLEN/32。</p>
+<p>sizeK⇐RLEN/8。</p>
 <h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
 <div class="admonition note">
