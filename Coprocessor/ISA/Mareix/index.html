@@ -2545,6 +2545,8 @@
 </span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwmul.&lt;h/s&gt;.mv.i md, ms2, ms1[uimm3]</span><span class="w"> </span>
 </span></code></pre></div>
 <h4 id="_4">浮点整数转换指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<p>从整数到浮点数的转换支持非加宽转换/双加宽转换。整数支持有符号整数和无符号整数。对于双加宽转换，由md和md+1指定的目标矩阵使用两个矩阵寄存器。保留了指定奇数md的指令。</p>
+<p>从浮点转换到整数的转换支持非窄转换/半窄转换。整数支持有符号整数和无符号整数。对于半窄转换，由ms和ms+1指定的源矩阵使用两个矩阵寄存器。保留指定奇数ms的指令。</p>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
 <div class="admonition note">
 <p class="admonition-title"> XuantieSpec</p>
