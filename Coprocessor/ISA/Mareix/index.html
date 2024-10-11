@@ -724,6 +724,25 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Pointwise Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      整数算数指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      整数移位指令
+    </span>
+  </a>
+  
 </li>
         
           <li class="md-nav__item">
@@ -732,6 +751,11 @@
       Float Pointwise Arithmetic Instructions
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -2402,11 +2426,12 @@
 </li>
 </ul>
 <p>对于矩阵-矩阵指令，这两个源都是矩阵。对于矩阵-向量指令，src2是矩阵，src1是一行矩阵。以第0行为例，向量操作数操作在每一行矩阵操作数上，作为md[i，j] = ms2[i，j] op ms1[0，j]。</p>
+<h4 id="_1">整数算数指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
 <ul>
-<li>madd：执行 src1 和 src2 的加法运算。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行（如 row0）进行逐元素加法。</li>
-<li>msub：从 src1 中减去 src2。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行进行逐元素减法。</li>
-<li>mmul：执行 src1 和 src2 的乘法运算。在矩阵-矩阵运算中，它计算两个矩阵的乘积；在矩阵-向量运算中，它计算矩阵与向量的乘积。mmul 指令将乘积的低XLEN 位写入目标寄存器 rd。mmulh 版本则将乘积的高 XLEN 位写入目标寄存器。</li>
-<li>mmax 和 mmin：分别执行有符号和无符号比较。mmax 指令返回两个操作数中的最大值，而 mmin 指令返回最小值。</li>
+<li><code>madd</code>：执行 src1 和 src2 的加法运算。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行（如 row0）进行逐元素加法。</li>
+<li><code>msub</code>：从 src1 中减去 src2。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行进行逐元素减法。</li>
+<li><code>mmul</code>：执行 src1 和 src2 的乘法运算。在矩阵-矩阵运算中，它计算两个矩阵的乘积；在矩阵-向量运算中，它计算矩阵与向量的乘积。mmul 指令将乘积的低XLEN 位写入目标寄存器 rd。mmulh 版本则将乘积的高 XLEN 位写入目标寄存器。</li>
+<li><code>mmax</code> 和<code>mmin</code>：分别执行有符号和无符号比较。mmax 指令返回两个操作数中的最大值，而 mmin 指令返回最小值。</li>
 </ul>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="c1">#matrix-matrix add</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">madd.&lt;s/d&gt;.mm md, ms2, ms1</span>
@@ -2441,6 +2466,16 @@
 </span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector unsigned min</span>
 </span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mumin.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
 </span></code></pre></div>
+<h4 id="_2">整数移位指令<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
+<p>矩阵移位指令（如 mn4clip/msll/msrl/msra）和 mn4clipu 指令用于处理数据的打包、移位等操作</p>
+<ul>
+<li>
+<p><code>mn4clip</code> 和<code>mn4clipu</code> 指令：这两个指令用于将定点数值打包到一个宽度为原数据宽度四分之一的目标中。支持的功能包括四舍五入、缩放和饱和。缩放移位量来自于一个矩阵（由 ms1 指定）或一个向量（ms1[uimm3]），其中 uimm3 是一个无符号立即数索引，用于从 ms1 中选择特定的向量元素。对于 64 位源数据宽度，使用低 6 位；对于 32 位源数据宽度，使用低 5 位。更高的位被忽略。如果目标值溢出，则设置饱和标志 xmsat。对于 clip 指令，四舍五入在饱和之前进行。</p>
+</li>
+<li>
+<p><code>msll</code>、<code>msrl</code> 和 <code>msra</code> 指令：这些指令分别执行逻辑左移（Logical Shift Left）、逻辑右移（Logical Shift Right）和算术右移（Arithmetic Shift Right）。源数据位于 ms2 中。移位量由矩阵/向量数据提供，具体由 ms1/ms1[uimm3] 指定。矩阵移位指令支持四舍五入，四舍五入模式由 xmxrm 控制和状态寄存器（CSR）指定。</p>
+</li>
+</ul>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="w">    </span><span class="c1">#matrix-matrix logical left shift</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msll.&lt;s/d&gt;.mm md, ms2, ms1</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector logical left shift</span>
@@ -2462,7 +2497,7 @@
 </span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector clip,uimm3</span>
 </span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mn4clipu.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
 </span></code></pre></div>
-<h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
+<h4 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h4>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
 <div class="admonition note">
 <p class="admonition-title"> XuantieSpec</p>
