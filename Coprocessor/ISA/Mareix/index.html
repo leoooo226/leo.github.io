@@ -2598,7 +2598,25 @@
 </span></code></pre></div>
 <h4 id="_5">浮点整数转换指令<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
 <p>从整数到浮点数的转换支持非加宽转换/双加宽转换。整数支持有符号整数和无符号整数。对于双加宽转换，由md和md+1指定的目标矩阵使用两个矩阵寄存器。保留了指定奇数md的指令。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="w">    </span><span class="c1">#matrix-matrix unsigned integer floating point convert(uint32 to fp32)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mufcvt.&lt;w&gt;.mm md, ms2</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix signed integer floating point widen convert(uint8 to fp16)</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mufwcvt.&lt;b&gt;.mm md, ms2</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix signed integer floating point convert(sint32 to fp32)</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msfcvt.&lt;w&gt;.mm md, ms2</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix signed integer floating point widen convert(sint8 to fp16)</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msfwcvt.&lt;b&gt;.mm md, ms2</span>
+</span></code></pre></div>
 <p>从浮点转换到整数的转换支持非窄转换/半窄转换。整数支持有符号整数和无符号整数。对于半窄转换，由ms和ms+1指定的源矩阵使用两个矩阵寄存器。保留指定奇数ms的指令。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="w">    </span><span class="c1">#matrix-matrix floating point unsigned integer convert(fp32 to uint32)</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfucvt.&lt;s&gt;.mm md, ms2</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix floating point unsigned integer narrow convert(fp16 to uint8)</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfuncvt.&lt;h&gt;.mm md, ms2</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix floating point signed integer convert(fp32 to sint32)</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfscvt.&lt;s&gt;.mm md, ms2</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix floating point signed integer narrow convert(fp16 to sint8)</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfsncvt.&lt;h&gt;.mm md, ms2</span>
+</span></code></pre></div>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
 <h4 id="_6">置零指令<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
 <h4 id="_7">重置指令<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
