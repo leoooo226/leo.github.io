@@ -2243,7 +2243,7 @@
 <hr />
 <h2 id="matrix-isa">Matrix ISA<a class="headerlink" href="#matrix-isa" title="Permanent link">&para;</a></h2>
 <h3 id="matrix-multiplication-instructions">Matrix Multiplication Instructions<a class="headerlink" href="#matrix-multiplication-instructions" title="Permanent link">&para;</a></h3>
-<p>矩阵乘法指令从ms1和ms2指定的矩阵寄存器中提取矩阵A（sizeMxsizeK）和矩阵B（sizeNxsizeK），将AMK*（BNK）T的乘法结果加到从md寄存器获取的矩阵C（sizeMxsizeN）中，输出将覆盖累积寄存器。</p>
+<p>矩阵乘累加指令从ms1和ms2指定的矩阵寄存器中提取矩阵A（sizeMxsizeK）和矩阵B（sizeNxsizeK），将AMK*（BNK）T的乘法结果加到从md寄存器获取的矩阵C（sizeMxsizeN）中，输出将覆盖累积寄存器。</p>
 <ul>
 <li>sizeK ⇐ xrlenb</li>
 <li>sizeM ⇐ RLEN/32</li>
@@ -2398,11 +2398,9 @@
 <p>64位指令：当xmisa寄存器的bit[15]和bit[2]都被设置为1时，64位指令是合法的。在其他所有情况下，64位指令是非法的。</p>
 </li>
 <li>
-<p>矩阵操作数的形状：矩阵的形状由M/K给出，其中M和K的值通过sizeM和sizeK计算得出。</p>
+<p>矩阵操作数的形状：矩阵的形状由M/K给出，其中M和K的值通过sizeM和sizeK计算得出。<code>sizeM⇐RLEN/32</code> <code>sizeK⇐RLEN/8</code>。</p>
 </li>
 </ul>
-<p>sizeM⇐RLEN/32。</p>
-<p>sizeK⇐RLEN/8。</p>
 <p>对于矩阵-矩阵指令，这两个源都是矩阵。对于矩阵-向量指令，src2是矩阵，src1是一行矩阵。以第0行为例，向量操作数操作在每一行矩阵操作数上，作为md[i，j] = ms2[i，j] op ms1[0，j]。</p>
 <ul>
 <li>madd：执行 src1 和 src2 的加法运算。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行（如 row0）进行逐元素加法。</li>
@@ -2442,6 +2440,27 @@
 </span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mumin.&lt;s/d&gt;.mm md, ms2, ms1</span>
 </span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector unsigned min</span>
 </span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mumin.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span></code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="w">    </span><span class="c1">#matrix-matrix logical left shift</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msll.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector logical left shift</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msll.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix logic right shift</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msrl.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector logic right shift</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msrl.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix arithmetic right shift</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msra.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector arithmetic right shift</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">msra.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix signed clip</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mn4clip.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector clip,uimm3</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mn4clip.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix unsigned clip</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mn4clipu.&lt;s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector clip,uimm3</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mn4clipu.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
 </span></code></pre></div>
 <h3 id="float-pointwise-arithmetic-instructions">Float Pointwise Arithmetic Instructions<a class="headerlink" href="#float-pointwise-arithmetic-instructions" title="Permanent link">&para;</a></h3>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
