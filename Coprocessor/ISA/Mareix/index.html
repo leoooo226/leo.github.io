@@ -757,6 +757,15 @@
           <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
+      浮点转换指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
       浮点整数转换指令
     </span>
   </a>
@@ -774,6 +783,39 @@
       Other Instructions
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Other Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      置零指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      重置指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      矩阵移动指令
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -2544,10 +2586,23 @@
 </span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector widen fmul</span>
 </span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwmul.&lt;h/s&gt;.mv.i md, ms2, ms1[uimm3]</span><span class="w"> </span>
 </span></code></pre></div>
-<h4 id="_4">浮点整数转换指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<h4 id="_4">浮点转换指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<p>转换指令将每个元素从ms1转换到目标寄存器md1。指令mfncvt支持窄转换，源元素的宽度是目标元素的两倍，寄存器ms和ms+1指定的源矩阵使用两个矩阵寄存器（寄存器对）。</p>
+<p><img alt="图片" src="../CVT_P1.png" /></p>
+<p>指令mfwcvt支持加宽转换，目标元素的宽度是源元素的两倍，目标矩阵使用两个矩阵寄存器（寄存器对）。保留了指定奇数md的指令。</p>
+<p><img alt="图片" src="../CVT_P2.png" /></p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="w">    </span><span class="c1">#matrix-matrix floating point narrow convert(fp32tofp16 fp64tofp32)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfncvt.&lt;s/d&gt;.mm md, ms1</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix floating point widen convert(fp16tofp32 fp32tofp64)</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwcvt.&lt;h/s&gt;.mm md, ms1</span>
+</span></code></pre></div>
+<h4 id="_5">浮点整数转换指令<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
 <p>从整数到浮点数的转换支持非加宽转换/双加宽转换。整数支持有符号整数和无符号整数。对于双加宽转换，由md和md+1指定的目标矩阵使用两个矩阵寄存器。保留了指定奇数md的指令。</p>
 <p>从浮点转换到整数的转换支持非窄转换/半窄转换。整数支持有符号整数和无符号整数。对于半窄转换，由ms和ms+1指定的源矩阵使用两个矩阵寄存器。保留指定奇数ms的指令。</p>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
+<h4 id="_6">置零指令<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
+<h4 id="_7">重置指令<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
+<h4 id="_8">矩阵移动指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
 <div class="admonition note">
 <p class="admonition-title"> XuantieSpec</p>
 <p><a href="https://github.com/XUANTIE-RV/riscv-matrix-extension-spec">https://github.com/XUANTIE-RV/riscv-matrix-extension-spec</a></p>
