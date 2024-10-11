@@ -2403,7 +2403,13 @@
 </ul>
 <p>sizeM⇐RLEN/32。</p>
 <p>sizeK⇐RLEN/8。</p>
-<p>对于矩阵-矩阵指令，这两个源都是矩阵。对于矩阵向量指令，src2是矩阵，src1是一行矩阵。以第0行为例，向量操作数操作在每一行矩阵操作数上，作为md[i，j] = ms2[i，j] op ms1[0，j]。</p>
+<p>对于矩阵-矩阵指令，这两个源都是矩阵。对于矩阵-向量指令，src2是矩阵，src1是一行矩阵。以第0行为例，向量操作数操作在每一行矩阵操作数上，作为md[i，j] = ms2[i，j] op ms1[0，j]。</p>
+<ul>
+<li>madd：执行 src1 和 src2 的加法运算。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行（如 row0）进行逐元素加法。</li>
+<li>msub：从 src1 中减去 src2。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行进行逐元素减法。</li>
+<li>mmul：执行 src1 和 src2 的乘法运算。在矩阵-矩阵运算中，它计算两个矩阵的乘积；在矩阵-向量运算中，它计算矩阵与向量的乘积。mmul 指令将乘积的低XLEN 位写入目标寄存器 rd。mmulh 版本则将乘积的高 XLEN 位写入目标寄存器。</li>
+<li>mmax 和 mmin：分别执行有符号和无符号比较。mmax 指令返回两个操作数中的最大值，而 mmin 指令返回最小值。</li>
+</ul>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="c1">#matrix-matrix add</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">madd.&lt;s/d&gt;.mm md, ms2, ms1</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector add</span>
