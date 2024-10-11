@@ -754,6 +754,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      浮点整数转换指令
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2413,6 +2422,7 @@
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mcfg rs1</span>
 </span></code></pre></div>
 <h3 id="pointwise-instructions">Pointwise Instructions<a class="headerlink" href="#pointwise-instructions" title="Permanent link">&para;</a></h3>
+<h4 id="_1">整数算数指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
 <p>对于整数矩阵逐点运算的指令格式，包括矩阵-矩阵和矩阵-向量的运算，以及32位和64位整数指令的可选支持。以下是对关键信息的详细解释：</p>
 <ul>
 <li>
@@ -2426,7 +2436,6 @@
 </li>
 </ul>
 <p>对于矩阵-矩阵指令，这两个源都是矩阵。对于矩阵-向量指令，src2是矩阵，src1是一行矩阵。以第0行为例，向量操作数操作在每一行矩阵操作数上，作为md[i，j] = ms2[i，j] op ms1[0，j]。</p>
-<h4 id="_1">整数算数指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
 <ul>
 <li><code>madd</code>：执行 src1 和 src2 的加法运算。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行（如 row0）进行逐元素加法。</li>
 <li><code>msub</code>：从 src1 中减去 src2。在矩阵-向量运算中，它相当于对 ms2 的每一行与 ms1 的指定行进行逐元素减法。</li>
@@ -2498,6 +2507,44 @@
 </span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mn4clipu.&lt;s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
 </span></code></pre></div>
 <h4 id="_3">浮点算数指令<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<p>对于浮点矩阵逐点运算的指令格式，包括矩阵-矩阵和矩阵-向量的运算，可选地支持16位、32位和64位浮点逐点运算。</p>
+<p>非加宽浮点逐点指令包括 mfadd（浮点加法）、mfsub（浮点减法）、mfmul（浮点乘法）、mfmax（浮点最大值）、mfmin（浮点最小值）。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="w">    </span><span class="c1">#matrix-matrix fadd</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfadd.&lt;h/s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector fadd</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfadd.&lt;h/s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix fsub</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfsub.&lt;h/s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector sub</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfsub.&lt;h/s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix fmul</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfmul.&lt;h/s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector fmul</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfmul.&lt;h/s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix fmax</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfmax.&lt;h/s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector fmax</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfmax.&lt;h/s/d&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix fmin</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfmin.&lt;h/s/d&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector fmin</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfmin.&lt;h/s/d&gt;.mv.i md, ms2, ms1[uimm3]</span><span class="w">  </span>
+</span></code></pre></div>
+<p>对于加宽浮点逐点指令，由于目标矩阵的数据宽度是源矩阵的两倍，因此需要使用两个矩阵寄存器（寄存器对）来表示目标矩阵。这些寄存器由 md 和 md+1 指定，其中 md 是目标矩阵的第一个寄存器的标识符。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="w">    </span><span class="c1">#matrix-matrix widen fadd</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwadd.&lt;h/s&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector widen fadd</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwadd.&lt;h/s&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix widen fsub</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwsub.&lt;h/s&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector widen fsub</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwsub.&lt;h/s&gt;.mv.i md, ms2, ms1[uimm3]</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-matrix widen fmul</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwmul.&lt;h/s&gt;.mm md, ms2, ms1</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">#matrix-vector widen fmul</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">mfwmul.&lt;h/s&gt;.mv.i md, ms2, ms1[uimm3]</span><span class="w"> </span>
+</span></code></pre></div>
+<h4 id="_4">浮点整数转换指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
 <h3 id="other-instructions">Other Instructions<a class="headerlink" href="#other-instructions" title="Permanent link">&para;</a></h3>
 <div class="admonition note">
 <p class="admonition-title"> XuantieSpec</p>
