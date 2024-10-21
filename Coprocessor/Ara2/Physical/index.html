@@ -966,18 +966,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ssfreq" class="md-nav__link">
-    <span class="md-ellipsis">
-      每秒传输速率（SSFreq.）
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#tt-freq" class="md-nav__link">
     <span class="md-ellipsis">
-      时间测试频率（TT Freq.）
+      TT Freq
     </span>
   </a>
   
@@ -995,7 +986,7 @@
         <li class="md-nav__item">
   <a href="#macro-areacell-area" class="md-nav__link">
     <span class="md-ellipsis">
-      宏单元区域面积（Macro Area）和细胞区域面积（Cell Area）
+      宏单元区域（Macro Area）和细胞区域（Cell Area）
     </span>
   </a>
   
@@ -2161,19 +2152,12 @@
                   
 
 
-<h1 id="_1"><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="ssfreq">每秒传输速率（SSFreq.）<a class="headerlink" href="#ssfreq" title="Permanent link">&para;</a></h2>
+<h1 id="_1">后端<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="tt-freq">TT Freq<a class="headerlink" href="#tt-freq" title="Permanent link">&para;</a></h2>
 <ul>
-<li>2车道：950 GHz</li>
-<li>4车道：960 GHz（提升1.0x）</li>
-<li>8车道：940 GHz（提升1.0x，但略低于4车道）</li>
-<li>16车道：750 GHz（下降0.8x）、860 GHz（16车道*，下降0.9x）</li>
-</ul>
-<p>分析：随着车道数的增加，每秒传输速率并没有呈现明显的线性增长趋势。特别是在16车道时，传输速率出现了明显的下降。</p>
-<h2 id="tt-freq">时间测试频率（TT Freq.）<a class="headerlink" href="#tt-freq" title="Permanent link">&para;</a></h2>
-<ul>
-<li>2、4、8车道均为1.35 GHz
--16车道：1.08 GHz（下降0.8x）、1.26 GHz（16车道*，下降0.9x）</li>
+<li>2、4、8车道均为1.35 GHz</li>
+<li>16车道：1.08 GHz（下降0.8x）</li>
+<li>16车道（无定点）：1.26 GHz（16车道*，下降0.9x）</li>
 </ul>
 <p>分析：与每秒传输速率类似，时间测试频率也随车道数的增加而降低，特别是在16车道时下降更为显著。</p>
 <h2 id="diearea">芯片面积（DieArea）<a class="headerlink" href="#diearea" title="Permanent link">&para;</a></h2>
@@ -2181,20 +2165,22 @@
 <li>2车道：0.59 mm²</li>
 <li>4车道：0.95 mm²（增长1.6x）</li>
 <li>8车道：1.88 mm²（增长2.0x）</li>
-<li>16车道：4.47 mm²（增长2.4x，保持不变）</li>
+<li>16车道：4.47 mm²（增长2.4x）</li>
+<li>16车道（无定点）：4.47 mm²（增长2.4x）</li>
 </ul>
 <p>分析：芯片面积随着车道数的增加而显著增加，呈现出近似线性的增长趋势。</p>
-<h2 id="macro-areacell-area">宏单元区域面积（Macro Area）和细胞区域面积（Cell Area）<a class="headerlink" href="#macro-areacell-area" title="Permanent link">&para;</a></h2>
+<h2 id="macro-areacell-area">宏单元区域（Macro Area）和细胞区域（Cell Area）<a class="headerlink" href="#macro-areacell-area" title="Permanent link">&para;</a></h2>
 <ul>
-<li>宏单元区域面积：随着车道数的增加，面积逐渐增加，但增长幅度逐渐放缓。</li>
-<li>细胞区域面积：同样随着车道数的增加而增加，且增长幅度相对较大。</li>
+<li>宏单元区域kGE（kilogate）：随着车道数的增加，kGE逐渐增加，但增长幅度逐渐放缓。</li>
+<li>细胞区域kGE（kilogate）：同样随着车道数的增加而增加，且增长幅度相对较大。</li>
 </ul>
 <h2 id="en-eff">每瓦特浮点运算能力（En. Eff.*）<a class="headerlink" href="#en-eff" title="Permanent link">&para;</a></h2>
 <ul>
 <li>2车道：34.1 FLOPSDp/W</li>
 <li>4车道：37.8 FLOPSDp/W（提升1.1x）</li>
 <li>8车道：35.7 FLOPSDp/W（略低于4车道，提升0.9x）</li>
-<li>16车道：无固定点支持，最小掩码单元</li>
+<li>16车道：无</li>
+<li>16车道（无定点）：30.3 FLOPSDp/W</li>
 </ul>
 <p>分析：每瓦特浮点运算能力在4车道时达到最高，随后在8车道时略有下降，而在16车道时则无法支持固定点计算。</p>
 
