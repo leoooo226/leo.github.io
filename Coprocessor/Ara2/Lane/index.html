@@ -939,6 +939,66 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="lane_sequencer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      模块声明
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      请求注册
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      操作请求命令队列
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vfu" class="md-nav__link">
+    <span class="md-ellipsis">
+      VFU操作控制
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      处理指令
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vfu_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      VFU操作和请求的具体实现
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2172,8 +2232,22 @@
 
 <h1 id="lane">Lane<a class="headerlink" href="#lane" title="Permanent link">&para;</a></h1>
 <h2 id="lanesv">lane.sv<a class="headerlink" href="#lanesv" title="Permanent link">&para;</a></h2>
-<p>lane的顶层模块，例化了lane的各个子模块，如lane_sequencer、operand_requester、VRF、Operand queues、Vector Functional Units等。1</p>
+<p>lane的顶层模块，例化了lane的各个子模块，如lane_sequencer、operand_requester、VRF、Operand queues、Vector Functional Units等。</p>
 <h2 id="lane_sequencer">lane_sequencer<a class="headerlink" href="#lane_sequencer" title="Permanent link">&para;</a></h2>
+<h3 id="_1">模块声明<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>lane_sequencer 模块通过导入不同的包（如 ara_pkg 和 rvv_pkg）来获得需要的类型和定义。
+定义了一些参数（如 NrLanes）和输入输出端口。</p>
+<h3 id="_2">请求注册<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>使用了寄存器处理指令的请求，确保不会重复采样相同指令。通过 last_id_d/q 存储上一个指令的ID。</p>
+<h3 id="_3">操作请求命令队列<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>维护指令执行所需的操作数请求，由于指令之间可能存在依赖关系，因此需要谨慎处理请求。</p>
+<h3 id="vfu">VFU操作控制<a class="headerlink" href="#vfu" title="Permanent link">&para;</a></h3>
+<p>监控执行的指令状态，分别记录正在运行和已完成的指令。</p>
+<h3 id="_4">处理指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>always_comb 和 always_ff 块用于实现组合逻辑和时序逻辑，处理请求的有效性、指令的调度和执行。
+根据指令的类型（VFU类型），做出不同的操作数请求。</p>
+<h3 id="vfu_1">VFU操作和请求的具体实现<a class="headerlink" href="#vfu_1" title="Permanent link">&para;</a></h3>
+<p>根据操作的不同（如 ALU、MFPU、Load、Store），设置相应的操作数请求，确保正确传递信息。</p>
 <h2 id="operand_requester">operand_requester<a class="headerlink" href="#operand_requester" title="Permanent link">&para;</a></h2>
 <h2 id="vrf">VRF<a class="headerlink" href="#vrf" title="Permanent link">&para;</a></h2>
 <h2 id="operand-queues">Operand queues<a class="headerlink" href="#operand-queues" title="Permanent link">&para;</a></h2>
