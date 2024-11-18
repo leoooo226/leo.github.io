@@ -114,6 +114,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#rvv-intrinsics" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -642,6 +647,8 @@
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
+      
+        
       
       
       <a href="./" class="md-nav__link md-nav__link--active">
@@ -2125,9 +2132,23 @@
                   
 
 
-  <h1>RVV-Intrinsics</h1>
-
-
+<h1 id="rvv-intrinsics">RVV-Intrinsics<a class="headerlink" href="#rvv-intrinsics" title="Permanent link">&para;</a></h1>
+<p>Intrinsics一般是指高级编程语言中的低级汇编语言的接口。这份Intrinsics的API的目标是让C/C++可以访问所有的RISC-V "V"(向量)扩展的指令。所以这些Intrinsics的命名很接近汇编指令的助记符。除了与汇编助记符相对应的基本Intrinsics外，还有一些接近语义(semantic)命名的Intrinsics。</p>
+<p>通常，Intrinsics的命名规则如下：</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">INTRINSIC ::= MNEMONIC &#39;_&#39; RET_TYPE</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">MNEMONIC ::= Instruction name in v-ext specification. Replace &#39;.&#39; with &#39;_&#39;.</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">RET_TYPE ::= SEW LMUL</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">SEW ::= ( i8 | i16 | i32 | i64 | u8 | u16 | u32 | u64 | f16 | f32 | f64 )</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">LMUL ::= ( m1 | m2 | m4 | m8 )</span>
+</span></code></pre></div>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="nt">Example</span><span class="p">:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vadd.vv vd, vs2, vs1</span><span class="p p-Indicator">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vint8m1_t vadd_vv_i8m1(vint8m1_t vs2, vint8m1_t vs1)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwaddu.vv vd, vs2, vs1</span><span class="p p-Indicator">:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vint16m2_t vwaddu_vv_i16m2(vint8m1_t vs2, vint8m1_t vs1)</span>
+</span></code></pre></div>
 
 
 
