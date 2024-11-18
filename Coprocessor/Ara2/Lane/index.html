@@ -556,6 +556,10 @@
       
         
       
+        
+      
+        
+      
     
     
       
@@ -596,11 +600,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ISA/Vector/" class="md-nav__link">
+      <a href="../../ISA/RVV/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Vector
+    RVV
   </span>
   
 
@@ -622,6 +626,48 @@
   
   <span class="md-ellipsis">
     Mareix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ISA/RVV-Intrinsics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RVV-Intrinsics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ISA/RVV-Crypto/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RVV-Crypto
   </span>
   
 
@@ -2235,8 +2281,7 @@
 <p>lane的顶层模块，例化了lane的各个子模块，如lane_sequencer、operand_requester、VRF、Operand queues、Vector Functional Units等。</p>
 <h2 id="lane_sequencer">lane_sequencer<a class="headerlink" href="#lane_sequencer" title="Permanent link">&para;</a></h2>
 <h3 id="_1">模块声明<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
-<p>lane_sequencer 模块通过导入不同的包（如 ara_pkg 和 rvv_pkg）来获得需要的类型和定义。
-定义了一些参数（如 NrLanes）和输入输出端口。</p>
+<p>lane_sequencer 模块通过导入不同的包（如 ara_pkg 和 rvv_pkg）来获得需要的类型和定义。定义了一些参数（如 NrLanes）和输入输出端口。</p>
 <h3 id="_2">请求注册<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>使用了寄存器处理指令的请求，确保不会重复采样相同指令。通过 last_id_d/q 存储上一个指令的ID。</p>
 <h3 id="_3">操作请求命令队列<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
