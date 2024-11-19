@@ -651,6 +651,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    RVV-Intrinsics
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -660,6 +671,43 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      命名规则
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      示例
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2134,12 +2182,22 @@
 
 <h1 id="rvv-intrinsics">RVV-Intrinsics<a class="headerlink" href="#rvv-intrinsics" title="Permanent link">&para;</a></h1>
 <p>Intrinsics一般是指高级编程语言中的低级汇编语言的接口。这份Intrinsics的API的目标是让C/C++可以访问所有的RISC-V "V"(向量)扩展的指令。所以这些Intrinsics的命名很接近汇编指令的助记符。除了与汇编助记符相对应的基本Intrinsics外，还有一些接近语义(semantic)命名的Intrinsics。</p>
+<h2 id="_1">命名规则<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>通常，Intrinsics的命名规则如下：</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">INTRINSIC ::= MNEMONIC &#39;_&#39; RET_TYPE</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">MNEMONIC ::= Instruction name in v-ext specification. Replace &#39;.&#39; with &#39;_&#39;.</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">RET_TYPE ::= SEW LMUL</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">SEW ::= ( i8 | i16 | i32 | i64 | u8 | u16 | u32 | u64 | f16 | f32 | f64 )</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">LMUL ::= ( m1 | m2 | m4 | m8 )</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">Intrinsic命名：</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">INTRINSIC ::= MNEMONIC &#39;_&#39; RET_TYPE</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">MNEMONIC ::= Instruction name in v-ext specification. Replace &#39;.&#39; with &#39;_&#39;.</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">RET_TYPE ::= SEW LMUL</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">SEW ::= ( i8 | i16 | i32 | i64 | u8 | u16 | u32 | u64 | f16 | f32 | f64 )</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">LMUL ::= ( m1 | m2 | m4 | m8 )</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">数据类型：</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">v&lt;基本类型&gt;m&lt;向量寄存器组lmul&gt;_t 其中：</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">基本类型：int8，int16，int32，int64，uint8，uint16，uint32，uint64，float16，float32</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">向量寄存器组 lmul：1，2，4，8</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">例如：</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vint32m1_t： 1个向量寄存器中存放 vl 个int32 数据, 0 &lt; vl &lt;= 4 (vlen/sewlmul=128/321=4 )</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vfloat32m1_t：1个向量寄存器中存放 vl 个float32数据, 0 &lt; vl &lt;=4</span>
 </span></code></pre></div>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="nt">Example</span><span class="p">:</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
@@ -2148,6 +2206,33 @@
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vwaddu.vv vd, vs2, vs1</span><span class="p p-Indicator">:</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vint16m2_t vwaddu_vv_i16m2(vint8m1_t vs2, vint8m1_t vs1)</span>
+</span></code></pre></div>
+<h2 id="_2">示例<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>通过数组相加的例子对 vector 扩展 intrinsic 使用作简单介绍；假设有长度为 ARRAY_LEN 的 float 类型数组 A，B，C，为了实现 C = A + B，有：</p>
+<p>普通标量实现:在循环中对数组 A，B 中的浮点数逐个相加，循环的次数为 ARRAY_LEN 次。</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">void add(const float *a, const float *b, float *c, size_t length)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">for (int i = 0; i &lt; length; i++) {</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">c[i] = a[i] + b[i];</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">}</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">}</span>
+</span></code></pre></div>
+<p>intrinsic 向量化实现:在循环中一次对数组 A，B 中的多个浮点数相加：</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">void add_vec(const float *a, const float *b, float *c, size_t length)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">while (length &gt; 0) {</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">size_t vl = vsetvl_e32m1(length);       // 设置向量寄存器每次操作的元素个数</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">vfloat32m1_t va = vle32_v_f32m1(a, vl); // 从数组a中加载vl个元素到向量寄存器va中</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">vfloat32m1_t vb = vle32_v_f32m1(b, vl); // 从数组b中加载vl个元素到向量寄存器vb中</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">vfloat32m1_t vc = vfadd_vv_f32m1(va, vb, vl);   // 向量寄存器va和向量寄存器vb中vl个元素对应相加，结果为vc</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">vse32_v_f32m1(c, vc, vl);   // 将向量寄存器中的vl个元素存到数组c中</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">a += vl;</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">b += vl;</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">c += vl;</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">length -= vl;</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">}</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">}</span>
 </span></code></pre></div>
 
 
