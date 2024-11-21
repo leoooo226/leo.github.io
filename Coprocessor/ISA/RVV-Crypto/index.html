@@ -2301,6 +2301,7 @@
 <h2 id="_1">简介<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>Cryptography Volume I：标量和熵源指令，描述了对不实现向量扩展的较小核的加密指令建议</p>
 <p>Cryptography Volume II：RISC-V向量密码学扩展。这里提出的所有指令都是基于向量寄存器的。这些指令被设计为具有较高性能的指令，以大型应用程序和服务器类核心为主要目标。</p>
+<p>对于加解密算法的实现，使用高级语言如C语言编程会因存在大量重复运算而产生更多的指令，执行效率低，特别是在嵌入式设备中。虽然使用FPGA实现加解密加速器速度最快，但其通用性受限，且仅在FPGA上实现加解密算法也浪费资源。相比之下，使用加解密指令实现加解密算法兼顾通用性和硬件加速性能。</p>
 <h2 id="zvbb">Zvbb<a class="headerlink" href="#zvbb" title="Permanent link">&para;</a></h2>
 <p>向量基本位操作指令</p>
 <h2 id="zvbc">Zvbc<a class="headerlink" href="#zvbc" title="Permanent link">&para;</a></h2>
