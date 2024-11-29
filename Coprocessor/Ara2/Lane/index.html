@@ -2442,10 +2442,14 @@
 <h2 id="vrf">VRF<a class="headerlink" href="#vrf" title="Permanent link">&para;</a></h2>
 <p>Ara的向量寄存器文件（VRF）使用一组单端口（1RW）存储bank实现。每个bank的宽度是64位，其与每个通道的数据路径的宽度相同。每个通道有八个bank，导致每个通道有八个单端口存储bank。在RVV中有32个向量寄存器。每个向量寄存器的大小（以位为单位）取决于实现（最小值= 128位）</p>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
-<p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道的示例，每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
+<p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
+<p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
 <p><img alt="tp" src="../image11.png" /></p>
-<p>在VRF中，各个向量寄存器及其对应的元素分布在4个通道上。继续示例，向量寄存器VO的元素跨通道和存储器组分布，如下所示</p>
+<p>在VRF中，各个向量寄存器及其对应的元素分布在4个通道上。向量寄存器VO的元素跨通道和存储器组分布如下所示</p>
+<p>对于4个通道，4096位（512B）向量需要64个64bit宽的存储bank。由于有4个通道，每个通道有8个存储bank，因此在单个“行”位置中总共有32个存储体。因此，完整向量需要两个存储器行位置。图中看到，对于SEW = 64，其中存储器第0和第1行被V0占用，第2和第3行被V1占用，一直到第62和63行被V31占用。</p>
 <p><img alt="tp" src="../image5.png" /></p>
+<p>以VLEN=4096、SEW=32和4个通道为例：</p>
+<p><img alt="tp" src="../image26.png" /></p>
 <h2 id="operand-queues">Operand queues<a class="headerlink" href="#operand-queues" title="Permanent link">&para;</a></h2>
 <h2 id="vector-functional-units">Vector Functional Units<a class="headerlink" href="#vector-functional-units" title="Permanent link">&para;</a></h2>
 
