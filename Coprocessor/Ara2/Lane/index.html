@@ -2441,6 +2441,14 @@
 <h2 id="operand_requester">operand_requester<a class="headerlink" href="#operand_requester" title="Permanent link">&para;</a></h2>
 <h2 id="vrf">VRF<a class="headerlink" href="#vrf" title="Permanent link">&para;</a></h2>
 <p>Ara的向量寄存器文件（VRF）使用一组单端口（1RW）存储bank实现。每个bank的宽度是64位，其与每个通道的数据路径的宽度相同。每个通道有八个bank，导致每个通道有八个单端口存储bank。在RVV中有32个向量寄存器。每个向量寄存器的大小（以位为单位）取决于实现（最小值= 128位）</p>
+<p>跨通道拆分VRF的优势：</p>
+<ul>
+<li>由于通道是处理元件（PE），因此大多数计算都限制在一个通道内，这使得硬件实现变得容易。</li>
+<li>消除了执行单元对通道数量的依赖性，这使得Ara具有可扩展性。</li>
+<li>由于VRF在通道内部，因此VRF和通道之间的路由执行逻辑被简化</li>
+</ul>
+<p>通道内的VRF部分被进一步划分为八个64位宽的bank。每个bank使用单端口SRAM存储器。作为一个单端口存储器，它只有一个地址端口用于读取和写入。在稳定状态下，在最坏情况条件下，同时访问5个存储体以支持乘法累加指令（需要3个源寄存器加上掩码寄存器，导致4次读取，以及一个目的地寄存器，导致单次写入）。这是单个指令的最坏情况。但是可以在不同的单元中同时执行更多的指令（例如vload + vslide + vmacc.m），并且它们可以同时访问每个通道最多8个存储体。</p>
+<p><img alt="tp" src="../VRFPerLanePerBank.png" /></p>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
 <p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
 <p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
