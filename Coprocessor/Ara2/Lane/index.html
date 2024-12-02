@@ -1142,9 +1142,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#mapping-of-vector-elements-to-the-memory-banks" class="md-nav__link">
+  <a href="#translating-vector-register-number-to-sram-memory-bank" class="md-nav__link">
     <span class="md-ellipsis">
-      Mapping of Vector Elements to the Memory Banks
+      Translating Vector Register Number to SRAM memory Bank
     </span>
   </a>
   
@@ -2449,7 +2449,151 @@
 </ul>
 <p>通道内的VRF部分被进一步划分为八个64位宽的bank。每个bank使用单端口SRAM存储器。作为一个单端口存储器，它只有一个地址端口用于读取和写入。在稳定状态下，在最坏情况条件下，同时访问5个存储体以支持乘法累加指令（需要3个源寄存器加上掩码寄存器，导致4次读取，以及一个目的地寄存器，导致单次写入）。这是单个指令的最坏情况。但是可以在不同的单元中同时执行更多的指令（例如vload + vslide + vmacc.m），并且它们可以同时访问每个通道最多8个存储体。</p>
 <p><img alt="tp" src="../VRFPerLanePerBank.png" /></p>
-<h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
+<h3 id="translating-vector-register-number-to-sram-memory-bank">Translating Vector Register Number to SRAM memory Bank<a class="headerlink" href="#translating-vector-register-number-to-sram-memory-bank" title="Permanent link">&para;</a></h3>
+<p>向量寄存器编号字段的值范围为0到31（5位），存在于指令中。它们被解码并用于确定VRF存储器中该向量寄存器的起始地址。在通道内，向量寄存器被存储为连续的字节集。寄存器号（vid）乘以一个因子，该因子等于单个向量寄存器中的字节数除以通道数。得到的数字给出了VRF存储器中向量寄存器的开始地址。</p>
+<p>以VLEN=4096、SEW=64和4个通道为例：</p>
+<table>
+<thead>
+<tr>
+<th>Vid</th>
+<th>Address (Hexa)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>2</td>
+<td>100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>180</td>
+</tr>
+<tr>
+<td>4</td>
+<td>200</td>
+</tr>
+<tr>
+<td>5</td>
+<td>280</td>
+</tr>
+<tr>
+<td>6</td>
+<td>300</td>
+</tr>
+<tr>
+<td>7</td>
+<td>380</td>
+</tr>
+<tr>
+<td>8</td>
+<td>400</td>
+</tr>
+<tr>
+<td>9</td>
+<td>480</td>
+</tr>
+<tr>
+<td>10</td>
+<td>500</td>
+</tr>
+<tr>
+<td>11</td>
+<td>580</td>
+</tr>
+<tr>
+<td>12</td>
+<td>600</td>
+</tr>
+<tr>
+<td>13</td>
+<td>680</td>
+</tr>
+<tr>
+<td>14</td>
+<td>700</td>
+</tr>
+<tr>
+<td>15</td>
+<td>780</td>
+</tr>
+<tr>
+<td>16</td>
+<td>800</td>
+</tr>
+<tr>
+<td>17</td>
+<td>880</td>
+</tr>
+<tr>
+<td>18</td>
+<td>900</td>
+</tr>
+<tr>
+<td>19</td>
+<td>980</td>
+</tr>
+<tr>
+<td>20</td>
+<td>A00</td>
+</tr>
+<tr>
+<td>21</td>
+<td>A80</td>
+</tr>
+<tr>
+<td>22</td>
+<td>B00</td>
+</tr>
+<tr>
+<td>23</td>
+<td>B80</td>
+</tr>
+<tr>
+<td>24</td>
+<td>C00</td>
+</tr>
+<tr>
+<td>25</td>
+<td>C80</td>
+</tr>
+<tr>
+<td>26</td>
+<td>D00</td>
+</tr>
+<tr>
+<td>27</td>
+<td>D80</td>
+</tr>
+<tr>
+<td>28</td>
+<td>E00</td>
+</tr>
+<tr>
+<td>29</td>
+<td>E80</td>
+</tr>
+<tr>
+<td>30</td>
+<td>F00</td>
+</tr>
+<tr>
+<td>31</td>
+<td>F80</td>
+</tr>
+<tr>
+<td>### Mapping of Vector Elements to the Memory Banks</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
 <p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
 <p><img alt="tp" src="../image11.png" /></p>
