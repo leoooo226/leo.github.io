@@ -1160,6 +1160,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      洗牌逻辑
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#mapping-of-vector-elements-to-the-memory-banks" class="md-nav__link">
     <span class="md-ellipsis">
       Mapping of Vector Elements to the Memory Banks
@@ -2613,6 +2622,13 @@
 <h3 id="organization-of-elements-in-vector-register-file">Organization of Elements in Vector Register File<a class="headerlink" href="#organization-of-elements-in-vector-register-file" title="Permanent link">&para;</a></h3>
 <p>向量寄存器的元素被映射到VRF中的连续通道。每个通道的数据路径宽度为64位，与单个寄存器堆组的宽度相匹配。下图显示了4个通道，编号为0-3，每个通道有8个字节（64位），连续的字节编号为0 - 1F。由于每个通道中存在功能单元，因此可以并行处理元素组。例如，如果我们有四个64位元素和四个通道，那么每个元素都被放置在下面数字0-3所示的不同通道中。所有这4个元件都可以从VRF同时访问，并且可以并行操作。</p>
 <p><img alt="tp" src="../VLEN512_SEW64_Lane4.png" /></p>
+<p>继续先前的跨通道的布置，单个通道内的元素也以一定顺序布置，使得当元素宽度改变时，一些元素和通道之间的映射保持相同。因此，通道中的连续字节与元素的连续字节之间的映射不相同。这可以通过使用下一节中描述的混洗逻辑来解决。</p>
+<p>作为具有256 B（2048位）的向量长度和4个通道（每个通道是64位宽）的示例，用于各种大小的SEW的字节的映射如下所示：</p>
+<p><img alt="tp" src="../elem_lane_organization.png" /></p>
+<p>对于第一种情况（SEW = 64），这种安排简单而明显。每个64位元素被映射到不同的通道中，并且每个元素的字节被连续地存储在通道内。对于第二种情况（SEW = 32），元素0、1、2和3被映射到通道0到通道3的下半部分（32位）。然后，元素4被映射到通道0的上半部分，依此类推，直到元素7被映射到通道3的上半部分。重要的是要注意，对于SEW的两种情况，元素0、1、2和3的最低有效字节被映射到对应通道内的相同字节位置。对于SEW的剩余值继续重复该过程。</p>
+<p>在SEW = 16和8的情况下，还有一件事需要观察。当我们从通道0开始分配新元素的第一个字节时，我们还观察通道中的最后一个元素被分配了通道的哪一半（高或低32位）。对于新的分配，我们选择上一次没有使用的那一半。因此，在SEW = 16的情况下，当分配元素8时，它被放置在通道0的字节位置2（通道0的下半部分）而不是字节位置6（通道0的上半部分），因为通道0中分配的最后一个元素，元素4，被分配在字节位置4（通道0的上半部分）。</p>
+<p>VRF中的元素及其对应字节的上述布置被约束在通道内。通道外的数据（即内存中的数据）按照递增的内存地址从最低有效字节到最高有效字节简单打包。因此，当数据在存储器和VRF之间移动时，字节被混洗/解混洗以匹配适当的所需排序。元素和字节的这两种排序被称为字节的通道组织和字节的自然打包。</p>
+<h3 id="_5">洗牌逻辑<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
 <p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
 <p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
