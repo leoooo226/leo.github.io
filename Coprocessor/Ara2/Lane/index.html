@@ -1151,6 +1151,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#organization-of-elements-in-vector-register-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Organization of Elements in Vector Register File
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#mapping-of-vector-elements-to-the-memory-banks" class="md-nav__link">
     <span class="md-ellipsis">
       Mapping of Vector Elements to the Memory Banks
@@ -2601,6 +2610,9 @@
 </tr>
 </tbody>
 </table>
+<h3 id="organization-of-elements-in-vector-register-file">Organization of Elements in Vector Register File<a class="headerlink" href="#organization-of-elements-in-vector-register-file" title="Permanent link">&para;</a></h3>
+<p>向量寄存器的元素被映射到VRF中的连续通道。每个通道的数据路径宽度为64位，与单个寄存器堆组的宽度相匹配。下图显示了4个通道，编号为0-3，每个通道有8个字节（64位），连续的字节编号为0 - 1F。由于每个通道中存在功能单元，因此可以并行处理元素组。例如，如果我们有四个64位元素和四个通道，那么每个元素都被放置在下面数字0-3所示的不同通道中。所有这4个元件都可以从VRF同时访问，并且可以并行操作。</p>
+<p><img alt="tp" src="../VLEN512_SEW64_Lane4.png" /></p>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
 <p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
 <p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
