@@ -2633,8 +2633,16 @@
 <h3 id="_5">洗牌逻辑<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>如下图所示，混洗/解混洗逻辑位于内存子系统和VRF之间。当数据从存储器移动到VRF（通过加载指令）时，它会从自然打包排列混洗到通道组织排列。类似地，当数据从VRF移动到内存（通过存储指令）时，它会从通道组织（Lane Organization）到自然打包（Natural Packing）排列进行解混洗。</p>
 <p><img alt="tp" src="../shuffle_interconnect.png" /></p>
+<p>对于4个通道和16个SEW，从自然打包到通道组织的字节映射如下图所示。对于元素0，字节索引是相同的，映射到VRF中的字节索引0和1，用于自然包装和通道组织。元素1被映射到VRF中的字节索引8，其两个字节在VRF中的索引8和9中。混洗逻辑从存储器中取出顺序字节，如自然打包行中所示，并将其转换为通道组织行中所示的通道组织排列。反混洗逻辑则相反。</p>
 <p><img alt="tp" src="../shuffling_logic_SEW16.png" /></p>
+<p>混洗/解混洗逻辑的布置是向量的SEW的函数。这意味着当一个向量从内存移动到VRF时，字节会根据向量的SEW值进行混洗。类似地，当向量从VRF移动到存储器时，字节基于向量的SEW被重新洗牌。因此，除了存储在VRF中的向量的字节之外，它还在硬件中用其SEW进行标记。当数据被移回内存时，该标签随后被解混洗逻辑使用。</p>
+<p>下图显示了字节如何存储在内存中（自然打包）以及它们如何存储在VRF（通道组织）中。名为A0到H3的32个字节按顺序存储在内存位置0到31（自然顺序），如下面的内存图像所示。随后，这32个字节使用不同的SEW值存储在VRF中，如下面的VRF图像所示。</p>
 <p><img alt="tp" src="../shuffling_logic_vary_sew.png" /></p>
+<p>下图显示了字节如何存储在内存中（自然打包）以及它们如何存储在VRF（通道组织）中。名为A0到H3的32个字节按顺序存储在内存位置0到31（自然顺序），如下面的内存图像所示。随后，这32个字节使用不同的SEW值存储在VRF中，如下面的VRF图像所示。</p>
+<p>Lane 1 [ location 11] = (SEW = = 64) ? C3 : ((SEW == 32) ? B3 : ((SEW == 16) ? E3 : G1))</p>
+<p>类似地，用于存储单元11的去混洗复用器如下：</p>
+<p>Memory [location 11] = (SEW = = 64) ? Lane 1[location 11] : ((SEW == 32) ? Lane 2[location 19] : ((SEW == 16) ? Lane 1[location 13] : Lane 3[location 25]))</p>
+<p>这些字节多路复用器在两个方向上被复制，每个字节从存储器进入VRF，每个字节从VRF出去到存储器。</p>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
 <p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
 <p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
