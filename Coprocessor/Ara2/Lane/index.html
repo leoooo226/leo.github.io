@@ -1169,6 +1169,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#reshuffle-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reshuffle Logic
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#mapping-of-vector-elements-to-the-memory-banks" class="md-nav__link">
     <span class="md-ellipsis">
       Mapping of Vector Elements to the Memory Banks
@@ -2638,11 +2647,20 @@
 <p>混洗/解混洗逻辑的布置是向量的SEW的函数。这意味着当一个向量从内存移动到VRF时，字节会根据向量的SEW值进行混洗。类似地，当向量从VRF移动到存储器时，字节基于向量的SEW被重新洗牌。因此，除了存储在VRF中的向量的字节之外，它还在硬件中用其SEW进行标记。当数据被移回内存时，该标签随后被解混洗逻辑使用。</p>
 <p>下图显示了字节如何存储在内存中（自然打包）以及它们如何存储在VRF（通道组织）中。名为A0到H3的32个字节按顺序存储在内存位置0到31（自然顺序），如下面的内存图像所示。随后，这32个字节使用不同的SEW值存储在VRF中，如下面的VRF图像所示。</p>
 <p><img alt="tp" src="../shuffling_logic_vary_sew.png" /></p>
-<p>下图显示了字节如何存储在内存中（自然打包）以及它们如何存储在VRF（通道组织）中。名为A0到H3的32个字节按顺序存储在内存位置0到31（自然顺序），如下面的内存图像所示。随后，这32个字节使用不同的SEW值存储在VRF中，如下面的VRF图像所示。</p>
+<p>例如，通道1的字节位置11可以具有分别用于SEW值64、32、16和8的存储器字节C3、B3、E3或G1。所以这个字节的shuffle多路复用器如下：</p>
 <p>Lane 1 [ location 11] = (SEW = = 64) ? C3 : ((SEW == 32) ? B3 : ((SEW == 16) ? E3 : G1))</p>
-<p>类似地，用于存储单元11的去混洗复用器如下：</p>
+<p>类似地，用于存储单元11的deshuffle多路复用器如下：</p>
 <p>Memory [location 11] = (SEW = = 64) ? Lane 1[location 11] : ((SEW == 32) ? Lane 2[location 19] : ((SEW == 16) ? Lane 1[location 13] : Lane 3[location 25]))</p>
 <p>这些字节多路复用器在两个方向上被复制，每个字节从存储器进入VRF，每个字节从VRF出去到存储器。</p>
+<h3 id="reshuffle-logic">Reshuffle Logic<a class="headerlink" href="#reshuffle-logic" title="Permanent link">&para;</a></h3>
+<p>在具有跨多个通道分布的VRF的多通道架构中，对于跨通道边界的指令出现某些特殊问题（例如，缩小和扩大指令）。由于支持尾部不受干扰策略的架构要求，这些问题进一步加剧，即，不应修改超过向量长度的元素的要求。当指令写入向量寄存器vd时，该向量寄存器最初用与新EEW不同的EEW编码，并且vd的旧内容未被完全重写，则vd的旧内容被破坏，并且尾部不受干扰策略被违反。为了避免尾部元素的这种损坏，可以访问所有通道的滑动单元对向量寄存器执行混洗操作。这种洗牌操作称为重新洗牌。</p>
+<p>让我们以具有256位（32 B）宽的向量寄存器和四个通道的简单向量单元为例，其中每个通道为64位（8 B）宽。每个通道都有一个256 B SRAM存储体，配置为32x64位宽的1R1W端口存储器。因此，每个bank（这里每个通道只有一个bank）都实施了VRF的四分之一。以下示例限于SEW值16和32。</p>
+<p>SRAM中基于自然打包的向量元素的映射如下所示：</p>
+<p><img alt="tp" src="../image15.png" /></p>
+<p>SRAM中基于通道组织的矢量元素的映射如下所示：</p>
+<p><img alt="tp" src="../image7.png" /></p>
+<p>每个通道具有8个字节的向量，并且向量元素从通道0开始一直映射到通道3。对于Natural Packing &amp; SEW = 32，泳道0包含元素0和1，泳道1包含元素2和3，泳道2包含元素4和5，泳道3包含元素6和7。类似地，还示出了SEW = 16的16个元素的映射。因此，向量寄存器的连续元素存储在连续通道中。对于通道组织&amp; SEW = 32，通道0包含元素0和4，通道1包含元素1和5，通道2包含元素2和6，通道3包含元素3和7。类似地，还示出了SEW = 16的16个元素的映射。这里，连续的元素被存储在不同的通道中。下面的示例中使用了以下内存映像。连续向量字节存储在内存中的连续位置。</p>
+<p><img alt="tp" src="../image19.png" /></p>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
 <p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
 <p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
