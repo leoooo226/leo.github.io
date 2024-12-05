@@ -1204,6 +1204,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vector-register-file-and-operand-delivery-interconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Vector Register File and Operand-Delivery Interconnect
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2713,13 +2722,35 @@
 <p>将其与自然排序进行比较，我们可以看到正确的尾元素被保留在正确的位置。因此，通过重新洗牌的目的地寄存器，使它的SEW匹配的EEW指令的目的地寄存器EEW，我们可以正确地实现尾部不受干扰的政策。从上图中可以明显看出，如果SEW和EEW匹配，则不需要重新洗牌。</p>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
 <p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
-<p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面示出了向量表示VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
+<p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面是向量寄存器VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
 <p><img alt="tp" src="../image11.png" /></p>
 <p>在VRF中，各个向量寄存器及其对应的元素分布在4个通道上。向量寄存器VO的元素跨通道和存储器组分布如下所示</p>
 <p>对于4个通道，4096位（512B）向量需要64个64bit宽的存储bank。由于有4个通道，每个通道有8个存储bank，因此在单个“行”位置中总共有32个存储体。因此，完整向量需要两个存储器行位置。图中看到，对于SEW = 64，其中存储器第0和第1行被V0占用，第2和第3行被V1占用，一直到第62和63行被V31占用。</p>
 <p><img alt="tp" src="../image5.png" /></p>
 <p>以VLEN=4096、SEW=32和4个通道为例：</p>
 <p><img alt="tp" src="../image26.png" /></p>
+<h3 id="vector-register-file-and-operand-delivery-interconnect">Vector Register File and Operand-Delivery Interconnect<a class="headerlink" href="#vector-register-file-and-operand-delivery-interconnect" title="Permanent link">&para;</a></h3>
+<p>向量处理器的每个通道具有3个功能单元：</p>
+<ul>
+<li>Vector Floating-point Unit (VFPU)</li>
+<li>Vector Multiplier (VMUL)</li>
+<li>Vector Integer ALU (VALU)</li>
+</ul>
+<p>用于矢量加载和存储指令的矢量加载和存储单元（VLSU）和用于矢量滑动指令的滑动单元（SLDU）作为通道外部的单独单元存在。</p>
+<p>每个功能单元的数据路径与64位的VRF存储体宽度相匹配。</p>
+<p>通道从Ara equencer接收请求以执行向量指令。该请求包含关于向量指令的以下信息：</p>
+<ul>
+<li>Vector and scalar source operand register numbers</li>
+<li>Mask register number</li>
+<li>Vector &amp; scalar destination register numbers</li>
+<li>Effective length multiplier</li>
+<li>Value of the vector length</li>
+<li>Value of the vector start</li>
+<li>Vector type (values from the vtype CSR register)</li>
+<li>etc.</li>
+</ul>
+<p>每个通道都有自己的序列器（Lane Sequencer），用于接收请求并与操作数请求者和功能单元进行接口。</p>
+<p>操作数请求器沿着矢量寄存器文件仲裁器从VRF库请求各个操作数元素。目标功能单元信息等，也与请求一起沿着传递。然后，从VRF中为功能单元提取的操作数被传递到操作数队列。如前所述，当多个功能单元试图访问同一存储体中的操作数时，VRF的多存储体组织会导致存储冲突。每个通道在VRF和功能单元之间提供有一组操作数队列，以吸收由于这种存储冲突而引起的延迟。类似地，将结果写回VRF也可能导致存储体冲突。在每个功能单元的输出端提供写回队列，以吸收由于存储冲突而导致的任何延迟。所有队列都是64位宽。</p>
 <h2 id="operand-queues">Operand queues<a class="headerlink" href="#operand-queues" title="Permanent link">&para;</a></h2>
 <h2 id="vector-functional-units">Vector Functional Units<a class="headerlink" href="#vector-functional-units" title="Permanent link">&para;</a></h2>
 
