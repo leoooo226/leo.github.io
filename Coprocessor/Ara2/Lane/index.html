@@ -1108,15 +1108,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#vfu_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      VFU操作和请求的具体实现
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -2497,10 +2488,8 @@
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="err"> </span><span class="l l-Scalar l-Scalar-Plain"> inactive(x) = body(x) &amp;&amp; !mask(x)</span>
 </span></code></pre></div>
 <h3 id="_4">处理指令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>always_comb 和 always_ff 块用于实现组合逻辑和时序逻辑，处理请求的有效性、指令的调度和执行。
+<p>always_ff 块用于实现组合逻辑和时序逻辑，处理请求的有效性、指令的调度和执行。
 根据指令的类型（VFU类型），做出不同的操作数请求。</p>
-<h3 id="vfu_1">VFU操作和请求的具体实现<a class="headerlink" href="#vfu_1" title="Permanent link">&para;</a></h3>
-<p>根据操作的不同（如 ALU、MFPU、Load、Store），设置相应的操作数请求，确保正确传递信息。</p>
 <h2 id="operand_requester">operand_requester<a class="headerlink" href="#operand_requester" title="Permanent link">&para;</a></h2>
 <h2 id="vrf">VRF<a class="headerlink" href="#vrf" title="Permanent link">&para;</a></h2>
 <p>Ara的向量寄存器文件（VRF）使用一组单端口（1RW）存储bank实现。每个bank的宽度是64位，其与每个通道的数据路径的宽度相同。每个通道有八个bank，导致每个通道有八个单端口存储bank。在RVV中有32个向量寄存器。每个向量寄存器的大小（以位为单位）取决于实现（最小值= 128位）</p>
@@ -2510,9 +2499,9 @@
 <li>消除了执行单元对通道数量的依赖性，这使得Ara具有可扩展性。</li>
 <li>由于VRF在通道内部，因此VRF和通道之间的路由执行逻辑被简化</li>
 </ul>
-<p>通道内的VRF部分被进一步划分为八个64位宽的bank。每个bank使用单端口SRAM存储器。作为一个单端口存储器，它只有一个地址端口用于读取和写入。在稳定状态下，在最坏情况条件下，同时访问5个存储体以支持乘法累加指令（需要3个源寄存器加上掩码寄存器，导致4次读取，以及一个目的地寄存器，导致单次写入）。这是单个指令的最坏情况。但是可以在不同的单元中同时执行更多的指令（例如vload + vslide + vmacc.m），并且它们可以同时访问每个通道最多8个存储体。</p>
+<p>通道内的VRF部分被进一步划分为八个64位宽的bank。每个bank使用单端口SRAM存储器。作为一个单端口存储器，它只有一个地址端口用于读取和写入。在稳定状态下，在最坏情况条件下，同时访问5个存储bank以支持乘法累加指令（需要3个源寄存器加上掩码寄存器，导致4次读取，以及一个目的地寄存器，导致单次写入）。这是单个指令的最坏情况。但是可以在不同的单元中同时执行更多的指令（例如vload + vslide + vmacc.m），并且它们可以同时访问每个通道最多8个存储bank。</p>
 <p><img alt="tp" src="../VRFPerLanePerBank.png" /></p>
-<p>于每个通道具有4KiB的VRF存储器，因此去往每个通道的地址总线将为12位宽。由于通道内有8个库，所以地址的最低有效3位用于寻址8个库，并且剩余9位用于寻址库内的字节。在这些剩余的9位中，6位用于寻址存储体内的64个64位位置中的1个，并且地址的剩余3位用于寻址64位内的单个字节。</p>
+<p>于每个通道具有4KiB的VRF存储器，因此去往每个通道的地址总线将为12位宽。由于通道内有8个库，所以地址的最低有效3位用于寻址8个库，并且剩余9位用于寻址库内的字节。在这些剩余的9位中，6位用于寻址存储bank内的64个64位位置中的1个，并且地址的剩余3位用于寻址64位内的单个字节。</p>
 <p><img alt="tp" src="../addressPerLane.png" /></p>
 <h3 id="translating-vector-register-number-to-sram-memory-bank">Translating Vector Register Number to SRAM memory Bank<a class="headerlink" href="#translating-vector-register-number-to-sram-memory-bank" title="Permanent link">&para;</a></h3>
 <p>向量寄存器编号字段的值范围为0到31（5位），存在于指令中。它们被解码并用于确定VRF存储器中该向量寄存器的起始地址。在通道内，向量寄存器被存储为连续的字节集。寄存器号（vid）乘以一个因子，该因子等于单个向量寄存器中的字节数除以通道数。得到的数字给出了VRF存储器中向量寄存器的开始地址。</p>
@@ -2681,7 +2670,7 @@
 <p>这些字节多路复用器在两个方向上被复制，每个字节从存储器进入VRF，每个字节从VRF出去到存储器。</p>
 <h3 id="reshuffle-logic">Reshuffle Logic<a class="headerlink" href="#reshuffle-logic" title="Permanent link">&para;</a></h3>
 <p>在具有跨多个通道分布的VRF的多通道架构中，对于跨通道边界的指令出现某些特殊问题（例如，缩小和扩大指令）。由于支持尾部不受干扰策略的架构要求，这些问题进一步加剧，即，不应修改超过向量长度的元素的要求。当指令写入向量寄存器vd时，该向量寄存器最初用与新EEW不同的EEW编码，并且vd的旧内容未被完全重写，则vd的旧内容被破坏，并且尾部不受干扰策略被违反。为了避免尾部元素的这种损坏，可以访问所有通道的滑动单元对向量寄存器执行混洗操作。这种洗牌操作称为重新洗牌。</p>
-<p>让我们以具有256位（32 B）宽的向量寄存器和四个通道的简单向量单元为例，其中每个通道为64位（8 B）宽。每个通道都有一个256 B SRAM存储体，配置为32x64位宽的1R1W端口存储器。因此，每个bank（这里每个通道只有一个bank）都实施了VRF的四分之一。以下示例限于SEW值16和32。</p>
+<p>让我们以具有256位（32 B）宽的向量寄存器和四个通道的简单向量单元为例，其中每个通道为64位（8 B）宽。每个通道都有一个256 B SRAM存储bank，配置为32x64位宽的1R1W端口存储器。因此，每个bank（这里每个通道只有一个bank）都实施了VRF的四分之一。以下示例限于SEW值16和32。</p>
 <p>SRAM中基于自然打包的向量元素的映射如下所示：</p>
 <p><img alt="tp" src="../image15.png" /></p>
 <p>SRAM中基于通道组织的矢量元素的映射如下所示：</p>
@@ -2721,11 +2710,11 @@
 <p><img alt="tp" src="../image9.png" /></p>
 <p>将其与自然排序进行比较，我们可以看到正确的尾元素被保留在正确的位置。因此，通过重新洗牌的目的地寄存器，使它的SEW匹配的EEW指令的目的地寄存器EEW，我们可以正确地实现尾部不受干扰的政策。从上图中可以明显看出，如果SEW和EEW匹配，则不需要重新洗牌。</p>
 <h3 id="mapping-of-vector-elements-to-the-memory-banks">Mapping of Vector Elements to the Memory Banks<a class="headerlink" href="#mapping-of-vector-elements-to-the-memory-banks" title="Permanent link">&para;</a></h3>
-<p>单个向量寄存器的元素与VRF存储体之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
+<p>单个向量寄存器的元素与VRF存bank之间的映射。以VLEN=4096、SEW=64和4个通道为例：</p>
 <p>每个向量寄存器有64个元素，它们的编号从0到63。在自然打包中，下面是向量寄存器VO，其中Vn[x]指示向量寄存器Vn的第x个64位元素：</p>
 <p><img alt="tp" src="../image11.png" /></p>
 <p>在VRF中，各个向量寄存器及其对应的元素分布在4个通道上。向量寄存器VO的元素跨通道和存储器组分布如下所示</p>
-<p>对于4个通道，4096位（512B）向量需要64个64bit宽的存储bank。由于有4个通道，每个通道有8个存储bank，因此在单个“行”位置中总共有32个存储体。因此，完整向量需要两个存储器行位置。图中看到，对于SEW = 64，其中存储器第0和第1行被V0占用，第2和第3行被V1占用，一直到第62和63行被V31占用。</p>
+<p>对于4个通道，4096位（512B）向量需要64个64bit宽的存储bank。由于有4个通道，每个通道有8个存储bank，因此在单个“行”位置中总共有32个存储bank。因此，完整向量需要两个存储器行位置。图中看到，对于SEW = 64，其中存储器第0和第1行被V0占用，第2和第3行被V1占用，一直到第62和63行被V31占用。</p>
 <p><img alt="tp" src="../image5.png" /></p>
 <p>以VLEN=4096、SEW=32和4个通道为例：</p>
 <p><img alt="tp" src="../image26.png" /></p>
@@ -2736,8 +2725,8 @@
 <li>Vector Multiplier (VMUL)</li>
 <li>Vector Integer ALU (VALU)</li>
 </ul>
-<p>用于矢量加载和存储指令的矢量加载和存储单元（VLSU）和用于矢量滑动指令的滑动单元（SLDU）作为通道外部的单独单元存在。</p>
-<p>每个功能单元的数据路径与64位的VRF存储体宽度相匹配。</p>
+<p>MASKU、VLSU和SLDU作为通道外部的单独单元存在。</p>
+<p>每个功能单元的数据路径与64位的VRF存储bank宽度相匹配。</p>
 <p>通道从Ara equencer接收请求以执行向量指令。该请求包含关于向量指令的以下信息：</p>
 <ul>
 <li>Vector and scalar source operand register numbers</li>
@@ -2749,8 +2738,18 @@
 <li>Vector type (values from the vtype CSR register)</li>
 <li>etc.</li>
 </ul>
-<p>每个通道都有自己的序列器（Lane Sequencer），用于接收请求并与操作数请求者和功能单元进行接口。</p>
-<p>操作数请求器沿着矢量寄存器文件仲裁器从VRF库请求各个操作数元素。目标功能单元信息等，也与请求一起沿着传递。然后，从VRF中为功能单元提取的操作数被传递到操作数队列。如前所述，当多个功能单元试图访问同一存储体中的操作数时，VRF的多存储体组织会导致存储冲突。每个通道在VRF和功能单元之间提供有一组操作数队列，以吸收由于这种存储冲突而引起的延迟。类似地，将结果写回VRF也可能导致存储体冲突。在每个功能单元的输出端提供写回队列，以吸收由于存储冲突而导致的任何延迟。所有队列都是64位宽。</p>
+<p>每个通道都有自己的Lane Sequencer，用于接收请求并与操作数请求者和功能单元进行接口。</p>
+<p>操作数请求器和矢量寄存器文件仲裁器从VRF请求各个操作数元素。目标功能单元信息等，也与请求一起沿着传递。然后，从VRF中为功能单元提取的操作数被传递到操作数队列。如前所述，当多个功能单元试图访问同一存储bank中的操作数时，VRF的多存储bank组织会导致bank冲突。每个通道在VRF和功能单元之间提供有一组操作数队列，以吸收由于这种bank冲突而引起的延迟。类似地，将结果写回VRF也可能导致bank冲突。在每个功能单元的输出端提供写回队列，以吸收由于bank冲突而导致的任何延迟。所有队列都是64位宽。</p>
+<p>有九个操作数接口将VRF库连接到功能单元</p>
+<ul>
+<li>Three are dedicated to the VFPU/VMUL.</li>
+<li>Two are dedicated to the VALU.</li>
+<li>Two are dedicated to the Mask Unit.</li>
+<li>One is dedicated to the VLSU.</li>
+<li>One is dedicated to the SLDU.</li>
+</ul>
+<p>当操作数变得可用并且功能单元准备好进行下一个操作时，操作数寄存器将其操作数发送到功能单元。</p>
+<p><img alt="tp" src="../image16.png" /></p>
 <h2 id="operand-queues">Operand queues<a class="headerlink" href="#operand-queues" title="Permanent link">&para;</a></h2>
 <h2 id="vector-functional-units">Vector Functional Units<a class="headerlink" href="#vector-functional-units" title="Permanent link">&para;</a></h2>
 
