@@ -1193,9 +1193,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#shuffle-logic" class="md-nav__link">
     <span class="md-ellipsis">
-      洗牌逻辑
+      Shuffle Logic
     </span>
   </a>
   
@@ -2535,6 +2535,7 @@
 <h2 id="operand_requester">operand_requester<a class="headerlink" href="#operand_requester" title="Permanent link">&para;</a></h2>
 <p>负责从向量寄存器文件（VRF）中按顺序请求单个数据元素，并将它们发送到相应的操作数队列中,同时实现了vrf arbiter</p>
 <h3 id="_5">流寄存器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>在VRF和通道外的VFU之间加入了流寄存器，为了</p>
 <p>代码中定义了三个不同的单元（加载单元、滑动单元、掩码单元），每个单元都使用stream_register模板实例化了一个流的寄存器。stream_register是一个参数化模块，其类型参数T被设置为stream_register_payload_t结构体。</p>
 <p>每个单元都有其自己的结果变量（id、addr、wdata、be）以及请求（req）和授权（gnt）信号。此外，每个实例还接收来自其相应单元的数据输入（例如，ldu_result_id_i, ldu_result_addr_i等），并输出处理后的数据。</p>
 <h3 id="_6">停顿机制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
@@ -2704,7 +2705,7 @@
 <p>VRF中的元素及其对应字节的上述布置被约束在通道内。通道外的数据（即内存中的数据）按照递增的内存地址从最低有效字节到最高有效字节简单打包。因此，当数据在存储器和VRF之间移动时，字节被混洗/解混洗以匹配适当的所需排序。元素和字节的这两种排序被称为字节的通道组织和字节的自然打包。</p>
 <p>通道组织：元素及其对应字节存储在VRF中的方式，如上所述。</p>
 <p>自然打包：在内存中打包的元素和字节，最低有效字节与最高有效字节在内存地址中递增。</p>
-<h3 id="_7">洗牌逻辑<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<h3 id="shuffle-logic">Shuffle Logic<a class="headerlink" href="#shuffle-logic" title="Permanent link">&para;</a></h3>
 <p>如下图所示，混洗/解混洗逻辑位于内存子系统和VRF之间。当数据从存储器移动到VRF（通过加载指令）时，它会从自然打包排列混洗到通道组织排列。类似地，当数据从VRF移动到内存（通过存储指令）时，它会从通道组织（Lane Organization）到自然打包（Natural Packing）排列进行解混洗。</p>
 <p><img alt="tp" src="../shuffle_interconnect.png" /></p>
 <p>对于4个通道和16个SEW，从自然打包到通道组织的字节映射如下图所示。对于元素0，字节索引是相同的，映射到VRF中的字节索引0和1，用于自然包装和通道组织。元素1被映射到VRF中的字节索引8，其两个字节在VRF中的索引8和9中。混洗逻辑从存储器中取出顺序字节，如自然打包行中所示，并将其转换为通道组织行中所示的通道组织排列。反混洗逻辑则相反。</p>
