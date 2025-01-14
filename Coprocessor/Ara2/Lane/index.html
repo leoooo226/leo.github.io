@@ -2539,8 +2539,33 @@
 <p>代码中定义了三个不同的单元（加载单元、滑动单元、掩码单元），每个单元都使用stream_register模板实例化了一个流的寄存器。stream_register是一个参数化模块，其类型参数T被设置为stream_register_payload_t结构体。</p>
 <p>每个单元都有其自己的结果变量（id、addr、wdata、be）以及请求（req）和授权（gnt）信号。此外，每个实例还接收来自其相应单元的数据输入（例如，ldu_result_id_i, ldu_result_addr_i等），并输出处理后的数据。</p>
 <h3 id="_6">停顿机制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>跟踪哪些向量指令已经写入了结果。这是为了确保指令之间的数据依赖性得到正确处理，防止数据冒险（hazard）的发生，即防止一个指令在另一个依赖于它的指令之前完成执行。</p>
+<p>然后，根据来自不同功能单元（如<code>ALU、MFPU、MASKU、LDU、SLDU</code>）的ID和结果授予信号（<code>result_id</code>和<code>result_gnt</code>），更新<code>vinsn_result_written_d</code>中对应位。如果某个功能单元完成了对某个指令的结果写入，则<code>vinsn_result_written_d</code>中对应指令ID的位将被置为1。</p>
 <h3 id="requester">Requester<a class="headerlink" href="#requester" title="Permanent link">&para;</a></h3>
+<p>每个操作数队列都有一个请求器，可以处于IDLE或REQUESTING状态。</p>
+<p>有九个操作数队列将VRF连接到功能单元</p>
+<ul>
+<li>Three are dedicated to the VFPU/VMUL.</li>
+<li>Two are dedicated to the VALU.</li>
+<li>Two are dedicated to the Mask Unit.</li>
+<li>One is dedicated to the VLSU.</li>
+<li>One is dedicated to the SLDU.</li>
+</ul>
+<p>请求器根据指令的元数据（如指令ID、地址、长度、元素宽度等）生成请求，并将其发送到VRF。</p>
+<ul>
+<li>vid_t id：一个字段，其类型为vid_t，可能表示指令的ID。</li>
+<li>vaddr_t addr：地址字段，同上。</li>
+<li>vlen_t len：一个字段，其类型为vlen_t，可能表示剩余要读取的元素数量。</li>
+<li>vew_e vew：一个枚举字段，其类型为vew_e，可能表示元素宽度。</li>
+<li>logic [NrVInsn-1:0] hazard：一个逻辑数组字段，表示向量指令之间的危害（hazard）。</li>
+<li>logic is_widening：一个逻辑字段，表示是否为拓宽指令。</li>
+<li>logic [NrVInsn-1:0] waw_hazard_counter：一个逻辑数组字段，可能用于计数WAW（写后写）危害。</li>
+</ul>
+<p>请求器还处理指令之间的依赖关系，确保在依赖解除之前不会发出请求。</p>
 <h3 id="arbiter">Arbiter<a class="headerlink" href="#arbiter" title="Permanent link">&para;</a></h3>
+<p>每个VRF存储体都有一个仲裁器，用于处理来自不同请求源的请求。
+仲裁器分为高优先级和低优先级请求，高优先级请求总是优先于低优先级请求。
+仲裁器使用轮询（Round-Robin）算法来公平地分配资源。</p>
 <h2 id="vrf">VRF<a class="headerlink" href="#vrf" title="Permanent link">&para;</a></h2>
 <p>Ara的向量寄存器文件（VRF）使用一组单端口（1RW）存储bank实现。每个bank的宽度是64位，其与每个通道的数据路径的宽度相同。每个通道有八个bank，导致每个通道有八个单端口存储bank。在RVV中有32个向量寄存器。每个向量寄存器的大小（以位为单位）取决于实现（最小值= 128位）</p>
 <p>跨通道拆分VRF的优势：</p>
@@ -2790,7 +2815,7 @@
 </ul>
 <p>每个通道都有自己的Lane Sequencer，用于接收请求并与操作数请求者和功能单元进行接口。</p>
 <p>操作数请求器和矢量寄存器文件仲裁器从VRF请求各个操作数元素。目标功能单元信息等，也与请求一起沿着传递。然后，从VRF中为功能单元提取的操作数被传递到操作数队列。如前所述，当多个功能单元试图访问同一存储bank中的操作数时，VRF的多存储bank组织会导致bank冲突。每个通道在VRF和功能单元之间提供有一组操作数队列，以吸收由于这种bank冲突而引起的延迟。类似地，将结果写回VRF也可能导致bank冲突。在每个功能单元的输出端提供写回队列，以吸收由于bank冲突而导致的任何延迟。所有队列都是64位宽。</p>
-<p>有九个操作数接口将VRF库连接到功能单元</p>
+<p>有九个操作数队列将VRF连接到功能单元</p>
 <ul>
 <li>Three are dedicated to the VFPU/VMUL.</li>
 <li>Two are dedicated to the VALU.</li>
