@@ -884,6 +884,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Decoder
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -893,6 +904,43 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      第一级译码
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      计分板
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2232,7 +2280,8 @@
 
 <h1 id="decoder">Decoder<a class="headerlink" href="#decoder" title="Permanent link">&para;</a></h1>
 <p>Ara协处理器采取两级译码。其中第一级在CV6处理器后端的ID级中进行，只用于简单的区分是否为Vector扩展指令，以及是否需要使用标量源操作数、或是产生标量目标操作数。第二级则会在Ara协处理器中的Distpatcher完全译码。</p>
-<p>在CV6中</p>
+<h2 id="_1">第一级译码<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>在CV6's Decoder中额外为Ara协处理器增加了几段额外的译码逻辑。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">if (CVA6Cfg.EnableAccelerator) begin </span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gen_accel_decoder</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">// This module is responsible for a light-weight decoding of accelerator instructions,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">// identifying them, but also whether they read/write scalar registers.</span>
@@ -2254,7 +2303,29 @@
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">assign acc_is_control_flow_instr = 1&#39;b0;</span>
 </span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">end</span>
 </span></code></pre></div>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">typedef struct packed {</span>
+<p>记分板表项：</p>
+<ul>
+<li>pc：指令的PC指针。</li>
+<li>trans_id：指令ID。如果我们用记分板的索引或者pc当作id，那么其实trans_id是冗余的，可以被优化掉。</li>
+<li>fu：执行指令的功能单元。</li>
+<li>op：FU执行的操作类型。</li>
+<li>rs1</li>
+<li>rs2</li>
+<li>rd</li>
+<li>result：</li>
+<li>对于未完成的指令，这个位域保存立即数；RISC-V的指令编码中，立即数的确分布在不同的位，需要组合。例如，I-type指令的立即数是12位的，位于指令的31:20位。而更大的立即数如U-type或J-type则需要更复杂的组合。如果在指令解码阶段，处理器需要将立即数提取出来，可能需要在执行阶段之前暂存在某个地方，比如<code>result</code>字段。</li>
+<li>对于部分编码在rs2寄存器中的未完成浮点指令，result变量也用于存储rs2的值；可能指的是某些浮点指令将操作码的一部分放置在rs2字段中，这可能需要解码时从rs2中提取额外信息。例如，某些指令可能复用rs2字段来编码不同的功能，如舍入模式或其他控制位，这时候处理器可能需要将rs2的值暂存在<code>result</code>中以供后续使用。</li>
+<li>对于浮点混合乘加指令，这个位域保存第三个操作数；例如，FMADD指令的格式是rs1、rs2、rs3，结果存入rd。这三个源寄存器分别来自浮点寄存器文件。可能在处理这类指令时，第三个操作数（rs3）的地址需要被暂存，特别是如果处理器的流水线设计需要分阶段访问寄存器文件，可能在某个阶段无法同时获取所有操作数，所以需要将rs3的地址保存在<code>result</code>中，以便后续阶段使用。</li>
+<li>valid：result是否有效。</li>
+<li>use_imm：是否把imm作为operand b。</li>
+<li>use_zimm：是否把zimm作为operand a。Zimm是某些RISC-V指令集扩展（如Zbt）中的压缩立即数字段。</li>
+<li>use_pc：是否使用PC作为operand a，这种情况通常发生在特定的跳转指令或异常处理中，需要将PC作为操作数之一。</li>
+<li>ex：发生异常。</li>
+<li>bp：分支预测的数据结构。</li>
+<li>is_compressed：是否包含压缩指令。</li>
+<li>vfp：是否为vector floating-point指令。</li>
+</ul>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">typedef struct packed {</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">logic [riscv::VLEN-1:0] pc;  // PC of instruction</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">logic [TRANS_ID_BITS-1:0] trans_id;      // this can potentially be simplified, we could index the scoreboard entry</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">                                             </span><span class="l l-Scalar l-Scalar-Plain">// with the transaction id in any case make the width more generic</span>
@@ -2276,19 +2347,9 @@
 </span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">logic                     is_compressed; // signals a compressed instructions, we need this information at the commit stage if</span>
 </span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">                                             </span><span class="l l-Scalar l-Scalar-Plain">// we want jump accordingly e.g.</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">+4, +2</span>
 </span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">logic vfp;  // is this a vector floating-point instruction?</span>
-</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">  </span><span class="err">}</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scoreboard_entry_t;</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">} scoreboard_entry_t;</span>
 </span></code></pre></div>
-<p>在CV6's Decoder中额外为Ara协处理器增加了一段额外的译码逻辑。
-is_accel表示是否为一条vector指令；
-is_rs1表示是否要使用定点标量源操作数x[rs1]；
-is_rs2表示是否要使用定点标量源操作数x[rs2]；
-is_rd表示是否会产生定点标量目的操作数x[rd]；
-is_fs1表示是否要使用浮点标量源操作数f[rs1]；
-is_fs2表示是否要使用浮点标量源操作数f[rs2]；
-is_fd表示是否会产生浮点标量目的操作数f[rd]；
-is_vfp表示是否为vector float-point指令；
-is_load表示是否为load指令，配合is_accel可知是否为vector load指令；
-is_store表示是否为store指令，配合is_accel可知是否为vector store指令。</p>
+<h2 id="_2">计分板<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 
 
 
