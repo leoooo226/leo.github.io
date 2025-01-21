@@ -793,6 +793,8 @@
       
         
       
+        
+      
     
     
       
@@ -873,11 +875,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../Axi/" class="md-nav__link">
+      <a href="../Decoder/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Axi
+    Decoder
   </span>
   
 
@@ -1290,6 +1292,27 @@
   
   <span class="md-ellipsis">
     CV6
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Axi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Axi
   </span>
   
 
@@ -2542,7 +2565,7 @@
 <p>跟踪哪些向量指令已经写入了结果。这是为了确保指令之间的数据依赖性得到正确处理，防止数据冒险（hazard）的发生，即防止一个指令在另一个依赖于它的指令之前完成执行。</p>
 <p>然后，根据来自不同功能单元（如<code>ALU、MFPU、MASKU、LDU、SLDU</code>）的ID和结果授予信号（<code>result_id</code>和<code>result_gnt</code>），更新<code>vinsn_result_written_d</code>中对应位。如果某个功能单元完成了对某个指令的结果写入，则<code>vinsn_result_written_d</code>中对应指令ID的位将被置为1。</p>
 <h3 id="requester">Requester<a class="headerlink" href="#requester" title="Permanent link">&para;</a></h3>
-<p>每个操作数队列都有一个请求器，可以处于IDLE或REQUESTING状态。</p>
+<p>每个操作数队列都有一个请求器索引，可以处于IDLE或REQUESTING状态。</p>
 <p>有九个操作数队列将VRF连接到功能单元</p>
 <ul>
 <li>Three are dedicated to the VFPU/VMUL.</li>
@@ -2551,15 +2574,15 @@
 <li>One is dedicated to the VLSU.</li>
 <li>One is dedicated to the SLDU.</li>
 </ul>
-<p>请求器根据指令的元数据（如指令ID、地址、长度、元素宽度等）生成请求，并将其发送到VRF。</p>
+<p>请求器根据指令的元数据生成请求，并将其发送到VRF。</p>
 <ul>
-<li>vid_t id：一个字段，其类型为vid_t，可能表示指令的ID。</li>
-<li>vaddr_t addr：地址字段，同上。</li>
-<li>vlen_t len：一个字段，其类型为vlen_t，可能表示剩余要读取的元素数量。</li>
-<li>vew_e vew：一个枚举字段，其类型为vew_e，可能表示元素宽度。</li>
-<li>logic [NrVInsn-1:0] hazard：一个逻辑数组字段，表示向量指令之间的危害（hazard）。</li>
-<li>logic is_widening：一个逻辑字段，表示是否为拓宽指令。</li>
-<li>logic [NrVInsn-1:0] waw_hazard_counter：一个逻辑数组字段，可能用于计数WAW（写后写）危害。</li>
+<li>vid_t id：表示指令的ID。</li>
+<li>vaddr_t addr：地址字段。</li>
+<li>vlen_t len：表示剩余要读取的元素数量。</li>
+<li>vew_e vew：一个枚举字段，表示元素宽度。</li>
+<li>logic [NrVInsn-1:0] hazard：一个逻辑数组字段，表示向量指令之间的冒险。</li>
+<li>logic is_widening：表示是否为拓宽指令。</li>
+<li>logic [NrVInsn-1:0] waw_hazard_counter：一个逻辑数组字段，可能用于计数WAW（写后写）冒险。</li>
 </ul>
 <p>请求器还处理指令之间的依赖关系，确保在依赖解除之前不会发出请求。</p>
 <h3 id="arbiter">Arbiter<a class="headerlink" href="#arbiter" title="Permanent link">&para;</a></h3>
