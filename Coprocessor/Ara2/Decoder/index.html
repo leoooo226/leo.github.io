@@ -2281,7 +2281,7 @@
 <h1 id="decoder">Decoder<a class="headerlink" href="#decoder" title="Permanent link">&para;</a></h1>
 <p>Ara协处理器采取两级译码。其中第一级在CV6处理器后端的ID级中进行，只用于简单的区分是否为Vector扩展指令，以及是否需要使用标量源操作数、或是产生标量目标操作数。第二级则会在Ara协处理器中的Distpatcher完全译码。</p>
 <h2 id="_1">第一级译码<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>在CV6's Decoder中额外为Ara协处理器增加了几段额外的译码逻辑。</p>
+<p>在CV6's Decoder中额外为Ara协处理器增加了额外的译码逻辑。</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">if (CVA6Cfg.EnableAccelerator) begin </span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gen_accel_decoder</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">// This module is responsible for a light-weight decoding of accelerator instructions,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">// identifying them, but also whether they read/write scalar registers.</span>
@@ -2303,7 +2303,20 @@
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">assign acc_is_control_flow_instr = 1&#39;b0;</span>
 </span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">end</span>
 </span></code></pre></div>
-<p>记分板表项：</p>
+<p>在cva6_accel_first_pass_decoder.sv中，对acc_instruction进行初始化和相关组合逻辑的判断，它的作用是组合逻辑上决定一个指令是否是向量指令、是否读取标量寄存器，以及是否向目标标量寄存器写入</p>
+<ul>
+<li>is_accel表示是否为一条vector指令；</li>
+<li>is_rs1表示是否要使用定点标量源操作数x[rs1]；</li>
+<li>is_rs2表示是否要使用定点标量源操作数x[rs2]；</li>
+<li>is_rd表示是否会产生定点标量目的操作数x[rd]；</li>
+<li>is_fs1表示是否要使用浮点标量源操作数f[rs1]；</li>
+<li>is_fs2表示是否要使用浮点标量源操作数f[rs2]；</li>
+<li>is_fd表示是否会产生浮点标量目的操作数f[rd]；</li>
+<li>is_vfp表示是否为vector float-point指令；</li>
+<li>is_load表示是否为load指令，配合is_accel可知是否为vector load指令；</li>
+<li>is_store表示是否为store指令，配合is_accel可知是否为vector store指令。</li>
+</ul>
+<p>记分板表项ariane_pkg.sv中：</p>
 <ul>
 <li>pc：指令的PC指针。</li>
 <li>trans_id：指令ID。如果我们用记分板的索引或者pc当作id，那么其实trans_id是冗余的，可以被优化掉。</li>
