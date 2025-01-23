@@ -2558,7 +2558,7 @@
 <h2 id="operand_requester">operand_requester<a class="headerlink" href="#operand_requester" title="Permanent link">&para;</a></h2>
 <p>负责从向量寄存器文件（VRF）中按顺序请求单个数据元素，并将它们发送到相应的操作数队列中,同时实现了vrf arbiter</p>
 <h3 id="_5">流寄存器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>在VRF和通道外的VFU之间加入了流寄存器，为了</p>
+<p>在VRF和通道外的VFU之间加入了流寄存器，为了?????</p>
 <p>代码中定义了三个不同的单元（加载单元、滑动单元、掩码单元），每个单元都使用stream_register模板实例化了一个流的寄存器。stream_register是一个参数化模块，其类型参数T被设置为stream_register_payload_t结构体。</p>
 <p>每个单元都有其自己的结果变量（id、addr、wdata、be）以及请求（req）和授权（gnt）信号。此外，每个实例还接收来自其相应单元的数据输入（例如，ldu_result_id_i, ldu_result_addr_i等），并输出处理后的数据。</p>
 <h3 id="_6">停顿机制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
@@ -2585,7 +2585,20 @@
 <li>logic [NrVInsn-1:0] waw_hazard_counter：一个逻辑数组字段，可能用于计数WAW（写后写）冒险。</li>
 </ul>
 <p>请求器还处理指令之间的依赖关系，确保在依赖解除之前不会发出请求。</p>
+<ul>
+<li>lane sequencer告诉operand requester当前指令要从VRF读数；</li>
+<li>operand requester把上述请求转换为对VRF的请求、并同时通知operand queue准备好接受数据（通过一种信用机制）；</li>
+<li>VRF从operand requester处得到请求，并把操作数给到operand queue。</li>
+</ul>
 <h3 id="arbiter">Arbiter<a class="headerlink" href="#arbiter" title="Permanent link">&para;</a></h3>
+<ul>
+<li>共有14个master，也就是说需要源操作数的9个queue、和产生目的操作数的5个执行单元放在一起仲裁，以获取VRF的访问权限。</li>
+<li>需要源操作数、产生目的操作数的模块一起参与仲裁，并且分两个优先级</li>
+<li>高优先级：AluA ~ MulFPUC, VFU_Alu ~ VFU_MFpu</li>
+<li>低优先级：MaskB ~ SlideAddrGenA, VFU_SlideUnit ~ VFU_LoadUnit</li>
+<li>VFU_StoreUnit不产生目的操作数，不需要参与仲裁</li>
+<li>Tips：这就是为什么VFU_StoreUnit必须放在枚举类型最后一个的原因！</li>
+</ul>
 <p>每个VRF存储体都有一个仲裁器，用于处理来自不同请求源的请求。
 仲裁器分为高优先级和低优先级请求，高优先级请求总是优先于低优先级请求。
 仲裁器使用轮询（Round-Robin）算法来公平地分配资源。</p>

@@ -2424,7 +2424,7 @@
 <p>处理多种操作模式，包括重新排列向量元素<code>RESHUFFLE</code>，同时跟踪每个向量的<code>EEW</code>和<code>LMUL</code>，以及处理与加载和存储操作相关的特殊情况<code>ignore_zero_vl_check</code>。不过，对于<code>is_stride_np2</code>的实现，存在逻辑上的不准确之处?</p>
 <hr />
 <h2 id="decoder">Decoder<a class="headerlink" href="#decoder" title="Permanent link">&para;</a></h2>
-<p>处理向量寄存器的重排操作<code>RESHUFFLE</code>。也就是<strong>滑动指令？</strong>由SLDU执行，这里应该是控制状态</p>
+<p>处理向量寄存器的重排操作<code>RESHUFFLE</code>。物理上矢量元素是按lane's organization排布的，其排布取决于元素的数据类型。因此，当一条指令的vd的数据类型与原先vd中的EEW不匹配的时候，我们需要插入一条reshuffle微操作，使得两者匹配</p>
 <p>在<code>NORMAL_OPERATION</code>下，对指令进行解码：</p>
 <h3 id="_1">配置和算数指令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <ul>
