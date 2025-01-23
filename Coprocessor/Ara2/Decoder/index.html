@@ -2303,10 +2303,17 @@
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">assign acc_is_control_flow_instr = 1&#39;b0;</span>
 </span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">end</span>
 </span></code></pre></div>
-<p>在cva6_accel_first_pass_decoder.sv中，对acc_instruction进行初始化和相关组合逻辑的判断，它的作用是组合逻辑上决定一个指令是否是向量指令、是否读取标量寄存器，以及是否向目标标量寄存器写入</p>
+<p>在cva6_accel_first_pass_decoder.sv中，对acc_instruction进行初始化和相关组合逻辑的判断，它的作用是组合逻辑上决定一个指令是否是向量指令、是否读取标量寄存器，以及是否向目标标量寄存器写入。</p>
 <ul>
-<li>is_accel表示是否为一条vector指令；</li>
-<li>is_rs1表示是否要使用定点标量源操作数x[rs1]；</li>
+<li>is_accel_o: 输出信号，指示输入指令是否为向量指令。</li>
+<li>instruction_o: 输出信号，包含预解码后的指令信息。</li>
+<li>illegal_instr_o: 输出信号，指示输入指令是否非法。</li>
+<li>
+<p>is_control_flow_instr_o: 输出信号，指示输入指令是否为控制流指令。</p>
+</li>
+<li>
+<p>is_rs1表示是否要使用定点标量源操作数x[rs1]；</p>
+</li>
 <li>is_rs2表示是否要使用定点标量源操作数x[rs2]；</li>
 <li>is_rd表示是否会产生定点标量目的操作数x[rd]；</li>
 <li>is_fs1表示是否要使用浮点标量源操作数f[rs1]；</li>
@@ -2316,6 +2323,11 @@
 <li>is_load表示是否为load指令，配合is_accel可知是否为vector load指令；</li>
 <li>is_store表示是否为store指令，配合is_accel可知是否为vector store指令。</li>
 </ul>
+<p>矢量算术操作 (riscv::OpcodeVec)：根据func3字段进一步区分不同的操作类型，并设置相应的寄存器使用标志。</p>
+<p>矢量内存操作 (riscv::OpcodeLoadFp 和 riscv::OpcodeStoreFp)：根据mew和width字段判断是否为矢量加载或存储指令，并设置相应的寄存器使用标志。</p>
+<p>矢量原子操作 (riscv::OpcodeAmo)：根据width字段判断是否为矢量原子指令，并设置相应的寄存器使用标志。</p>
+<p>系统指令 (riscv::OpcodeSystem)：判断是否对矢量控制寄存器（CSR）进行读写操作，如果是，则设置相应的寄存器使用标志。</p>
+<p>它会检查输入指令是否是矢量扩展指令并且矢量扩展是否未被关闭。如果是，则将该指令发往加速器<code>instruction_o.fu  = ACCEL</code>，如果需要标量源寄存器和目的寄存器则会设置相应的地址，并进一步解码指令的具体操作类型（如存储、加载、浮点操作等），</p>
 <p>记分板表项ariane_pkg.sv中：</p>
 <ul>
 <li>pc：指令的PC指针。</li>
