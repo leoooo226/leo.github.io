@@ -2558,11 +2558,11 @@
 <h2 id="operand_requester">operand_requester<a class="headerlink" href="#operand_requester" title="Permanent link">&para;</a></h2>
 <p>负责从向量寄存器文件（VRF）中按顺序请求单个数据元素，并将它们发送到相应的操作数队列中,同时实现了vrf arbiter</p>
 <h3 id="_5">流寄存器<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p>在VRF和通道外的VFU之间加入了流寄存器，为了?????</p>
+<p>在VRF和通道外的VFU之间加入了流寄存器，为了?????将来自 Load Unit、Slide Unit 和 Mask Unit 的结果进行缓存，确保在请求者需要时能够正确地传递数据。它实现了一个带有简单流式ready/valid握手协议的寄存器。这种寄存器通常用于数据流控制，确保数据在传输过程中不会丢失或覆盖</p>
 <p>代码中定义了三个不同的单元（加载单元、滑动单元、掩码单元），每个单元都使用stream_register模板实例化了一个流的寄存器。stream_register是一个参数化模块，其类型参数T被设置为stream_register_payload_t结构体。</p>
 <p>每个单元都有其自己的结果变量（id、addr、wdata、be）以及请求（req）和授权（gnt）信号。此外，每个实例还接收来自其相应单元的数据输入（例如，ldu_result_id_i, ldu_result_addr_i等），并输出处理后的数据。</p>
 <h3 id="_6">停顿机制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
-<p>跟踪哪些向量指令已经写入了结果。这是为了确保指令之间的数据依赖性得到正确处理，防止数据冒险（hazard）的发生，即防止一个指令在另一个依赖于它的指令之前完成执行。</p>
+<p>跟踪哪些向量指令已经写入了结果。这是为了确保指令之间的数据依赖性得到正确处理，防止数据冒险（hazard）的发生，即防止一个指令在另一个依赖于它的指令之前完成执行。<strong>可以考虑转发机制？</strong></p>
 <p>然后，根据来自不同功能单元（如<code>ALU、MFPU、MASKU、LDU、SLDU</code>）的ID和结果授予信号（<code>result_id</code>和<code>result_gnt</code>），更新<code>vinsn_result_written_d</code>中对应位。如果某个功能单元完成了对某个指令的结果写入，则<code>vinsn_result_written_d</code>中对应指令ID的位将被置为1。</p>
 <h3 id="requester">Requester<a class="headerlink" href="#requester" title="Permanent link">&para;</a></h3>
 <p>每个操作数队列都有一个请求器索引，可以处于IDLE或REQUESTING状态。</p>
@@ -2574,21 +2574,20 @@
 <li>One is dedicated to the VLSU.</li>
 <li>One is dedicated to the SLDU.</li>
 </ul>
-<p>请求器根据指令的元数据生成请求，并将其发送到VRF。</p>
+<p>元数据：</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vid_t id：表示指令的ID。</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vaddr_t addr：地址字段。</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vlen_t len：表示剩余要读取的元素数量。</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">vew_e vew：一个枚举字段，表示元素宽度。</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">logic [NrVInsn-1:0] hazard：一个逻辑数组字段，表示向量指令之间的冒险。</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">logic is_widening：表示是否为拓宽指令。</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">logic [NrVInsn-1:0] waw_hazard_counter：一个逻辑数组字段，可能用于计数WAW（写后写）冒险。</span>
+</span></code></pre></div>
+<p>lane sequencer告诉operand requester当前指令要从VRF读数； operand requester把上述请求转换为对VRF的请求、并同时通知operand queue准备好接受数据（通过一种信用机制）；VRF从operand requester处得到请求，并把操作数给到operand queue。</p>
 <ul>
-<li>vid_t id：表示指令的ID。</li>
-<li>vaddr_t addr：地址字段。</li>
-<li>vlen_t len：表示剩余要读取的元素数量。</li>
-<li>vew_e vew：一个枚举字段，表示元素宽度。</li>
-<li>logic [NrVInsn-1:0] hazard：一个逻辑数组字段，表示向量指令之间的冒险。</li>
-<li>logic is_widening：表示是否为拓宽指令。</li>
-<li>logic [NrVInsn-1:0] waw_hazard_counter：一个逻辑数组字段，可能用于计数WAW（写后写）冒险。</li>
-</ul>
-<p>请求器还处理指令之间的依赖关系，确保在依赖解除之前不会发出请求。</p>
-<ul>
-<li>lane sequencer告诉operand requester当前指令要从VRF读数；</li>
-<li>operand requester把上述请求转换为对VRF的请求、并同时通知operand queue准备好接受数据（通过一种信用机制）；</li>
-<li>VRF从operand requester处得到请求，并把操作数给到operand queue。</li>
+<li>首先初始化请求和相关仲裁信号</li>
+<li>根据输入的向量操作请求(operand_request_i[requester_index])来计算并准备执行该操作所需的元数据，包括向量体的长度、需要获取的数据包数量、VRF中的起始地址等，以及初始化请求者元数据和操作队列命令</li>
+<li></li>
 </ul>
 <h3 id="arbiter">Arbiter<a class="headerlink" href="#arbiter" title="Permanent link">&para;</a></h3>
 <ul>
