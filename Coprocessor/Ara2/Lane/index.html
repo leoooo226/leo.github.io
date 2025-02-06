@@ -2863,14 +2863,16 @@
 <p>当操作数变得可用并且功能单元准备好进行下一个操作时，操作数寄存器将其操作数发送到功能单元。</p>
 <p><img alt="tp" src="../image16.png" /></p>
 <h2 id="operand-queues">Operand queues<a class="headerlink" href="#operand-queues" title="Permanent link">&para;</a></h2>
+<p>是管理向量寄存器文件中的操作数队列，并根据不同的功能单元需求提供相应的操作数。该模块通过实例化多个operand_queue来实现这一功能，并且在某些共享操作数队列的情况下，使用滤波逻辑来避免将错误的准备好信号传递给功能单元。</p>
 <p>共9个源操作数队列</p>
 <ul>
-<li>ALU: 2</li>
-<li>MFPU: 3</li>
-<li>STU: 1</li>
-<li>SLDU &amp; AddrGen: 1</li>
-<li>MaskU: 2</li>
+<li>ALU: 2 <code>i_operand_queue_alu_a</code> <code>i_operand_queue_alu_b</code></li>
+<li>MFPU: 3 <code>i_operand_queue_mfpu_a</code> <code>i_operand_queue_mfpu_b</code> <code>i_operand_queue_mfpu_c</code></li>
+<li>STU: 1 <code>i_operand_queue_st_mask_a</code></li>
+<li>SLDU &amp; AddrGen: 1 <code>i_operand_queue_slide_addrgen_a</code></li>
+<li>MaskU: 2 <code>i_operand_queue_mask_b</code> <code>i_operand_queue_mask_m</code></li>
 </ul>
+<p>由于滑动单元和地址生成单元共享同一个操作数队列，因此需要过滤掉错误的准备好信号。通过addrgen_operand_ready_filtered和sldu_operand_ready_filtered来实现这一点</p>
 <h2 id="vector-functional-units">Vector Functional Units<a class="headerlink" href="#vector-functional-units" title="Permanent link">&para;</a></h2>
 
 
