@@ -2587,10 +2587,12 @@
 <ul>
 <li>首先初始化请求和相关仲裁信号</li>
 <li>根据输入的向量操作请求(operand_request_i[requester_index])来计算并准备执行该操作所需的元数据，包括向量体的长度、需要获取的数据包数量、VRF中的起始地址等，以及初始化请求者元数据和操作队列命令</li>
-<li></li>
+<li>定义了一个状态机，用于处理操作数请求。状态机包含两个状态：IDLE（空闲）和REQUESTING（请求）。在空闲状态时，如果接收到有效的操作数请求，则切换到请求状态，并将请求的元数据和命令发送到操作数队列。在请求状态时，根据操作数队列是否就绪，向VRF发出操作数请求，并在接收到授权信号后更新地址指针和剩余长度。如果所有操作数都已请求完毕，则切换回空闲状态，并根据新的操作数请求重新开始。</li>
 </ul>
+<p><code>num_bytes = ( 1 &lt;&lt; ( unsigned'(EW64) - unsigned'(requester_metadata_q.vew) ) );</code>疑问？当有效元素宽度（vew）等于总位宽（在这个例子中是64位）时，计算出的num_bytes值为1。这意味着在这种情况下，根据提供的计算方式，一次只读取或处理1个字节的数据。当有效元素宽度（vew），num_bytes的值将是2的32次方</p>
 <h3 id="arbiter">Arbiter<a class="headerlink" href="#arbiter" title="Permanent link">&para;</a></h3>
 <ul>
+<li>从commencell例化了rr_arb_tree模块，用于仲裁来自不同请求源的请求。</li>
 <li>共有14个master，也就是说需要源操作数的9个queue、和产生目的操作数的5个执行单元放在一起仲裁，以获取VRF的访问权限。</li>
 <li>需要源操作数、产生目的操作数的模块一起参与仲裁，并且分两个优先级</li>
 <li>高优先级：AluA ~ MulFPUC, VFU_Alu ~ VFU_MFpu</li>
