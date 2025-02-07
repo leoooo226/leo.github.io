@@ -2874,6 +2874,7 @@
 </ul>
 <p>由于滑动单元和地址生成单元共享同一个操作数队列，因此需要过滤掉错误的准备好信号。通过addrgen_operand_ready_filtered和sldu_operand_ready_filtered来实现这一点</p>
 <h2 id="vector-functional-units">Vector Functional Units<a class="headerlink" href="#vector-functional-units" title="Permanent link">&para;</a></h2>
+<p>将矢量指令分解为矢量ALU和矢量MFPU的操作，并协调两者之间的数据流动、操作模式以及掩码处理。模块通过其接口与其他模块（如分派器、车道序列器、操作数队列、矢量寄存器文件、滑动单元和掩码单元）进行通信，实现高效的矢量计算。它还处理了ALU和MFPU的就绪信号和操作完成信号，以便上层模块了解操作的状态。此外，该模块还支持浮点操作模式，以及特定的矢量掩码和滑动操作，以提高灵活性和计算能力。</p>
 
 
 
