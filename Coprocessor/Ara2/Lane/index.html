@@ -2903,19 +2903,26 @@
 <li>定点指令支持，支持则<code>r=1</code>，否则<code>r=0</code></li>
 <li><code>simdalu</code>例化</li>
 <li>状态机与控制：当归约操作跟随在普通操作之后时，可能会出现归约操作数在主 FSM 进入正确状态之前就开始到达的情况。因此，如果当前指令是归约操作且主 FSM 尚未进入 INTRA_LANE_REDUCTION 状态，则不应消耗操作数</li>
-<li><code>NO_REDUCTION</code>,<code>INTRA_LANE_REDUCTION</code>, <code>INTER_LANES_REDUCTION_TX</code>,<code>INTER_LANES_REDUCTION_RX</code>, <code>LN0_REDUCTION_COMMIT</code> ,<code>SIMD_REDUCTION</code></li>
-</ul>
+<li>
+<p><code>NO_REDUCTION</code>,<code>INTRA_LANE_REDUCTION</code>, <code>INTER_LANES_REDUCTION_TX</code>,<code>INTER_LANES_REDUCTION_RX</code>, <code>LN0_REDUCTION_COMMIT</code> ,<code>SIMD_REDUCTION</code></p>
+</li>
+<li>
 <p>NO_REDUCTION: 对于非缩减指令，如果结果队列未满并且有所有必要的操作数有效时，模块会发出有效的操作信号valu_valid，并更新结果队列中的结果、地址、ID和字节使能。对于缩减指令，模块会跳过此状态。对于窄化指令（如VNSRA, VNSRL等），除了上述操作外，模块还会在issue后更新narrowing_select以指示下一次操作处理结果的哪一半。</p>
-<p>INTRA_LANE_REDUCTION: 对于 lane 内部缩减运算，模块首先检查是否可以继续进行运算（即结果队列未满）。如果有所有必要的操作数，模块会发出有效的操作信号valu_valid，并累加缩减结果到结果队列中。如果当前vl为零（即所有lane内部缩减运算完成），模块会将状态转变为INTER_LANES_REDUCTION_TX，准备开始 lane 间的缩减运算。</p>
-<p>INTER_LANES_REDUCTION_TX: 对于 lane 间的缩减运算，模块首先检查是否可以继续进行运算。然后，将结果发送给 SLDU（滑动单元），并等待 SLDU 返回结果。当 SLDU 返回结果时，模块将状态转变为INTER_LANES_REDUCTION_RX。</p>
-<p>INTER_LANES_REDUCTION_RX: 对于 lane 间的缩减运算，首先检查是否可以继续进行运算。如果有来自 SLDU 的有效操作数，模块会发出有效的操作信号valu_valid，并根据自身的 lane ID 决定是否需要参与 lane 间的缩减运算。如果是 lane 0，模块会将来自 SLDU 的结果存储到结果队列中，并准备开始 SIMD 缩减运算。如果是其他 lane，模块会将状态转变为LN0_REDUCTION_COMMIT，准备提交结果。</p>
-<p>LN0_REDUCTION_COMMIT: 对于 lane 0 的缩减提交，模块首先检查是否可以继续提交结果。如果有有效结果，模块会将状态转变为NO_REDUCTION，并提交结果给主序列器。</p>
+</li>
+<li>INTRA_LANE_REDUCTION: 对于 lane 内部缩减运算，模块首先检查是否可以继续进行运算（即结果队列未满）。如果有所有必要的操作数，模块会发出有效的操作信号valu_valid，并累加缩减结果到结果队列中。如果当前vinsn_issue_valid &amp;&amp; issue_cnt_d == '0为零（即所有lane内部缩减运算完成），模块会将状态转变为INTER_LANES_REDUCTION_TX，准备开始 lane 间的缩减运算。</li>
+<li>INTER_LANES_REDUCTION_TX: 对于 lane 间的缩减运算，模块首先检查是否可以继续进行运算。然后，将结果发送给 SLDU（滑动单元），并等待 SLDU 返回结果。当 SLDU 返回结果时，模块将状态转变为INTER_LANES_REDUCTION_RX。</li>
+<li>INTER_LANES_REDUCTION_RX: 对于 lane 间的缩减运算，首先检查是否可以继续进行运算。如果有来自 SLDU 的有效操作数，模块会发出有效的操作信号valu_valid，并根据自身的 lane ID 决定是否需要参与 lane 间的缩减运算。如果是 lane 0，模块会将来自 SLDU 的结果存储到结果队列中，并准备开始 SIMD 缩减运算。如果是其他 lane，模块会将状态转变为LN0_REDUCTION_COMMIT，准备提交结果。</li>
+<li>LN0_REDUCTION_COMMIT: 对于 lane 0 的缩减提交，模块首先检查是否可以继续提交结果。如果有有效结果，模块会将状态转变为NO_REDUCTION，并提交结果给主序列器。</li>
+<li>
 <p>SIMD_REDUCTION: 对于 SIMD 缩减运算，lane 0 会根据simd_red_cnt_q的值来决定是否需要继续进行运算。如果有有效操作数，模块会发出有效的操作信号valu_valid，并根据simd_red_cnt_q的值来选择哪些数据需要参与运算。当所有 lane 0 的 SIMD 缩减运算完成时，模块会将状态转变为NO_REDUCTION，并提交结果给主序列器。</p>
-<ul>
-<li>SIMD ALU 模块：执行实际的 SIMD 操作，并输出结果和溢出标志。</li>
+</li>
+<li>
+<p>SIMD ALU 模块：执行实际的 SIMD 操作，并输出结果和溢出标志。</p>
+</li>
 <li>结果提交：将计算结果提交到向量寄存器文件，并更新相关状态和变量。</li>
 </ul>
 <h2 id="vmfpu">VMFPU<a class="headerlink" href="#vmfpu" title="Permanent link">&para;</a></h2>
+<p>vmfpu 模块是 Ara 处理器中用于执行整数乘法和浮点数操作的核心模块。它包括指令队列用于管理待执行的向量指令、结果队列用于暂存计算结果、乘法器、除法器、规约操作单元以及 FPU 模块。模块通过复杂的控制逻辑来确保指令按照正确的顺序执行，并且结果能够正确地写入向量寄存器文件。该模块实现了多种向量操作，包括乘法、除法、比较、转换和各种规约操作，支持多种元素宽度和数据类型，并且具备高效的资源管理和时序控制机制.</p>
 
 
 
